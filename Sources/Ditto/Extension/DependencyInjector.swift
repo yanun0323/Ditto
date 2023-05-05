@@ -4,7 +4,12 @@ import SwiftUI
 public class DIContainer: EnvironmentKey {
     public static var defaultValue: DIContainer { Self.default }
     public static var `default`: DIContainer {
-        return DIContainer()
+        return DIContainer(isMock: true)
+    }
+    
+    private let isMock: Bool
+    init(isMock: Bool = false) {
+        self.isMock = isMock
     }
 }
 

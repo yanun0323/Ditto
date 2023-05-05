@@ -1,3 +1,3 @@
 # Ditto
 
-A description of this package.
+Ditto is an useful tool package for swiftUI.

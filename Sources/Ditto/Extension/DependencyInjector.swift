@@ -17,7 +17,7 @@ extension View {
 
 @available(iOS 15, macOS 12.0, *)
 extension EnvironmentValues {
-    var injected: DIContainer {
+    public var injected: DIContainer {
         get { self[DIContainer.self] }
         set { self[DIContainer.self] = newValue }
     }

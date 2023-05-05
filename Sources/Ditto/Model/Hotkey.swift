@@ -12,7 +12,7 @@ extension View {
     public func hotkeys( _ hotkeys: [Hotkey] ) -> some View {
         self.modifier(HotKeysMod(hotkeys))
     }
-}
+}   
 
 @available(macOS 12.0, *)
 public struct HotKeysMod: ViewModifier {

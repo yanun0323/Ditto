@@ -8,7 +8,7 @@ public class DIContainer: EnvironmentKey {
     }
     
     public let isMock: Bool
-    init(isMock: Bool = false) {
+    public init(isMock: Bool = false) {
         self.isMock = isMock
     }
 }

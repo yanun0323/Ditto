@@ -53,6 +53,7 @@ extension SQL {
 // MARK: Migrater
 @available(iOS 15, macOS 12.0, *)
 public protocol Migrater {
+    static var table: SQLite.Table { get }
     /** Migrate sqlite datebase schema */
     static func migrate(_:Connection) throws
     /** Parse object from result row */

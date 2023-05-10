@@ -1,6 +1,9 @@
 import SwiftUI
 import SQLite
 
+/*
+ Define Decimal value to make it storable in sqlite
+ **/
 @available(iOS 15, macOS 12.0, *)
 extension Decimal: Value {
     public typealias Datatype = String
@@ -22,6 +25,9 @@ extension Decimal: Value {
     }
 }
 
+/*
+ Define Decimal value to make it storable in sqlite
+ **/
 @available(iOS 15, macOS 12.0, *)
 extension Color: Value {
     public typealias Datatype = Blob

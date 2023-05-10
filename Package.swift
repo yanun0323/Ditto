@@ -14,6 +14,9 @@ let package = Package(
         .library(
             name: "Ditto",
             targets: ["Ditto"]),
+        .library(
+            name: "Example",
+            targets: ["Example"])
     ],
     dependencies: [
         .package(url: "https://github.com/stephencelis/SQLite.swift.git", from: "0.14.1")
@@ -26,6 +29,10 @@ let package = Package(
         .target(
             name: "Ditto",
             dependencies: [.product(name: "SQLite", package: "SQLite.swift")]),
+        .target(
+            name: "Example",
+            dependencies: ["Ditto"]
+        ),
         .testTarget(
             name: "DittoTests",
             dependencies: ["Ditto"]),

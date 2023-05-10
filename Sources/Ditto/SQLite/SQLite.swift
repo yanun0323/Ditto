@@ -3,19 +3,14 @@ import SwiftUI
 
 // MARK: SQLite Instance
 /**
- # SQL
  Property Wrapper for SQLite instance
  
  ```
  // initial the SQL before use it
  let db = SQL.Init(dbName: "database", isMock: false) /* use in memory sqlite database if isMock is true*/
- 
  // get db
  let db = SQL.GetDriver()
- 
- 
  ```
- 
  */
 @available(iOS 15, macOS 12.0, *)
 public struct SQL {
@@ -24,20 +19,14 @@ public struct SQL {
 
 @available(iOS 15, macOS 12.0, *)
 extension SQL {
-    /**
-     # GetDriver
-     Get sqlite database instance. if no exist, create a new one
-     */
+    /** Get sqlite database instance. if no exist, create a in memory sqlite database  connection */
     public static func GetDriver() -> Connection {
         if let conn = db {
             return conn
         }
         return self.Init(isMock: true)
     }
-    /**
-     # Init
-     Create a new sqlite database instance
-     */
+    /** Create a new sqlite database instance, use in memory sqlite database if isMock is true */
     public static func Init(dbName name: String? = nil, isMock: Bool) -> Connection {
         var dbName = "production"
         if let name = name, !name.isEmpty {
@@ -64,12 +53,16 @@ extension SQL {
 // MARK: Migrater
 @available(iOS 15, macOS 12.0, *)
 public protocol Migrater {
+    /** Migrate sqlite datebase schema */
     static func migrate(_:Connection) throws
+    /** Parse object from result row */
+    static func parse(_:Row) throws -> Self?
 }
 
 // MARK: Connection
 @available(iOS 15, macOS 12.0, *)
 extension Connection {
+    /** Run table migrations */
     public func Migrate(_ migraters: [Migrater.Type]) {
         System.DoCatch("migrate tables") {
             for m in migraters {

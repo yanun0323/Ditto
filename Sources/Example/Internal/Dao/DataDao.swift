@@ -14,16 +14,17 @@ extension DataDao where Self: DataRepository {
     }
     
     func GetStudent(_ id: Int64) throws -> Student? {
-        let query = Student.Table().filter(id == Student.id)
-        let results = tryㄏ SQL.GetDriver().prepare(query)
+        let query = Student.table.filter(id == Student.id)
+        let results = try SQL.GetDriver().prepare(query)
         for r in results {
             return try Student.parse(r)
         }
+        
         return nil
     }
     
     func CreateStudent(_ s: Student) throws -> Int64 {
-        let insert = Student.Table().insert(
+        let insert = Student.table.insert(
             Student.id <- s.id,
             Student.name <- s.name,
             Student.age <- s.age
@@ -32,7 +33,7 @@ extension DataDao where Self: DataRepository {
     }
     
     func UpdateStudent(_ id: Int64, _ s: Student) throws {
-        let update = Student.Table().filter(Student.id == id).update(
+        let update = Student.table.filter(Student.id == id).update(
             Student.id <- s.id,
             Student.name <- s.name,
             Student.age <- s.age
@@ -41,7 +42,7 @@ extension DataDao where Self: DataRepository {
     }
     
     func DeleteStudent(_ id: Int64) throws {
-        try SQL.GetDriver().run(Student.Table().filter(Student.id == id).delete())
+        try SQL.GetDriver().run(Student.table.filter(Student.id == id).delete())
     }
     
 }

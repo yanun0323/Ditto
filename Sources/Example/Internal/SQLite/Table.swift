@@ -9,7 +9,7 @@ extension Student {
 }
 
 extension Student: Migrater {
-    static var table: SQLite.Table { .init("students") }
+    static var table: Tablex { .init("students") }
     
     static func migrate(_ conn: Connection) throws {
         try conn.run(table.create(ifNotExists: true) { t in

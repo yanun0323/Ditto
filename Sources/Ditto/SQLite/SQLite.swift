@@ -1,15 +1,18 @@
 import SQLite
 import SwiftUI
 
+@available(iOS 15, macOS 12.0, *)
+public typealias Tablex = SQLite.Table
+
 // MARK: SQLite Instance
 /**
  Property Wrapper for SQLite instance
  
  ```
  // initial the SQL before use it
- let db = SQL.Init(dbName: "database", isMock: false) /* use in memory sqlite database if isMock is true*/
+ let db = SQL.setup(dbName: "database", isMock: false) /* use in memory sqlite database if isMock is true*/
  // get db
- let db = SQL.GetDriver()
+ let db = SQL.getDriver()
  ```
  */
 @available(iOS 15, macOS 12.0, *)
@@ -20,14 +23,14 @@ public struct SQL {
 @available(iOS 15, macOS 12.0, *)
 extension SQL {
     /** Get sqlite database instance. if no exist, create a in memory sqlite database  connection */
-    public static func GetDriver() -> Connection {
+    public static func getDriver() -> Connection {
         if let conn = db {
             return conn
         }
-        return self.Init(isMock: true)
+        return self.setup(isMock: true)
     }
     /** Create a new sqlite database instance, use in memory sqlite database if isMock is true */
-    public static func Init(dbName name: String? = nil, isMock: Bool) -> Connection {
+    public static func setup(dbName name: String? = nil, isMock: Bool) -> Connection {
         var dbName = "production"
         if let name = name, !name.isEmpty {
             dbName = name
@@ -53,7 +56,7 @@ extension SQL {
 // MARK: Migrater
 @available(iOS 15, macOS 12.0, *)
 public protocol Migrater {
-    static var table: SQLite.Table { get }
+    static var table: Tablex { get }
     /** Migrate sqlite datebase schema */
     static func migrate(_:Connection) throws
     /** Parse object from result row */

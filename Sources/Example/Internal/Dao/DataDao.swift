@@ -7,7 +7,7 @@ protocol DataDao {}
 extension DataDao where Self: DataRepository {
     func Tx<T>(_ action: () throws -> T?) throws -> T? where T: Any {
         var result: T?
-        try SQL.GetDriver().transaction {
+        try SQL.getDriver().transaction {
             result = try action()
         }
         return result
@@ -15,7 +15,7 @@ extension DataDao where Self: DataRepository {
     
     func GetStudent(_ id: Int64) throws -> Student? {
         let query = Student.table.filter(id == Student.id)
-        let results = try SQL.GetDriver().prepare(query)
+        let results = try SQL.getDriver().prepare(query)
         for r in results {
             return try Student.parse(r)
         }
@@ -29,7 +29,7 @@ extension DataDao where Self: DataRepository {
             Student.name <- s.name,
             Student.age <- s.age
         )
-        return try SQL.GetDriver().run(insert)
+        return try SQL.getDriver().run(insert)
     }
     
     func UpdateStudent(_ id: Int64, _ s: Student) throws {
@@ -38,11 +38,11 @@ extension DataDao where Self: DataRepository {
             Student.name <- s.name,
             Student.age <- s.age
         )
-        try SQL.GetDriver().run(update)
+        try SQL.getDriver().run(update)
     }
     
     func DeleteStudent(_ id: Int64) throws {
-        try SQL.GetDriver().run(Student.table.filter(Student.id == id).delete())
+        try SQL.getDriver().run(Student.table.filter(Student.id == id).delete())
     }
     
 }

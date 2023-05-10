@@ -2,13 +2,11 @@ import SwiftUI
 import Ditto
 import SQLite
 
-extension Student {
+extension Student: Migrater {
     static let id = Expression<Int64>("id")
     static let name = Expression<String>("name")
     static let age = Expression<Int>("age")
-}
-
-extension Student: Migrater {
+    
     static var table: Tablex { .init("students") }
     
     static func migrate(_ conn: Connection) throws {
@@ -20,7 +18,7 @@ extension Student: Migrater {
         try conn.run(table.createIndex(name, ifNotExists: true))
     }
     
-    static func parse(_ r: Row) throws -> Student? {
+    static func parse(_ r: Row) throws -> Student {
         return Student(
             id: try r.get(id),
             name: try r.get(name),

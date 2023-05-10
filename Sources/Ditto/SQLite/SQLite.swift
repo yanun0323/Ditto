@@ -54,13 +54,71 @@ extension SQL {
 }
 
 // MARK: Migrater
+/**
+ define for migrate table in sqlite
+ ```
+ // Sample
+ extension Element: Migrater {
+     static let id = Expression<Int64>("id")
+     static let name = Expression<String>("name")
+     static let value = Expression<Blob>("value")
+     
+     static var table: Tablex { .init("elements") }
+     
+     static func migrate(_ conn: Connection) throws {
+         try conn.run(table.create(ifNotExists: true) { t in
+             t.column(id, primaryKey: .autoincrement)
+             t.column(name, unique: true)
+             t.column(value)
+         })
+         
+         try conn.run(table.createIndex(name, ifNotExists: true))
+     }
+     
+     static func parse(_ r: Row) throws -> Element {
+         return Element(
+             id: try r.get(id),
+             name: try r.get(name),
+             value: try r.get(value)
+         )
+     }
+ }
+ 
+ ```
+ */
 @available(iOS 15, macOS 12.0, *)
 public protocol Migrater {
     static var table: Tablex { get }
-    /** Migrate sqlite datebase schema */
+    /**
+     Migrate sqlite datebase schema
+     ```
+     // Sample
+     static func migrate(_ conn: Connection) throws {
+         try conn.run(table.create(ifNotExists: true) { t in
+         t.column(id, primaryKey: .autoincrement)
+         t.column(name, unique: true)
+         t.column(value)
+         })
+         try conn.run(table.createIndex(name, ifNotExists: true))
+     }
+     ```
+     
+     */
     static func migrate(_:Connection) throws
-    /** Parse object from result row */
-    static func parse(_:Row) throws -> Self?
+    /**
+     Parse object from result row
+     ```
+     // Sample
+     static func parse(_ r: Row) throws -> Element {
+         return Element(
+             id: try r.get(id),
+             name: try r.get(name),
+             value: try r.get(value)
+         )
+     }
+     ```
+     */
+    static func parse(_:Row) throws -> Self
 }
 
 // MARK: Connection

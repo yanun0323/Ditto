@@ -28,7 +28,7 @@ extension Http {
      }
      ```
      */
-    public static func SendRequest<T>(_ method: Method = .GET, toUrl path: String, type: T.Type, action: @escaping (URLRequest) -> URLRequest) -> T? where T: Decodable {
+    public static func sendRequest<T>(_ method: Method = .GET, toUrl path: String, type: T.Type, action: @escaping (URLRequest) -> URLRequest) -> T? where T: Decodable {
         guard let url = URL(string: path) else {
             print("failed to generate url from string: \(path)")
             return nil
@@ -75,7 +75,7 @@ extension Http {
      }
      ```
      */
-    public static func DumpRequest(_ method: Method = .GET, toUrl path: String, action: @escaping (URLRequest) -> URLRequest) -> String {
+    public static func dumpRequest(_ method: Method = .GET, toUrl path: String, action: @escaping (URLRequest) -> URLRequest) -> String {
         guard let url = URL(string: path) else {
             print("failed to generate url from string: \(path)")
             return ""
@@ -117,7 +117,7 @@ extension Http {
      }
      ```
      */
-    public static func RequestStatusCode(_ method: Method = .GET, toUrl path: String, action: @escaping (URLRequest) -> URLRequest) -> Int? {
+    public static func requestStatusCode(_ method: Method = .GET, toUrl path: String, action: @escaping (URLRequest) -> URLRequest) -> Int? {
         guard let url = URL(string: path) else {
             print("failed to generate url from string: \(path)")
             return nil

@@ -5,11 +5,11 @@ protocol PreferenceDao {}
 
 extension PreferenceDao where Self: PreferenceRepository {
     
-    func GetAccentColor() -> Color {
-        return UserDefaults.accentColor ?? .accentColor
+    func getAccentColor() throws -> Color? {
+        return UserDefaults.accentColor
     }
     
-    func SetAccentColor(_ color: Color) throws {
+    func setAccentColor(_ color: Color) throws {
         UserDefaults.accentColor = color
     }
 }

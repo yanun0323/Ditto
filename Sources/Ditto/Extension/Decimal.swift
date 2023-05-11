@@ -2,15 +2,15 @@ import SwiftUI
 
 @available(iOS 15, macOS 12.0, *)
 extension Decimal {
-    public func ToDouble() -> Double {
+    public var double: Double {
         return (self as NSDecimalNumber).doubleValue
     }
     
-    public func ToCGFloat() -> CGFloat {
-        return CGFloat(self.ToFloat())
+    public var cgfloat: CGFloat {
+        return CGFloat(self.float)
     }
     
-    public func ToFloat() -> Float {
+    public var float: Float {
         return (self as NSDecimalNumber).floatValue
     }
 }

@@ -45,29 +45,29 @@ extension Date {
     
     public var daysOfMonth: Int {
         let first = self.firstDayOfMonth
-        return first.distance(to: first.AddMonth(1)).days
+        return first.distance(to: first.addMonth(1)).days
     }
     
     public var weeksOfMonth: Int {
-        guard let first = Self.init(from: "\(self.String("yyyyMM"))01", .Numeric) else { return -1 }
+        guard let first = Self.init(from: "\(self.string("yyyyMM"))01", .Numeric) else { return -1 }
         let firstWeekDay = (first.timeIntervalSince1970.days + 5) % 7
-        let days = first.distance(to: first.AddMonth(1)).days
+        let days = first.distance(to: first.addMonth(1)).days
         return (days + firstWeekDay + 6) / 7
     }
     
     public var firstDayOfMonth: Date {
-        Self.init(from: "\(self.String("yyyyMM", .US))01", .Numeric)!
+        Self.init(from: "\(self.string("yyyyMM", .us))01", .Numeric)!
     }
     
     public var lastDayOfMonth: Date {
-        self.firstDayOfMonth.AddMonth(1).AddDay(-1)
+        self.firstDayOfMonth.addMonth(1).addDay(-1)
     }
 }
 
 // MARK: Date Function
 @available(iOS 15, macOS 12.0, *)
 extension Date {
-    public func String(_ layout: DateFormatLayout = .Default, _ locale: Locale = .current, _ timezone: TimeZone? = nil) -> String
+    public func string(_ layout: DateFormatLayout = .Default, _ locale: Locale = .current, _ timezone: TimeZone? = nil) -> String
     {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = layout
@@ -76,42 +76,42 @@ extension Date {
         return dateFormatter.string(from: self)
     }
     
-    public func AddDay(_ day: Int) -> Date {
-        return self.Add(.day, day)
+    public func addDay(_ day: Int) -> Date {
+        return self.add(.day, day)
     }
     
-    public func AddMonth(_ month: Int) -> Date {
-        return self.Add(.month, month)
+    public func addMonth(_ month: Int) -> Date {
+        return self.add(.month, month)
     }
     
-    public func AddYear(_ year: Int) -> Date {
-        return self.Add(.year, year)
+    public func addYear(_ year: Int) -> Date {
+        return self.add(.year, year)
     }
     
-    public func AddWeek(_ week: Int) -> Date {
-        return self.Add(.day, 7 * week)
+    public func addWeek(_ week: Int) -> Date {
+        return self.add(.day, 7 * week)
     }
     
-    public func Add(_ unit: Calendar.Component, _ value: Int) -> Date {
+    public func add(_ unit: Calendar.Component, _ value: Int) -> Date {
         return Calendar.current.date(byAdding: unit, value: value, to: self) ?? self
     }
     
-    public func Add(_ span: DateSpan) -> Date? {
+    public func add(_ span: DateSpan) -> Date? {
         switch span {
-            case .None:
+            case .none:
                 return nil
-            case .Day:
-                return self.AddDay(1)
-            case .Week:
-                return self.AddWeek(1)
-            case .Month:
-                return self.AddMonth(1)
-            case .Year:
-                return self.AddYear(1)
+            case .day:
+                return self.addDay(1)
+            case .week:
+                return self.addWeek(1)
+            case .month:
+                return self.addMonth(1)
+            case .year:
+                return self.addYear(1)
         }
     }
     
-    public func DaysBetween(_ date: Date) -> Int {
+    public func daysBetween(_ date: Date) -> Int {
         return self.distance(to: date).days
     }
 }
@@ -162,20 +162,20 @@ public extension DateFormatLayout {
 @available(iOS 15, macOS 12.0, *)
 public enum DateSpan: Int, Identifiable, Hashable, CaseIterable, Codable {
     public var id: Int { self.rawValue }
-    case None=0, Day=1, Week=2, Month=3, Year=4
+    case none=0, day=1, week=2, month=3, year=4
     
     init(_ int: Int) {
         switch int {
-            case Self.Day.rawValue:
-                self = .Day
-            case Self.Week.rawValue:
-                self = .Week
-            case Self.Month.rawValue:
-                self = .Month
-            case Self.Year.rawValue:
-                self = .Year
+            case Self.day.rawValue:
+                self = .day
+            case Self.week.rawValue:
+                self = .week
+            case Self.month.rawValue:
+                self = .month
+            case Self.year.rawValue:
+                self = .year
             default:
-                self = .None
+                self = .none
         }
     }
 }

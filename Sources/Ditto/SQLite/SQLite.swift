@@ -125,8 +125,8 @@ public protocol Migrater {
 @available(iOS 15, macOS 12.0, *)
 extension Connection {
     /** Run table migrations */
-    public func Migrate(_ migraters: [Migrater.Type]) {
-        System.DoCatch("migrate tables") {
+    public func migrate(_ migraters: [Migrater.Type]) {
+        System.doCatch("migrate tables") {
             for m in migraters {
                 try m.migrate(self)
             }

@@ -10,10 +10,10 @@ public struct System {
 @available(macOS 12.0, iOS 15, *)
 extension System {
     /**
-     # Async
+     # async
      Invoke function in background thread and main thread
      */
-    public static func Async(background: @escaping () -> Void = {}, main: @escaping () -> Void) {
+    public static func async(background: @escaping () -> Void = {}, main: @escaping () -> Void) {
         DispatchQueue.global().async {
             background()
             DispatchQueue.main.async {
@@ -22,7 +22,7 @@ extension System {
         }
     }
     
-    public static func Async<T>(background: @escaping () -> T = {}, main: @escaping (T) -> Void) {
+    public static func async<T>(background: @escaping () -> T = {}, main: @escaping (T) -> Void) {
         DispatchQueue.global().async {
             let data = background()
             DispatchQueue.main.async {
@@ -34,7 +34,7 @@ extension System {
 
 @available(macOS 12.0, iOS 15, *)
 extension System {
-    public static func DoCatch<T>(_ log: String, _ action: () throws -> T?) -> T? where T: Any {
+    public static func doCatch<T>(_ log: String, _ action: () throws -> T?) -> T? where T: Any {
         do {
             return try action()
         } catch {
@@ -49,7 +49,7 @@ import AppKit
 
 @available(macOS 12.0, *)
 extension System {
-    public static func Unfocus() {
+    public static func unfocus() {
         NSApp.keyWindow?.makeFirstResponder(nil)
     }
 }

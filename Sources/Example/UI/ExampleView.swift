@@ -55,6 +55,7 @@ struct ExampleView: View {
                 
                 Slider(value: $studentAge, in: 10...25, step: 1)
             }
+            
             Button(width: 120, height: 30, color: accentColor, radius: 7, shadow: 5) {
                 if students.isEmpty { return }
                 if creating { return }

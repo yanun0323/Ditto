@@ -2,8 +2,8 @@ import SwiftUI
 import Ditto
 
 extension DIContainer {
-    var appstate: AppState { AppState.Get() }
-    var interactor: Interactor { Interactor.Get(isMock: self.isMock) }
+    var appstate: AppState { AppState.get() }
+    var interactor: Interactor { Interactor.get(isMock: self.isMock) }
 }
 
 struct Interactor {
@@ -14,15 +14,20 @@ struct Interactor {
     
     init(appstate: AppState, isMock: Bool) {
         let repo: Repository = Dao()
+        
+        SQL.getDriver().migrate([
+            Student.self
+        ])
+        
         self.data = DataInteractor(appstate: appstate, repo: repo)
         self.preference = PreferenceInteractor(appstate: appstate, repo: repo)
     }
 }
 
 extension Interactor {
-    public static func Get(isMock: Bool) -> Self {
+    public static func get(isMock: Bool) -> Self {
         if Self.default.isNil {
-            Self.default = Interactor(appstate: AppState.Get(), isMock: isMock)
+            Self.default = Interactor(appstate: AppState.get(), isMock: isMock)
         }
         return Self.default!
     }

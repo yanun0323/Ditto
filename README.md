@@ -1,6 +1,6 @@
 # Ditto
 
-Ditto is an useful tool package for swiftUI.
+Ditto is a powerful pakage for swiftUI.
 
 - [Dependency Injector](#dependency-injector)
 - [SQL](#sql)

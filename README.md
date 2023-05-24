@@ -42,9 +42,11 @@ Project
 - **UI**
     - App views cross different platform
 - **System**
-    - `DIContainer` ***Dependency Injector*** instance
+    - `DIContainer` ***Dependency Injector*** instance. contain `AppState` and `Interaction`
     - `AppState` ***Stateful***, stores value and data publisher, it store `state` of App.
-    - `Interactor` ***Stateless***, contain all of the business logic and `Repo` instances. 
+- **`Interactor`**
+    - ***Stateless***, contain all of the business logic and `Repo`, `AppState` instances.
+    - Access data through `Repo`.
 - **Model**
     - Define the structures of data
 - **Domain**

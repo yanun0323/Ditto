@@ -7,7 +7,7 @@ Ditto is a powerful pakage for swiftUI.
 - [UserDefault](#userdefault)
 - [System](#system)
 - [Http](#http)
-- [Hotkey](#hotkeys)
+- [Hotkey](#hotkey)
 - [UI](#ui)
     - [Button](#button)
     - [Block](#block)

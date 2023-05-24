@@ -37,6 +37,7 @@ public struct Section<V>: View where V: View {
     }
 }
 
+#if DEBUG
 struct Section_Previews: PreviewProvider {
     static var previews: some View {
         Section("123") {
@@ -44,3 +45,4 @@ struct Section_Previews: PreviewProvider {
         }
     }
 }
+#endif

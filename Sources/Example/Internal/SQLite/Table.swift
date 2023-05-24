@@ -2,7 +2,7 @@ import SwiftUI
 import Ditto
 import SQLite
 
-extension Student: Migrater {
+extension Student: Migrator {
     static let id = Expression<Int64>("id")
     static let name = Expression<String>("name")
     static let age = Expression<Int>("age")

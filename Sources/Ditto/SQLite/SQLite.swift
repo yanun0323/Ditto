@@ -53,12 +53,12 @@ extension SQL {
     }
 }
 
-// MARK: Migrater
+// MARK: Migrator
 /**
  define for migrate table in sqlite
  ```
  // Sample
- extension Element: Migrater {
+ extension Element: Migrator {
      static let id = Expression<Int64>("id")
      static let name = Expression<String>("name")
      static let value = Expression<Blob>("value")
@@ -87,7 +87,7 @@ extension SQL {
  ```
  */
 @available(iOS 15, macOS 12.0, *)
-public protocol Migrater {
+public protocol Migrator {
     static var table: Tablex { get }
     /**
      Migrate sqlite datebase schema
@@ -125,9 +125,9 @@ public protocol Migrater {
 @available(iOS 15, macOS 12.0, *)
 extension Connection {
     /** Run table migrations */
-    public func migrate(_ migraters: [Migrater.Type]) {
+    public func migrate(_ migrators: [Migrator.Type]) {
         System.doCatch("migrate tables") {
-            for m in migraters {
+            for m in migrators {
                 try m.migrate(self)
             }
         }

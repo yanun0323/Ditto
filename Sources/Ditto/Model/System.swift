@@ -51,6 +51,12 @@ import AppKit
 extension System {
     public static func unfocus() {
         NSApp.keyWindow?.makeFirstResponder(nil)
+        System.async {
+            
+        } main: {  in
+            
+        }
+
     }
 }
 #endif
@@ -62,10 +68,6 @@ import UIKit
 
 @available(iOS 15, *)
 extension System {
-    public static let device: Device = .init()
-}
-
-public struct Device {
-    public let screen: CGRect = UIScreen.main.bounds
+    public static let screen: CGRect = UIScreen.main.bounds
 }
 #endif

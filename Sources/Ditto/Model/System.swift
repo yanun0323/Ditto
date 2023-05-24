@@ -51,12 +51,6 @@ import AppKit
 extension System {
     public static func unfocus() {
         NSApp.keyWindow?.makeFirstResponder(nil)
-        System.async {
-            
-        } main: {  in
-            
-        }
-
     }
 }
 #endif

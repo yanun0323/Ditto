@@ -21,14 +21,14 @@ extension Color {
 
 // MARK: Color Component
 @available(iOS 15, macOS 12.0, *)
-fileprivate extension Color {
+extension Color {
 #if os(macOS)
     typealias SystemColor = NSColor
 #else
     typealias SystemColor = UIColor
 #endif
     
-    var colorComponents: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)? {
+    public var components: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)? {
         var r: CGFloat = 0
         var g: CGFloat = 0
         var b: CGFloat = 0
@@ -67,7 +67,7 @@ extension Color: Codable {
     }
     
     public func encode(to encoder: Encoder) throws {
-        guard let colorComponents = self.colorComponents else {
+        guard let colorComponents = self.components else {
             return
         }
         

@@ -6,6 +6,7 @@ extension Student: Migrator {
     static let id = Expression<Int64>("id")
     static let name = Expression<String>("name")
     static let age = Expression<Int>("age")
+    static let sex = Expression<Student.Sex>("sex")
     
     static var table: Tablex { .init("students") }
     
@@ -14,15 +15,17 @@ extension Student: Migrator {
             t.column(id, primaryKey: .autoincrement)
             t.column(name, unique: true)
             t.column(age)
+            t.column(sex)
         })
         try conn.run(table.createIndex(name, ifNotExists: true))
     }
     
-    static func parse(_ r: Row) throws -> Student {
+    static func parse(_ row: Row) throws -> Student {
         return Student(
-            id: try r.get(id),
-            name: try r.get(name),
-            age: try r.get(age)
+            id: try row.get(id),
+            name: try row.get(name),
+            age: try row.get(age),
+            sex: try row.get(sex)
         )
     }
 }

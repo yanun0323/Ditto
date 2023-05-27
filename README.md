@@ -44,7 +44,7 @@ Project
 - **System**
     - `DIContainer` ***Dependency Injector*** instance. contain `AppState` and `Interaction`
     - `AppState` ***Stateful***, stores value and data publisher, it store `state` of App.
-- **`Interactor`**
+- **Interactor**
     - ***Stateless***, contain all of the business logic and `Repo`, `AppState` instances.
     - Access data through `Repo`.
 - **Model**
@@ -70,11 +70,11 @@ Wrapper for [`SQLite`](https://github.com/stephencelis/SQLite.swift) ,it makes l
 
 ### Sample Code
 ```swift
-// define Migrator
+// define element Migrator
 extension Element: Migrator {
     static let id = Expression<Int64>("id")
     static let name = Expression<String>("name")
-    static let value = Expression<Blob>("value")
+    static let value = Expression<Decimal>("value")
     
     static var table: Tablex { .init("elements") }
     
@@ -100,16 +100,16 @@ extension Element: Migrator {
 // init SQLite database
 let db = SQL.setup(dbName: "database", isMock: false)
 
-// query student
-func listStudent() throws -> [Student] {
-    let query = Student.table
+// query element
+func listElements() throws -> [Element] {
+    let query = Element.table
     let results = try SQL.getDriver().prepare(query)
     
-    var students: [Student] = []
+    var elems: [Element] = []
     for r in results {
-        students.append(try Student.parse(r))
+        elems.append(try Element.parse(r))
     }
-    return students
+    return elems
 }
 ```
 

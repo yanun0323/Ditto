@@ -51,8 +51,8 @@ extension UserDefault where Value: ExpressibleByNilLiteral {
     /// Creates a new User Defaults property wrapper for the given key.
     /// - Parameters:
     ///   - key: The key to use with the user defaults store.
-    public init(key: String, _ container: UserDefaults = .standard) {
-        self.init(key: key, defaultValue: nil, container: container)
+    public init(key: String, _ defaultValue: Value = nil, _ container: UserDefaults = .standard) {
+        self.init(key: key, defaultValue: defaultValue, container: container)
     }
 }
 

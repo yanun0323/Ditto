@@ -1,5 +1,10 @@
 import SwiftUI
 
+#if os(iOS)
+import UIKit
+#elseif os(macOS)
+import AppKit
+#endif
 
 @available(macOS 12.0, iOS 15, *)
 public struct System {
@@ -45,8 +50,6 @@ extension System {
 }
 
 #if os(macOS)
-import AppKit
-
 @available(macOS 12.0, *)
 extension System {
     public static func unfocus() {
@@ -54,11 +57,6 @@ extension System {
     }
 }
 #endif
-
-
-
-#if os(iOS)
-import UIKit
 
 @available(macOS 12.0, iOS 15, *)
 extension System {
@@ -69,5 +67,17 @@ extension System {
 #elseif os(macOS)
     public static let screen: CGSize? = NSScreen.main?.visibleFrame.size // You could implement this to force a CGFloat and get the full device screen size width regardless of the window size with .frame.size.width
 #endif
-}
+    
+    public static func screen(_ d: Dimension, _ ratio: CGFloat) -> CGFloat {
+#if os(macOS)
+        guard let screen = screen else { return 0 }
 #endif
+        if d == .width {
+            return screen.width * ratio
+        }
+        return screen.height * ratio
+    }
+    public enum Dimension {
+        case width, height
+    }
+}

@@ -72,7 +72,7 @@ struct ExampleView: View {
             }
 
             
-            Button(width: 150, height: 30, colors: [accentColor.opacity(0.6), accentColor], radius: 7, shadow: 5) {
+            Button(width: 150, height: 30, colors: [accentColor.opacity(0.6), accentColor], radius: 7) {
                 if students.isEmpty { return }
                 if creating { return }
                 defer { creating = false }

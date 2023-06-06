@@ -59,9 +59,9 @@ public struct Button<V>: View where V: View {
                     .overlay(content: content)
             } else {
                 Rectangle()
-                    .shadow(radius: shadow)
                     .foregroundColor(.transparent)
                     .backgroundLinearGradient(colors)
+                    .shadow(radius: shadow)
                     .frame(width: width <= 0 ? nil : width, height: height <= 0 ? nil : height)
                     .overlay(content: content)
             }

@@ -60,8 +60,14 @@ extension System {
 #if os(iOS)
 import UIKit
 
-@available(iOS 15, *)
+@available(macOS 12.0, iOS 15, *)
 extension System {
-    public static let screen: CGRect = UIScreen.main.bounds
+#if os(watchOS)
+    public static let screen: CGSize = WKInterfaceDevice.current().screenBounds.size
+#elseif os(iOS)
+    public static let screen: CGSize = UIScreen.main.bounds.size
+#elseif os(macOS)
+    public static let screen: CGSize? = NSScreen.main?.visibleFrame.size // You could implement this to force a CGFloat and get the full device screen size width regardless of the window size with .frame.size.width
+#endif
 }
 #endif

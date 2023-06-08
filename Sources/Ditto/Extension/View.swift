@@ -3,7 +3,7 @@ import SwiftUI
 @available(iOS 16, *)
 extension View {
     @ViewBuilder
-    func frame(size: CGSize, alignment a: Alignment = .center ) -> some View {
+    public func frame(size: CGSize, alignment a: Alignment = .center ) -> some View {
         self.frame(width: size.width, height: size.height, alignment: a)
     }
     

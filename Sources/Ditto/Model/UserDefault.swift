@@ -17,7 +17,7 @@ import Combine
  // Prints: New username: Test
  ```
  */
-@available(iOS 15, macOS 12.0, *)
+@available(iOS 16, macOS 13.0, *)
 @propertyWrapper
 public struct UserDefault<Value> {
     public let key: String
@@ -45,7 +45,7 @@ public struct UserDefault<Value> {
     }
 }
 
-@available(iOS 15, macOS 12.0, *)
+@available(iOS 16, macOS 13.0, *)
 extension UserDefault where Value: ExpressibleByNilLiteral {
     
     /// Creates a new User Defaults property wrapper for the given key.
@@ -58,12 +58,12 @@ extension UserDefault where Value: ExpressibleByNilLiteral {
 
 
 /// Allows to match for optionals with generics that are defined as non-optional.
-@available(iOS 15, macOS 12.0, *)
+@available(iOS 16, macOS 13.0, *)
 public protocol AnyOptional {
     /// Returns `true` if `nil`, otherwise `false`.
     var isNil: Bool { get }
 }
-@available(iOS 15, macOS 12.0, *)
+@available(iOS 16, macOS 13.0, *)
 extension Optional: AnyOptional {
     public var isNil: Bool { self == nil }
 }

@@ -1,9 +1,9 @@
 import Foundation
 
-@available(iOS 15, macOS 12.0, *)
+@available(iOS 16, macOS 13.0, *)
 public struct Http {}
 
-@available(iOS 15, macOS 12.0, *)
+@available(iOS 16, macOS 13.0, *)
 extension Http {
     public enum Method: String {
         case GET = "GET"
@@ -14,7 +14,7 @@ extension Http {
     }
 }
 
-@available(iOS 15, macOS 12.0, *)
+@available(iOS 16, macOS 13.0, *)
 extension Http {
     /**
      Send a request and get structure response

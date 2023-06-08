@@ -4,7 +4,7 @@ import SwiftUI
 import Combine
 import CoreGraphics
 
-@available(macOS 12.0, *)
+@available(macOS 13.0, *)
 extension View {
     public func hotkey(key: CGKeyCode, keyBase: [KeyBase], action: @escaping () -> Void) -> some View {
         self.modifier(HotKeysMod([Hotkey(keyBase: keyBase, key: key, action: action)]))
@@ -14,7 +14,7 @@ extension View {
     }
 }   
 
-@available(macOS 12.0, *)
+@available(macOS 13.0, *)
 public struct HotKeysMod: ViewModifier {
     @State public var subs = Set<AnyCancellable>() // Cancel onDisappear
     public var hotkeys: [Hotkey]
@@ -31,7 +31,7 @@ public struct HotKeysMod: ViewModifier {
     }
 }
 
-@available(macOS 12.0, *)
+@available(macOS 13.0, *)
 public struct DisableSoundsView: NSViewRepresentable {
     public var hotkeys: [Hotkey]
     
@@ -46,7 +46,7 @@ public struct DisableSoundsView: NSViewRepresentable {
     public func updateNSView(_ nsView: NSView, context: Context) { }
 }
 
-@available(macOS 12.0, *)
+@available(macOS 13.0, *)
 public class DisableSoundsNSView: NSView {
     public var hotkeys: [Hotkey] = []
     
@@ -55,7 +55,7 @@ public class DisableSoundsNSView: NSView {
     }
 }
 
-@available(macOS 12.0, *)
+@available(macOS 13.0, *)
 fileprivate func hotkeysSubscription(combinations: [Hotkey]) -> Bool {
     for comb in combinations {
         let basePressedCorrectly = comb.keyBasePressed
@@ -72,7 +72,7 @@ fileprivate func hotkeysSubscription(combinations: [Hotkey]) -> Bool {
 ///////////////////////
 ///HELPERS
 ///////////////////////
-@available(macOS 12.0, *)
+@available(macOS 13.0, *)
 public struct Hotkey {
     let keyBase: [KeyBase]
     let key: CGKeyCode
@@ -85,7 +85,7 @@ public struct Hotkey {
     }
 }
 
-@available(iOS 15, macOS 12.0, *)
+@available(iOS 16, macOS 13.0, *)
 extension Hotkey {
     public var keyBasePressed: Bool {
         let mustBePressed    = KeyBase.allCases.filter{ keyBase.contains($0) }
@@ -107,7 +107,7 @@ extension Hotkey {
     }
 }
 
-@available(iOS 15, macOS 12.0, *)
+@available(iOS 16, macOS 13.0, *)
 public enum KeyBase: CaseIterable {
     case option
     case command

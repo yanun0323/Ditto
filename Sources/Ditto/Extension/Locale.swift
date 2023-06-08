@@ -1,6 +1,6 @@
 import Foundation
 
-@available(iOS 15, macOS 12.0, *)
+@available(iOS 16, macOS 13.0, *)
 extension Locale {
     static public var tw: Locale = .init(identifier: "zh_tw")
     static public var us: Locale = .init(identifier: "en_us")

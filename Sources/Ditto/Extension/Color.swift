@@ -9,7 +9,7 @@ import AppKit
 #endif
 import SwiftUI
 
-@available(iOS 15, macOS 12.0, *)
+@available(iOS 16, macOS 13.0, *)
 extension Color {
     public static let primary100: Self = .primary
     public static let primary75: Self = .primary.opacity(0.75)
@@ -20,7 +20,7 @@ extension Color {
 }
 
 // MARK: Color Component
-@available(iOS 15, macOS 12.0, *)
+@available(iOS 16, macOS 13.0, *)
 extension Color {
 #if os(macOS)
     typealias SystemColor = NSColor
@@ -50,7 +50,7 @@ extension Color {
 }
 
 // MARK: Codable
-@available(iOS 15, macOS 12.0, *)
+@available(iOS 16, macOS 13.0, *)
 extension Color: Codable {
     public enum CodingKeys: String, CodingKey {
         case red, green, blue, alpha
@@ -81,7 +81,7 @@ extension Color: Codable {
 }
 
 // MARK: Hex
-@available(iOS 15, macOS 12.0, *)
+@available(iOS 16, macOS 13.0, *)
 extension Color {
     public init(hex: String?) {
         guard let str = hex else {

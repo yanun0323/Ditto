@@ -1,7 +1,7 @@
 import SQLite
 import SwiftUI
 
-@available(iOS 15, macOS 12.0, *)
+@available(iOS 16, macOS 13.0, *)
 public typealias Tablex = SQLite.Table
 
 // MARK: SQLite Instance
@@ -15,12 +15,12 @@ public typealias Tablex = SQLite.Table
  let db = SQL.getDriver()
  ```
  */
-@available(iOS 15, macOS 12.0, *)
+@available(iOS 16, macOS 13.0, *)
 public struct SQL {
     private static var db: Connection? = nil
 }
 
-@available(iOS 15, macOS 12.0, *)
+@available(iOS 16, macOS 13.0, *)
 extension SQL {
     /** Get sqlite database instance. if no exist, create a in memory sqlite database  connection */
     public static func getDriver() -> Connection {
@@ -86,7 +86,7 @@ extension SQL {
  
  ```
  */
-@available(iOS 15, macOS 12.0, *)
+@available(iOS 16, macOS 13.0, *)
 public protocol Migrator {
     static var table: Tablex { get }
     /**
@@ -122,7 +122,7 @@ public protocol Migrator {
 }
 
 // MARK: Connection
-@available(iOS 15, macOS 12.0, *)
+@available(iOS 16, macOS 13.0, *)
 extension Connection {
     /** Run table migrations */
     public func migrate(_ migrators: [Migrator.Type]) {

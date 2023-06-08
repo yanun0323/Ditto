@@ -6,13 +6,13 @@ import UIKit
 import AppKit
 #endif
 
-@available(macOS 12.0, iOS 15, *)
+@available(iOS 16, macOS 13.0, *)
 public struct System {
     public static let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "-"
     public static let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "-"
 }
 
-@available(macOS 12.0, iOS 15, *)
+@available(iOS 16, macOS 13.0, *)
 extension System {
     /**
      # async
@@ -37,7 +37,7 @@ extension System {
     }
 }
 
-@available(macOS 12.0, iOS 15, *)
+@available(iOS 16, macOS 13.0, *)
 extension System {
     public static func doCatch<T>(_ log: String, _ action: () throws -> T?) -> T? where T: Any {
         do {
@@ -50,7 +50,7 @@ extension System {
 }
 
 #if os(macOS)
-@available(macOS 12.0, *)
+@available(macOS 13.0, *)
 extension System {
     public static func unfocus() {
         NSApp.keyWindow?.makeFirstResponder(nil)
@@ -58,7 +58,7 @@ extension System {
 }
 #endif
 
-@available(macOS 12.0, iOS 15, *)
+@available(iOS 16, macOS 13.0, *)
 extension System {
 #if os(watchOS)
     public static let screen: CGSize = WKInterfaceDevice.current().screenBounds.size

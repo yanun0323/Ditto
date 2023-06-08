@@ -1,6 +1,6 @@
 import SwiftUI
 
-@available(iOS 15, macOS 12.0, *)
+@available(iOS 16, macOS 13.0, *)
 public struct DIContainer: EnvironmentKey {
     public static var defaultValue: DIContainer { Self.default }
     public static var `default`: DIContainer {
@@ -13,14 +13,14 @@ public struct DIContainer: EnvironmentKey {
     }
 }
 
-@available(iOS 15, macOS 12.0, *)
+@available(iOS 16, macOS 13.0, *)
 extension View {
     public func inject(_ container: DIContainer) -> some View {
         self.environment(\.injected, container)
     }
 }
 
-@available(iOS 15, macOS 12.0, *)
+@available(iOS 16, macOS 13.0, *)
 extension EnvironmentValues {
     public var injected: DIContainer {
         get { self[DIContainer.self] }

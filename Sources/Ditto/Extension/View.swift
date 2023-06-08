@@ -1,7 +1,12 @@
 import SwiftUI
 
-@available(iOS 15, *)
+@available(iOS 16, *)
 extension View {
+    @ViewBuilder
+    func frame(size: CGSize, alignment a: Alignment = .center ) -> some View {
+        self.frame(width: size.width, height: size.height, alignment: a)
+    }
+    
     @ViewBuilder
     public func foregroundLinearGradient(_ colors: [Color], start: UnitPoint = .topLeading, end: UnitPoint = .trailing) -> some View {
         if colors.count == 0 {

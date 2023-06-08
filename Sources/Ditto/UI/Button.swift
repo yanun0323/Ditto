@@ -1,6 +1,6 @@
 import SwiftUI
 
-@available(iOS 15, macOS 12.0, *)
+@available(iOS 16, macOS 13.0, *)
 public struct Button<V>: View where V: View {
     @State var width: CGFloat
     @State var height: CGFloat

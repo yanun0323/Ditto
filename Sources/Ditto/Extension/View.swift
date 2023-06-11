@@ -8,6 +8,11 @@ extension View {
     }
     
     @ViewBuilder
+    public func frame(maxSize size: CGSize, alignment a: Alignment = .center ) -> some View {
+        self.frame(maxWidth: size.width, maxHeight: size.height, alignment: a)
+    }
+    
+    @ViewBuilder
     public func foregroundLinearGradient(_ colors: [Color], start: UnitPoint = .topLeading, end: UnitPoint = .trailing) -> some View {
         if colors.count == 0 {
             self

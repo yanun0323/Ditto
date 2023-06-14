@@ -4,7 +4,7 @@ import SQLite
 /*
  Define Decimal value to make it storable in sqlite
  **/
-@available(iOS 16, macOS 13.0, *)
+@available(iOS 16, macOS 13, watchOS 9, *)
 extension Decimal: Value {
     public typealias Datatype = String
     
@@ -28,7 +28,7 @@ extension Decimal: Value {
 /*
  Define Decimal value to make it storable in sqlite
  **/
-@available(iOS 16, macOS 13.0, *)
+@available(iOS 16, macOS 13, watchOS 9, *)
 extension Color: Value {
     public typealias Datatype = Blob
     

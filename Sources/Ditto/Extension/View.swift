@@ -1,6 +1,6 @@
 import SwiftUI
 
-@available(iOS 16, *)
+@available(iOS 16, macOS 13, watchOS 9, *)
 extension View {
     @ViewBuilder
     public func frame(size: CGSize, alignment a: Alignment = .center ) -> some View {

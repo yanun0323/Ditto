@@ -15,7 +15,7 @@ Ditto is a powerful pakage for swiftUI.
     - [Separator](#separator)
 
 ## Requirement
-_**iOS 16.0** , **MacOS 13.0** or Higher_
+_**iOS 16.0** , **macOS 13** or Higher_
 
 ## Dependency Injector
 

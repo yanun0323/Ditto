@@ -1,6 +1,6 @@
 import SwiftUI
 
-@available(iOS 16, macOS 13.0, *)
+@available(iOS 16, macOS 13, watchOS 9, *)
 public struct Section<V>: View where V: View {
     var title: LocalizedStringKey
     var font: Font

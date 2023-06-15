@@ -1,6 +1,7 @@
 import SwiftUI
 import Ditto
 
+#if os(iOS)
 struct ExampleView: View {
     @Environment(\.injected) private var container: DIContainer
     @State var accentColor: Color = .accentColor
@@ -135,3 +136,4 @@ struct ExampleView_Previews: PreviewProvider {
             .previewLayout(.sizeThatFits)
     }
 }
+#endif

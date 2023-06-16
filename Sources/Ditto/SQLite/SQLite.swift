@@ -36,10 +36,10 @@ extension SQL {
             dbName = name
         }
         let conn: Connection
-        if isMock {
-            conn = try! Connection(filePath(dbName).absoluteString)
-        } else {
+        if isMock && (name == nil || name!.isEmpty) {
             conn = try! Connection(.inMemory)
+        } else {
+            conn = try! Connection(filePath(dbName).absoluteString)
         }
         conn.busyTimeout = 5
 

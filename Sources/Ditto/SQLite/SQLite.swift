@@ -119,6 +119,8 @@ public protocol Migrator {
      ```
      */
     static func parse(_:Row) throws -> Self
+    
+    func setter() -> [Setter]
 }
 
 // MARK: Connection
@@ -131,5 +133,25 @@ extension Connection {
                 try m.migrate(self)
             }
         }
+    }
+    
+    public func query<M: Migrator, V: Value>(_ m: M, delegate d: ((Tablex) -> ScalarQuery<V>)) throws -> V {
+        return try self.scalar(d(M.table))
+    }
+    
+    public func query<M: Migrator> (_ m: M, delegate d: ((Tablex) -> Tablex)) throws -> AnySequence<Row>{
+        return try self.prepare(d(M.table))
+    }
+    
+    public func insert<M: Migrator>(_ m: M) throws {
+        try self.run(M.table.insert(m.setter()))
+    }
+    
+    public func upsert<M: Migrator>(_ m: M, primaryKey key: Expressible) throws {
+        try self.run(M.table.upsert(m.setter(), onConflictOf: key, set: m.setter()))
+    }
+    
+    public func update<M: Migrator>(_ m: M) throws {
+        try self.run(M.table.update(m.setter()))
     }
 }

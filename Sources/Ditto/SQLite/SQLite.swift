@@ -125,7 +125,7 @@ public protocol Migrator {
 
 @available(iOS 16, macOS 13, watchOS 9, *)
 extension Migrator {
-    static var conn: ConnectionDelegate<Self> { .init(self) }
+    public static var conn: ConnectionDelegate<Self> { .init(self) }
 }
 
 // MARK: Connection
@@ -149,6 +149,7 @@ public struct ConnectionDelegate<M: Migrator> {
     }
 }
 
+@available(iOS 16, macOS 13, watchOS 9, *)
 extension ConnectionDelegate {
     public func query<V: Value>(delegate d: ((Tablex) -> ScalarQuery<V>)) throws -> V {
         return try SQL.getDriver().scalar(d(T.table))
@@ -158,15 +159,15 @@ extension ConnectionDelegate {
         return try SQL.getDriver().prepare(d(T.table))
     }
     
-    public func insert(_ m: M) throws {
-        try SQL.getDriver().run(T.table.insert(m.setter()))
+    public func insert(_ m: M) throws -> Int64 {
+        return try SQL.getDriver().run(T.table.insert(m.setter()))
     }
     
-    public func upsert(_ m: M, primaryKey key: Expressible) throws {
-        try SQL.getDriver().run(T.table.upsert(m.setter(), onConflictOf: key, set: m.setter()))
+    public func upsert(_ m: M, primaryKey key: Expressible) throws -> Int64 {
+        return try SQL.getDriver().run(T.table.upsert(m.setter(), onConflictOf: key, set: m.setter()))
     }
     
-    public func update(_ m: M) throws {
-        try SQL.getDriver().run(M.table.update(m.setter()))
+    public func update(_ m: M) throws -> Int {
+        return try SQL.getDriver().run(M.table.update(m.setter()))
     }
 }

@@ -28,4 +28,12 @@ extension Student: Migrator {
             sex: try row.get(sex)
         )
     }
+    
+    func setter() -> [Setter] {
+        return [
+            Student.id <- id,
+            Student.name <- name,
+            Student.age <- age
+        ]
+    }
 }

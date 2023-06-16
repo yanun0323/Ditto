@@ -135,11 +135,11 @@ extension Connection {
         }
     }
     
-    public func query<M: Migrator, V: Value>(_ m: M, delegate d: ((Tablex) -> ScalarQuery<V>)) throws -> V {
+    public func query<M: Migrator, V: Value>(_ m: M.Type, delegate d: ((Tablex) -> ScalarQuery<V>)) throws -> V {
         return try self.scalar(d(M.table))
     }
     
-    public func query<M: Migrator> (_ m: M, delegate d: ((Tablex) -> Tablex)) throws -> AnySequence<Row>{
+    public func query<M: Migrator> (_ m: M.Type, delegate d: ((Tablex) -> Tablex)) throws -> AnySequence<Row>{
         return try self.prepare(d(M.table))
     }
     

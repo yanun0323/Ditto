@@ -123,6 +123,11 @@ public protocol Migrator {
     func setter() -> [Setter]
 }
 
+@available(iOS 16, macOS 13, watchOS 9, *)
+extension Migrator {
+    static var conn: ConnectionDelegate<Self> { .init(self) }
+}
+
 // MARK: Connection
 @available(iOS 16, macOS 13, watchOS 9, *)
 extension Connection {
@@ -134,24 +139,34 @@ extension Connection {
             }
         }
     }
-    
-    public func query<M: Migrator, V: Value>(_ m: M.Type, delegate d: ((Tablex) -> ScalarQuery<V>)) throws -> V {
-        return try self.scalar(d(M.table))
+}
+
+@available(iOS 16, macOS 13, watchOS 9, *)
+public struct ConnectionDelegate<M: Migrator> {
+    private var T: M.Type
+    public init(_ t: M.Type) {
+        self.T = t
+    }
+}
+
+extension ConnectionDelegate {
+    public func query<V: Value>(delegate d: ((Tablex) -> ScalarQuery<V>)) throws -> V {
+        return try SQL.getDriver().scalar(d(T.table))
     }
     
-    public func query<M: Migrator> (_ m: M.Type, delegate d: ((Tablex) -> Tablex)) throws -> AnySequence<Row>{
-        return try self.prepare(d(M.table))
+    public func query(delegate d: ((Tablex) -> Tablex)) throws -> AnySequence<Row>{
+        return try SQL.getDriver().prepare(d(T.table))
     }
     
-    public func insert<M: Migrator>(_ m: M) throws {
-        try self.run(M.table.insert(m.setter()))
+    public func insert(_ m: M) throws {
+        try SQL.getDriver().run(T.table.insert(m.setter()))
     }
     
-    public func upsert<M: Migrator>(_ m: M, primaryKey key: Expressible) throws {
-        try self.run(M.table.upsert(m.setter(), onConflictOf: key, set: m.setter()))
+    public func upsert(_ m: M, primaryKey key: Expressible) throws {
+        try SQL.getDriver().run(T.table.upsert(m.setter(), onConflictOf: key, set: m.setter()))
     }
     
-    public func update<M: Migrator>(_ m: M) throws {
-        try self.run(M.table.update(m.setter()))
+    public func update(_ m: M) throws {
+        try SQL.getDriver().run(M.table.update(m.setter()))
     }
 }

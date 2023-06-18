@@ -163,7 +163,7 @@ extension Connection {
         return try SQL.getDriver().run(T(m).table.where(`where`).update(m.setter()))
     }
     
-    public func delete(_ model: Migrator, _ query: ((Table) -> QueryType)) throws -> Int {
+    public func delete(_ model: Migrator, _ query: ((Tablex) -> QueryType)) throws -> Int {
         return try self.run(query(T(model).table).delete())
     }
     

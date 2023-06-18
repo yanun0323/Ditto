@@ -135,12 +135,12 @@ extension Connection {
         }
     }
     
-    public func query<V: Value>(_ model: Migrator, _ query: ((Tablex) -> ScalarQuery<V>)) throws -> V {
-        return try self.scalar(query(T(model).table))
+    public func query<V: Value>(_ model: Migrator.Type, _ query: ((Tablex) -> ScalarQuery<V>)) throws -> V {
+        return try self.scalar(query(model.table))
     }
     
-    public func query(_ model: Migrator, _ query: ((Tablex) -> QueryType)) throws -> AnySequence<Row> {
-        return try self.prepare(query(T(model).table))
+    public func query(_ model: Migrator.Type, _ query: ((Tablex) -> QueryType)) throws -> AnySequence<Row> {
+        return try self.prepare(query(model.table))
     }
     
     public func listSchema(_ tableName: String) throws {
@@ -163,8 +163,8 @@ extension Connection {
         return try SQL.getDriver().run(T(m).table.where(`where`).update(m.setter()))
     }
     
-    public func delete(_ model: Migrator, _ query: ((Tablex) -> QueryType)) throws -> Int {
-        return try self.run(query(T(model).table).delete())
+    public func delete(_ model: Migrator.Type, _ query: ((Tablex) -> QueryType)) throws -> Int {
+        return try self.run(query(model.table).delete())
     }
     
     private func T(_ m: Migrator) -> Migrator.Type {

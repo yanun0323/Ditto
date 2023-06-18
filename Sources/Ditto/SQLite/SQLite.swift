@@ -125,7 +125,7 @@ public protocol Migrator {
 
 @available(iOS 16, macOS 13, watchOS 9, *)
 extension Migrator {
-    public static var conn: ConnectionDelegate<Self> { .init(self) }
+    public static var getDriver: ConnectionDelegate<Self> { .init(self) }
 }
 
 // MARK: Connection
@@ -163,11 +163,11 @@ extension ConnectionDelegate {
         return try SQL.getDriver().run(T.table.insert(m.setter()))
     }
     
-    public func upsert(_ m: M, primaryKey key: Expressible) throws -> Int64 {
-        return try SQL.getDriver().run(T.table.upsert(m.setter(), onConflictOf: key, set: m.setter()))
+    public func upsert(_ m: M, primaryKey pk: Expressible, `where`: Expression<Bool>) throws -> Int64 {
+        return try SQL.getDriver().run(T.table.where(`where`).upsert(m.setter(), onConflictOf: pk, set: m.setter()))
     }
     
-    public func update(_ m: M) throws -> Int {
-        return try SQL.getDriver().run(M.table.update(m.setter()))
+    public func update(_ m: M, `where`: Expression<Bool>) throws -> Int {
+        return try SQL.getDriver().run(M.table.where(`where`).update(m.setter()))
     }
 }

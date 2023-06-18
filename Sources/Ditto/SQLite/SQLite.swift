@@ -135,11 +135,11 @@ extension Connection {
         }
     }
     
-    public func query<V: Value>(_ model: Migrator, _ query: ((Table) -> ScalarQuery<V>)) throws -> V {
+    public func query<V: Value>(_ model: Migrator, _ query: ((Tablex) -> ScalarQuery<V>)) throws -> V {
         return try self.scalar(query(T(model).table))
     }
     
-    public func query(_ model: Migrator, _ query: ((Table) -> QueryType)) throws -> AnySequence<Row> {
+    public func query(_ model: Migrator, _ query: ((Tablex) -> QueryType)) throws -> AnySequence<Row> {
         return try self.prepare(query(T(model).table))
     }
     

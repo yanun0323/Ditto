@@ -123,11 +123,6 @@ public protocol Migrator {
     func setter() -> [Setter]
 }
 
-@available(iOS 16, macOS 13, watchOS 9, *)
-extension Migrator {
-    public static var getDriver: ConnectionDelegate<Self> { .init(self) }
-}
-
 // MARK: Connection
 @available(iOS 16, macOS 13, watchOS 9, *)
 extension Connection {
@@ -139,35 +134,36 @@ extension Connection {
             }
         }
     }
-}
-
-@available(iOS 16, macOS 13, watchOS 9, *)
-public struct ConnectionDelegate<M: Migrator> {
-    private var T: M.Type
-    public init(_ t: M.Type) {
-        self.T = t
-    }
-}
-
-@available(iOS 16, macOS 13, watchOS 9, *)
-extension ConnectionDelegate {
-    public func query<V: Value>(delegate d: ((Tablex) -> ScalarQuery<V>)) throws -> V {
-        return try SQL.getDriver().scalar(d(T.table))
+    
+    public func query<V: Value>(_ query: ScalarQuery<V>) throws -> V {
+        return try self.scalar(query)
     }
     
-    public func query(delegate d: ((Tablex) -> Tablex)) throws -> AnySequence<Row>{
-        return try SQL.getDriver().prepare(d(T.table))
+    public func query(_ query: QueryType) throws -> AnySequence<Row>{
+        return try self.prepare(query)
     }
     
-    public func insert(_ m: M) throws -> Int64 {
-        return try SQL.getDriver().run(T.table.insert(m.setter()))
+    public func listSchema(_ tableName: String) throws {
+        let columns = try self.schema.columnDefinitions(table: tableName)
+        print("'\(tableName)' schema:")
+        for column in columns {
+            print("'\(column.name)', type: \(column.type.rawValue), pk:\(!column.primaryKey.isNil), nullable: \(column.nullable)")
+        }
     }
     
-    public func upsert(_ m: M, primaryKey pk: Expressible, `where`: Expression<Bool>) throws -> Int64 {
-        return try SQL.getDriver().run(T.table.where(`where`).upsert(m.setter(), onConflictOf: pk, set: m.setter()))
+    public func insert(_ m: Migrator) throws -> Int64 {
+        return try self.run(T(m).table.insert(m.setter()))
     }
     
-    public func update(_ m: M, `where`: Expression<Bool>) throws -> Int {
-        return try SQL.getDriver().run(M.table.where(`where`).update(m.setter()))
+    public func upsert(_ m: Migrator, primaryKey pk: Expressible, `where`: Expression<Bool>) throws -> Int64 {
+        return try SQL.getDriver().run(T(m).table.where(`where`).upsert(m.setter(), onConflictOf: pk, set: m.setter()))
+    }
+    
+    public func update(_ m: Migrator, `where`: Expression<Bool>) throws -> Int {
+        return try SQL.getDriver().run(T(m).table.where(`where`).update(m.setter()))
+    }
+    
+    private func T(_ m: Migrator) -> Migrator.Type {
+        return type(of: m)
     }
 }

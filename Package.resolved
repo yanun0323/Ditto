@@ -8,6 +8,15 @@
         "revision" : "7a2e3cd27de56f6d396e84f63beefd0267b55ccb",
         "version" : "0.14.1"
       }
+    },
+    {
+      "identity" : "sworm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/yanun0323/Sworm",
+      "state" : {
+        "revision" : "e3db791dffc1f6c8765a2068d3d162929d6473d3",
+        "version" : "0.1.0"
+      }
     }
   ],
   "version" : 2

@@ -1,6 +1,7 @@
 import SwiftUI
 import Ditto
 import SQLite
+import Sworm
 
 extension Student: Migrator {
     static let id = Expression<Int64>("id")

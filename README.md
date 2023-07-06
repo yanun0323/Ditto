@@ -3,7 +3,6 @@
 Ditto is a powerful pakage for swiftUI.
 
 - [Dependency Injector](#dependency-injector)
-- [SQL](#sql)
 - [UserDefault](#userdefault)
 - [System](#system)
 - [Http](#http)
@@ -63,55 +62,6 @@ Project
 Check [`Example Folder`][example] for more information.
 
 [example]: https://github.com/yanun0323/Ditto/tree/master/Sources/Example
-
-## SQL
-
-Wrapper for [`SQLite`](https://github.com/stephencelis/SQLite.swift) ,it makes life easier.
-
-### Sample Code
-```swift
-// define element Migrator
-extension Element: Migrator {
-    static let id = Expression<Int64>("id")
-    static let name = Expression<String>("name")
-    static let value = Expression<Decimal>("value")
-    
-    static var table: Tablex { .init("elements") }
-    
-    static func migrate(_ conn: Connection) throws {
-        try conn.run(table.create(ifNotExists: true) { t in
-            t.column(id, primaryKey: .autoincrement)
-            t.column(name, unique: true)
-            t.column(value)
-        })
-        
-        try conn.run(table.createIndex(name, ifNotExists: true))
-    }
-    
-    static func parse(_ r: Row) throws -> Element {
-        return Element(
-            id: try r.get(id),
-            name: try r.get(name),
-            value: try r.get(value)
-        )
-    }
-}
-
-// init SQLite database
-let db = SQL.setup(dbName: "database", isMock: false)
-
-// query element
-func listElements() throws -> [Element] {
-    let query = Element.table
-    let results = try SQL.getDriver().prepare(query)
-    
-    var elems: [Element] = []
-    for r in results {
-        elems.append(try Element.parse(r))
-    }
-    return elems
-}
-```
 
 Check [`SQL Folder`][sql] for more information, and more use cases [`DataDao.swift`][dataDao]
 

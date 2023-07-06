@@ -1,5 +1,6 @@
 import SwiftUI
 import Ditto
+import Sworm
 
 extension DIContainer {
     var appstate: AppState { AppState.get() }

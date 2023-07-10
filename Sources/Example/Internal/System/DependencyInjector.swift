@@ -27,7 +27,7 @@ struct Interactor {
 
 extension Interactor {
     public static func get(isMock: Bool) -> Self {
-        if Self.default.isNil {
+        if Self.default == nil {
             Self.default = Interactor(appstate: AppState.get(), isMock: isMock)
         }
         return Self.default!

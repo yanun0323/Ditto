@@ -10,7 +10,7 @@ struct AppState {
 
 extension AppState {
     public static func get() -> Self {
-        if Self.default.isNil {
+        if Self.default == nil {
             Self.default = Self()
         }
         return Self.default!

@@ -56,6 +56,16 @@ extension UserDefaultState where Value: ExpressibleByNilLiteral {
 }
 
 
+extension UserDefaultState where Value: Any {
+    /// Creates a new User Defaults property wrapper for the given key.
+    /// - Parameters:
+    ///   - key: The key to use with the user defaults store.
+    public init(key: String, defaultValue: Value, _ container: UserDefaults = .standard) {
+        self.init(key: key, defaultValue: defaultValue, container: container)
+    }
+}
+
+
 /// Allows to match for optionals with generics that are defined as non-optional.
 @available(iOS 16, macOS 13, watchOS 9, *)
 public protocol AnyOptional {

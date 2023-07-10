@@ -65,13 +65,10 @@ extension System {
 #elseif os(iOS)
     public static let screen: CGSize = UIScreen.main.bounds.size
 #elseif os(macOS)
-    public static let screen: CGSize? = NSScreen.main?.visibleFrame.size // You could implement this to force a CGFloat and get the full device screen size width regardless of the window size with .frame.size.width
+    public static let screen: CGSize = NSScreen.main?.visibleFrame.size ?? .zero // You could implement this to force a CGFloat and get the full device screen size width regardless of the window size with .frame.size.width
 #endif
-    
+    /*** deprecated, use `System.screen.x(0.5).width` instead */
     public static func screen(_ d: Dimension, _ ratio: CGFloat) -> CGFloat {
-#if os(macOS)
-        guard let screen = screen else { return 0 }
-#endif
         if d == .width {
             return screen.width * ratio
         }

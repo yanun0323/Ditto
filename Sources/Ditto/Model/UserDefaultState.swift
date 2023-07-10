@@ -46,21 +46,24 @@ public struct UserDefaultState<Value> {
 }
 
 @available(iOS 16, macOS 13, watchOS 9, *)
-extension UserDefaultState where Value: ExpressibleByNilLiteral {
-    /// Creates a new User Defaults property wrapper for the given key.
-    /// - Parameters:
-    ///   - key: The key to use with the user defaults store.
-    public init(key: String, defaultNilableValue: Value = nil, _ container: UserDefaults = .standard) {
-        self.init(key: key, defaultValue: defaultNilableValue, container: container)
+extension UserDefaultState {
+    public init(key: String, defaultValue: Value = nil, _ container: UserDefaults = .standard) where Value: ExpressibleByNilLiteral {
+        self.init(key: key, defaultValue: defaultValue, container: container)
     }
-}
-
-@available(iOS 16, macOS 13, watchOS 9, *)
-extension UserDefaultState where Value: Any {
-    /// Creates a new User Defaults property wrapper for the given key.
-    /// - Parameters:
-    ///   - key: The key to use with the user defaults store.
-    public init(key: String, defaultValue: Value, _ container: UserDefaults = .standard) {
+    
+    public init(key: String, defaultValue: Value, _ container: UserDefaults = .standard) where Value: ExpressibleByStringLiteral {
+        self.init(key: key, defaultValue: defaultValue, container: container)
+    }
+    
+    public init(key: String, defaultValue: Value, _ container: UserDefaults = .standard) where Value: ExpressibleByBooleanLiteral {
+        self.init(key: key, defaultValue: defaultValue, container: container)
+    }
+    
+    public init(key: String, defaultValue: Value, _ container: UserDefaults = .standard) where Value: ExpressibleByIntegerLiteral {
+        self.init(key: key, defaultValue: defaultValue, container: container)
+    }
+    
+    public init(key: String, defaultValue: Value, _ container: UserDefaults = .standard) where Value: ExpressibleByFloatLiteral {
         self.init(key: key, defaultValue: defaultValue, container: container)
     }
 }
@@ -71,4 +74,9 @@ extension UserDefaultState where Value: Any {
 public protocol AnyOptional {
     /// Returns `true` if `nil`, otherwise `false`.
     var isNil: Bool { get }
+}
+
+@available(iOS 16, macOS 13, watchOS 9, *)
+extension Optional: AnyOptional {
+    public var isNil: Bool { self == nil }
 }

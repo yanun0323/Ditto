@@ -32,9 +32,9 @@ extension Student: Migrator {
     
     func setter() -> [Setter] {
         return [
-            Student.id <- id,
             Student.name <- name,
-            Student.age <- age
+            Student.age <- age,
+            Student.sex <- sex
         ]
     }
 }

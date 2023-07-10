@@ -50,12 +50,12 @@ extension UserDefaultState where Value: ExpressibleByNilLiteral {
     /// Creates a new User Defaults property wrapper for the given key.
     /// - Parameters:
     ///   - key: The key to use with the user defaults store.
-    public init(key: String, defaultValue: Value = nil, _ container: UserDefaults = .standard) {
-        self.init(key: key, defaultValue: defaultValue, container: container)
+    public init(key: String, defaultNilableValue: Value = nil, _ container: UserDefaults = .standard) {
+        self.init(key: key, defaultValue: defaultNilableValue, container: container)
     }
 }
 
-
+@available(iOS 16, macOS 13, watchOS 9, *)
 extension UserDefaultState where Value: Any {
     /// Creates a new User Defaults property wrapper for the given key.
     /// - Parameters:

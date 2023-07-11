@@ -6,7 +6,7 @@ import CoreGraphics
 
 @available(macOS 13, *)
 extension View {
-    public func hotkey(key: CGKeyCode, keyBase: [KeyBase], action: @escaping () -> Void) -> some View {
+    public func hotkey(key: CGKeyCode, keyBase: [KeyBase] = [], action: @escaping () -> Void) -> some View {
         self.modifier(HotKeysMod([Hotkey(keyBase: keyBase, key: key, action: action)]))
     }
     public func hotkeys( _ hotkeys: [Hotkey] ) -> some View {

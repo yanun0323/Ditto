@@ -26,6 +26,7 @@ public struct HotKeysMod: ViewModifier {
     public func body(content: Content) -> some View {
         ZStack {
             DisableSoundsView(hotkeys:hotkeys)
+                .frame(width: 0, height: 0)
             content
         }
     }

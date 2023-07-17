@@ -4,7 +4,11 @@ import SwiftUI
 extension View {
     @ViewBuilder
     public func debug() -> some View {
+        #if DEBUG
         self.border(Color.red, width: 1)
+        #else
+        self
+        #endif
     }
     
     @ViewBuilder

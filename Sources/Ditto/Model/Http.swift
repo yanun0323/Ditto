@@ -21,14 +21,12 @@ extension Http {
      
      ```swift
      let url = "http://api/user"
-     let user = Http.SendRequest(.GET, toUrl: url, type: User.self) { delegate in
-     var request = delegate
+     let user = Http.SendRequest(.GET, toUrl: url, type: User.self) { request in
      // do something ...
-     return request
      }
      ```
      */
-    public static func sendRequest<T>(_ method: Method = .GET, toUrl path: String, type: T.Type, action: @escaping (URLRequest) -> URLRequest) -> T? where T: Decodable {
+    public static func sendRequest<T>(_ method: Method = .GET, toUrl path: String, type: T.Type, action: @escaping (inout URLRequest) -> Void = { _ in }) -> T? where T: Decodable {
         guard let url = URL(string: path) else {
             print("failed to generate url from string: \(path)")
             return nil
@@ -37,7 +35,7 @@ extension Http {
         var result: T? = nil
         
         var request = URLRequest(url: url, timeoutInterval: 30)
-        request = action(request)
+        action(&request)
         request.httpMethod = method.rawValue
         
         URLSession.shared.dataTask(with: request) { data, responce, error in
@@ -68,14 +66,12 @@ extension Http {
      
      ```swift
      let url = "http://api/user"
-     let body = Http.DumpRequest(.GET, toUrl: url, type: User.self) { delegate in
-     var request = delegate
+     let body = Http.DumpRequest(.GET, toUrl: url, type: User.self) { request in
      // do something ...
-     return request
      }
      ```
      */
-    public static func dumpRequest(_ method: Method = .GET, toUrl path: String, action: @escaping (URLRequest) -> URLRequest) -> String {
+    public static func dumpRequest(_ method: Method = .GET, toUrl path: String, action: @escaping (inout URLRequest) -> Void = { _ in }) -> String {
         guard let url = URL(string: path) else {
             print("failed to generate url from string: \(path)")
             return ""
@@ -84,7 +80,7 @@ extension Http {
         var result: String = ""
         
         var request = URLRequest(url: url, timeoutInterval: 30)
-        request = action(request)
+        action(&request)
         request.httpMethod = method.rawValue
         
         URLSession.shared.dataTask(with: request) { data, responce, error in
@@ -110,14 +106,12 @@ extension Http {
      
      ```swift
      let url = "http://api/user"
-     let code = Http.RequestStatusCode(.GET, toUrl: url, type: User.self) { delegate in
-     var request = delegate
+     let code = Http.RequestStatusCode(.GET, toUrl: url, type: User.self) { request in
      // do something ...
-     return request
      }
      ```
      */
-    public static func requestStatusCode(_ method: Method = .GET, toUrl path: String, action: @escaping (URLRequest) -> URLRequest) -> Int? {
+    public static func requestStatusCode(_ method: Method = .GET, toUrl path: String, action: @escaping (inout URLRequest) -> Void = { _ in }) -> Int? {
         guard let url = URL(string: path) else {
             print("failed to generate url from string: \(path)")
             return nil
@@ -126,7 +120,7 @@ extension Http {
         var result: Int? = nil
         
         var request = URLRequest(url: url, timeoutInterval: 30)
-        request = action(request)
+        action(&request)
         request.httpMethod = method.rawValue
         
         URLSession.shared.dataTask(with: request) { _, responce, error in

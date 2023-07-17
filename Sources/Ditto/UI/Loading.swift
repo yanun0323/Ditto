@@ -44,10 +44,12 @@ public struct Loading: View {
         ZStack {
             ForEach(0...(count-1), id: \.self) { i in
                 let ratio = 1 - Double(i)*0.1
-                let diameter = lineWidth*ratio
+                let opacity = 1 - CGFloat(i)/CGFloat(count)
+                let diameter = lineWidth
                 Circle()
                     .foregroundColor(color)
                     .frame(width: diameter, height: diameter)
+                    .opacity(opacity)
                     .offset(y: -(size-lineWidth-lineWidth+diameter)*0.5)
                     .rotationEffect(Angle(degrees:-Double(i)*40))
                     .rotationEffect(Angle(degrees:isLoading ? 360 : 0))

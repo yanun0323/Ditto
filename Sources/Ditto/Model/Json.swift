@@ -2,7 +2,7 @@ import SwiftUI
 
 // MARK: - Encode/decode helpers
 
-class JSONNull: Codable, Hashable {
+public class JSONNull: Codable, Hashable {
     
     public static func == (lhs: JSONNull, rhs: JSONNull) -> Bool {
         return true
@@ -27,41 +27,41 @@ class JSONNull: Codable, Hashable {
     }
 }
 
-class JSONCodingKey: CodingKey {
-    let key: String
+public class JSONCodingKey: CodingKey {
+    public let key: String
     
-    required init?(intValue: Int) {
+    required public init?(intValue: Int) {
         return nil
     }
     
-    required init?(stringValue: String) {
+    required public init?(stringValue: String) {
         key = stringValue
     }
     
-    var intValue: Int? {
+    public var intValue: Int? {
         return nil
     }
     
-    var stringValue: String {
+    public var stringValue: String {
         return key
     }
 }
 
-class JSONAny: Codable {
+public class JSONAny: Codable {
     
-    let value: Any
+    public let value: Any
     
-    static func decodingError(forCodingPath codingPath: [CodingKey]) -> DecodingError {
+    static public func decodingError(forCodingPath codingPath: [CodingKey]) -> DecodingError {
         let context = DecodingError.Context(codingPath: codingPath, debugDescription: "Cannot decode JSONAny")
         return DecodingError.typeMismatch(JSONAny.self, context)
     }
     
-    static func encodingError(forValue value: Any, codingPath: [CodingKey]) -> EncodingError {
+    static public func encodingError(forValue value: Any, codingPath: [CodingKey]) -> EncodingError {
         let context = EncodingError.Context(codingPath: codingPath, debugDescription: "Cannot encode JSONAny")
         return EncodingError.invalidValue(value, context)
     }
     
-    static func decode(from container: SingleValueDecodingContainer) throws -> Any {
+    static public func decode(from container: SingleValueDecodingContainer) throws -> Any {
         if let value = try? container.decode(Bool.self) {
             return value
         }
@@ -80,7 +80,7 @@ class JSONAny: Codable {
         throw decodingError(forCodingPath: container.codingPath)
     }
     
-    static func decode(from container: inout UnkeyedDecodingContainer) throws -> Any {
+    static public func decode(from container: inout UnkeyedDecodingContainer) throws -> Any {
         if let value = try? container.decode(Bool.self) {
             return value
         }
@@ -107,7 +107,7 @@ class JSONAny: Codable {
         throw decodingError(forCodingPath: container.codingPath)
     }
     
-    static func decode(from container: inout KeyedDecodingContainer<JSONCodingKey>, forKey key: JSONCodingKey) throws -> Any {
+    static public func decode(from container: inout KeyedDecodingContainer<JSONCodingKey>, forKey key: JSONCodingKey) throws -> Any {
         if let value = try? container.decode(Bool.self, forKey: key) {
             return value
         }
@@ -134,7 +134,7 @@ class JSONAny: Codable {
         throw decodingError(forCodingPath: container.codingPath)
     }
     
-    static func decodeArray(from container: inout UnkeyedDecodingContainer) throws -> [Any] {
+    static public func decodeArray(from container: inout UnkeyedDecodingContainer) throws -> [Any] {
         var arr: [Any] = []
         while !container.isAtEnd {
             let value = try decode(from: &container)
@@ -143,7 +143,7 @@ class JSONAny: Codable {
         return arr
     }
     
-    static func decodeDictionary(from container: inout KeyedDecodingContainer<JSONCodingKey>) throws -> [String: Any] {
+    static public func decodeDictionary(from container: inout KeyedDecodingContainer<JSONCodingKey>) throws -> [String: Any] {
         var dict = [String: Any]()
         for key in container.allKeys {
             let value = try decode(from: &container, forKey: key)
@@ -152,7 +152,7 @@ class JSONAny: Codable {
         return dict
     }
     
-    static func encode(to container: inout UnkeyedEncodingContainer, array: [Any]) throws {
+    static public func encode(to container: inout UnkeyedEncodingContainer, array: [Any]) throws {
         for value in array {
             if let value = value as? Bool {
                 try container.encode(value)
@@ -176,7 +176,7 @@ class JSONAny: Codable {
         }
     }
     
-    static func encode(to container: inout KeyedEncodingContainer<JSONCodingKey>, dictionary: [String: Any]) throws {
+    static public func encode(to container: inout KeyedEncodingContainer<JSONCodingKey>, dictionary: [String: Any]) throws {
         for (key, value) in dictionary {
             let key = JSONCodingKey(stringValue: key)!
             if let value = value as? Bool {
@@ -201,7 +201,7 @@ class JSONAny: Codable {
         }
     }
     
-    static func encode(to container: inout SingleValueEncodingContainer, value: Any) throws {
+    static public func encode(to container: inout SingleValueEncodingContainer, value: Any) throws {
         if let value = value as? Bool {
             try container.encode(value)
         } else if let value = value as? Int64 {

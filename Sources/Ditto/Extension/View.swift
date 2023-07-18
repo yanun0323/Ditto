@@ -3,13 +3,21 @@ import SwiftUI
 @available(iOS 16, macOS 13, watchOS 9, *)
 extension View {
     @ViewBuilder
-    public func debug() -> some View {
-        #if DEBUG
-        self.border(Color.red, width: 1)
-        #else
+    public func debug(cover expected: CGSize? = nil) -> some View {
+    #if DEBUG
+        if expected != nil {
+            ZStack {
+                self
+                VStack {}
+                    .frame(size: expected!).border(Color.red, width: 1)
+            }
+        } else {
+            self.border(Color.red, width: 1)
+        }
+    #else
         self
-        #endif
-    }
+    #endif
+    }    
     
     @ViewBuilder
     public func frame(size: CGSize, alignment a: Alignment = .center ) -> some View {

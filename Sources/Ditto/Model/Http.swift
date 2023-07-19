@@ -2,9 +2,9 @@ import Foundation
 
 public struct Http {
     #if DEBUG
-    static var debug = true
+    public static var debug = true
     #else
-    static var debug = false
+    public static var debug = false
     #endif
 }
 

@@ -2,9 +2,9 @@ import Foundation
 
 public struct Http {
     #if DEBUG
-    public static var debug = true
+    private static var mode = Mode.debug
     #else
-    public static var debug = false
+    private static var mode = Mode.release
     #endif
 }
 
@@ -15,6 +15,12 @@ extension Http {
         case PUT = "PUT"
         case PATCH = "PATCH"
         case DELETE = "DELETE"
+    }
+}
+
+extension Http {
+    public enum Mode {
+        case release, debug
     }
 }
 
@@ -41,13 +47,28 @@ extension Http.Error: Error {}
 
 extension Http {
     private static func debug(_ message: String) {
-        if Http.debug {
+        if Http.mode == .debug {
             print(message)
         }
     }
 }
 
 extension Http {
+    /**
+     Set http mode. If mode is debug, print request log in console.
+    - Default Value:
+     ```
+     #if DEBUG
+     private static var mode = Mode.debug
+     #else
+     private static var mode = Mode.release
+     #endif
+     ```
+     */
+    public static func setMode(_ mode: Http.Mode) {
+        Http.mode = mode
+    }
+    
     /**
      Send a request and get structure response
      

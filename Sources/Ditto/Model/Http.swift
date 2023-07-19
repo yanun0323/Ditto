@@ -18,7 +18,7 @@ extension Http {
         case errDownloadData(String)
         case errDecodeData(String)
         
-        var message: String {
+        public var message: String {
             switch self {
                 case .errParseURL:
                     return "parse URL error, please check your url path"

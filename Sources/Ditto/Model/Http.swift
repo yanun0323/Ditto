@@ -70,6 +70,13 @@ extension Http {
     }
     
     /**
+     Get http mode.
+     */
+    public static func getMode() -> Http.Mode {
+        return Http.mode
+    }
+    
+    /**
      Send a request and get structure response
      
      ```swift

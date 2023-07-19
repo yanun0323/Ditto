@@ -2,7 +2,7 @@ import SwiftUI
 import Sparkle
 
 public struct Updater {
-    public var shared: SPUStandardUpdaterController { SPUStandardUpdaterController.shared }
+    public static var shared: SPUStandardUpdaterController { SPUStandardUpdaterController.shared }
 }
 
 extension SPUStandardUpdaterController {

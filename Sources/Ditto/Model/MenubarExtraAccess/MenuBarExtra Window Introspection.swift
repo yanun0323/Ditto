@@ -4,6 +4,7 @@
 //  © 2023 Steffan Andrews • Licensed under MIT License
 //
 
+#if os(macOS)
 import SwiftUI
 
 extension View {
@@ -25,3 +26,4 @@ extension View {
             }
     }
 }
+#endif

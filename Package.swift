@@ -18,7 +18,6 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/yanun0323/Sworm", from: "0.1.0"),
-        .package(url: "https://github.com/sparkle-project/Sparkle", from: "2.0.0")
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
     ],
@@ -29,12 +28,7 @@ let package = Package(
             name: "Ditto",
             dependencies: [
                 .product(name: "Sworm", package: "Sworm"),
-                .product(name: "Sparkle", package: "Sparkle")
             ]),
-        .target(
-            name: "Example",
-            dependencies: ["Ditto"]
-        ),
         .testTarget(
             name: "DittoTests",
             dependencies: ["Ditto"]),

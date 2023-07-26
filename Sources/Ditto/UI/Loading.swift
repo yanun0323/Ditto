@@ -43,7 +43,6 @@ public struct Loading: View {
         let count = 4
         ZStack {
             ForEach(0...(count-1), id: \.self) { i in
-                let ratio = 1 - Double(i)*0.1
                 let opacity = 1 - CGFloat(i)/CGFloat(count)
                 let diameter = lineWidth
                 Circle()

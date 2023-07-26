@@ -4,6 +4,7 @@
 //  © 2023 Steffan Andrews • Licensed under MIT License
 //
 
+#if os(macOS)
 import AppKit
 import SwiftUI
 
@@ -87,3 +88,4 @@ extension NSStatusItem {
         button?.publisher(for: \.cell!.state, options: [.initial, .new])
     }
 }
+#endif

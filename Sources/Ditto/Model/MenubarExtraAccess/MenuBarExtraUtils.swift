@@ -4,6 +4,7 @@
 //  © 2023 Steffan Andrews • Licensed under MIT License
 //
 
+#if os(macOS)
 import AppKit
 import SwiftUI
 import Combine
@@ -311,3 +312,4 @@ extension MenuBarExtraUtils {
         return String("\(anyView)".hashValue)
     }
 }
+#endif

@@ -8,7 +8,17 @@ extension CGSize {
     }
     
     /*** create new CGSize with input ratio */
-    public func x(w ratioW: CGFloat, h ratioH: CGFloat) -> CGSize {
-        return CGSize(width: self.width*ratioW, height: self.height*ratioH)
+    public func x(w ratioWidth: CGFloat, h ratioHeight: CGFloat) -> CGSize {
+        return CGSize(width: self.width*ratioWidth, height: self.height*ratioHeight)
+    }
+    
+    /*** create new CGSize with add input size */
+    public func add(_ size: CGSize) -> CGSize {
+        return CGSize(width: self.width + size.width, height: self.height + size.height)
+    }
+    
+    /*** create new CGSize with add input size */
+    public func add(w width: CGFloat, h height: CGFloat) -> CGSize {
+        return CGSize(width: self.width + width, height: self.height + height)
     }
 }

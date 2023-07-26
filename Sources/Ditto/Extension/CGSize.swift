@@ -21,4 +21,9 @@ extension CGSize {
     public func add(w width: CGFloat, h height: CGFloat) -> CGSize {
         return CGSize(width: self.width + width, height: self.height + height)
     }
+    
+    /*** create new CGSize with subtract input size */
+    public func sub(_ size: CGSize) -> CGSize {
+        return CGSize(width: self.width - size.width, height: self.height - size.height)
+    }
 }

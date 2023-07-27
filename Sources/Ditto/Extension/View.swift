@@ -3,16 +3,16 @@ import SwiftUI
 @available(iOS 16, macOS 13, watchOS 9, *)
 extension View {
     @ViewBuilder
-    public func debug(cover expected: CGSize? = nil) -> some View {
+    public func debug(_ color: Color = .red, cover expected: CGSize? = nil) -> some View {
     #if DEBUG
         if expected != nil {
             ZStack {
                 self
                 VStack {}
-                    .frame(size: expected!).border(Color.red, width: 1)
+                    .frame(size: expected!).border(color, width: 1)
             }
         } else {
-            self.border(Color.red, width: 1)
+            self.border(color, width: 1)
         }
     #else
         self

@@ -41,7 +41,7 @@ public struct Button<V>: View where V: View {
         SwiftUI.Button(action: action){
             Rectangle()
                 .foregroundColor(.transparent)
-                .backgroundLinearGradient(colors)
+                .backgroundGradient(colors)
                 .frame(width: width <= 0 ? nil : width, height: height <= 0 ? nil : height)
                 .overlay(content: content)
         }

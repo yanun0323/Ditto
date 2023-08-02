@@ -30,11 +30,13 @@ extension View {
     }
     
     @ViewBuilder
-    public func foregroundLinearGradient(_ colors: [Color], start: UnitPoint = .topLeading, end: UnitPoint = .trailing) -> some View {
+    public func foregroundGradient(_ colors: [Color], start: UnitPoint = .topLeading, end: UnitPoint = .trailing) -> some View {
         if colors.count == 0 {
             self
         } else {
-            self.overlay {
+            self
+                .foregroundColor(.clear)
+                .overlay {
                 LinearGradient(colors: colors, startPoint: start, endPoint: end)
                     .mask { self }
             }
@@ -42,7 +44,7 @@ extension View {
     }
     
     @ViewBuilder
-    public func backgroundLinearGradient(_ colors: [Color], start: UnitPoint = .topLeading, end: UnitPoint = .trailing) -> some View {
+    public func backgroundGradient(_ colors: [Color], start: UnitPoint = .topLeading, end: UnitPoint = .trailing) -> some View {
         if colors.count == 0 {
             self
         } else {
@@ -62,3 +64,18 @@ extension View {
         Block(size: .homebar)
     }
 }
+
+#if DEBUG
+struct Gradient_Previews: PreviewProvider {
+    static var previews: some View {
+        VStack {
+            Text("Hello, world!")
+                .font(.largeTitle)
+                .foregroundGradient([.red, .purple])
+            Text("Hello, world!")
+                .font(.largeTitle)
+                .backgroundGradient([.red, .purple])
+        }
+    }
+}
+#endif

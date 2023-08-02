@@ -51,4 +51,14 @@ extension View {
             )
         }
     }
+    
+    @ViewBuilder
+    public func statusbarArea() -> some View {
+        Block(size: .statusbar)
+    }
+    
+    @ViewBuilder
+    public func homebarArea() -> some View {
+        Block(size: .homebar)
+    }
 }

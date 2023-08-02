@@ -8,5 +8,5 @@ public struct Room {
     public static let device = System.screen
     public static let statusbar = CGSize(width: device.width, height: 60)
     public static let container = CGSize(width: device.width, height: device.height - statusbar.height - homebar.height)
-    public static let homebar = CGSize(width: device.width, height: 40)
+    public static let homebar = CGSize(width: device.width, height: 35)
 }

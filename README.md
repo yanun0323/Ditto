@@ -23,7 +23,7 @@ Ditto uses `Dependency Injector` to follow [`Clean Architecture`](https://blog.c
 
 Inspired by [`clean-architecture-swiftui`](https://github.com/nalexn/clean-architecture-swiftui)
 
-### Structure
+### Clean Architecture Structure
 ```
 Project
 |
@@ -67,6 +67,81 @@ Check [`Repo Folder`][sql] for more information, and more use cases [`DataDao.sw
 
 [sql]: https://github.com/yanun0323/Ditto/tree/master/Sources/Example/Internal/Repo
 [dataDao]: https://github.com/yanun0323/Ditto/blob/master/Sources/Example/Internal/Repo/DataDao.swift
+
+### DIContainer
+`DIContainer` is the instance of `Dependency Injector`.
+
+Inspired by [`clean-architecture-swiftui`](https://github.com/nalexn/clean-architecture-swiftui)
+
+#### Sample Code
+`MyApp.swift`
+```swift
+// Inject DIContainer into App
+@main
+struct MyApp: App {
+    private var container = DIContainer()
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .inject(container)
+        }
+    }
+}
+```
+
+`ContentView.swift`
+```swift
+// Get DIContainer from environment
+struct ContentView: View {
+    @Environment(\.injected) private var container: DIContainer
+
+    var body: some View {
+        // ...
+    }
+}
+
+// Inject DIContainer into Preview
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+                .inject(Container(isMock: true))
+    }
+}
+```
+
+`System.swift`
+```swift
+// Define AppState & Interactor in DIContainer
+extension DIContainer {
+    var appState: AppState { AppState.get() }
+    var interactor: Interactor { Interactor.get(isMock: self.isMock) }
+}
+
+// Define Interactor default value
+struct Interactor {
+    private static var `default`: Interactor? = nil
+
+    public static func get(isMock: Bool) -> Self {
+        if Self.default == nil {
+            Self.default = Interactor(isMock: isMock)
+        }
+        return Self.default!
+    }
+}
+
+// Define AppState default value
+struct AppState {
+    private static var `default`: AppState? = nil
+
+    public static func get() -> Self {
+        if Self.default == nil {
+            Self.default = Self()
+        }
+        return Self.default!
+    }
+}
+
+```
 
 ## UserDefault
 Property Wrapper for `UserDefaults`.

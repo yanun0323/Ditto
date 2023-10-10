@@ -63,9 +63,9 @@ Check [`Example Folder`][example] for more information.
 
 [example]: https://github.com/yanun0323/Ditto/tree/master/Sources/Example
 
-Check [`SQL Folder`][sql] for more information, and more use cases [`DataDao.swift`][dataDao]
+Check [`Repo Folder`][sql] for more information, and more use cases [`DataDao.swift`][dataDao]
 
-[sql]: https://github.com/yanun0323/Ditto/tree/master/Sources/Example/Internal/SQLite
+[sql]: https://github.com/yanun0323/Ditto/tree/master/Sources/Example/Internal/Repo
 [dataDao]: https://github.com/yanun0323/Ditto/blob/master/Sources/Example/Internal/Repo/DataDao.swift
 
 ## UserDefault

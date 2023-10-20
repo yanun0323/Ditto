@@ -30,4 +30,9 @@ extension CGSize {
     public func sub(w width: CGFloat = 0, h height: CGFloat = 0) -> CGSize {
         return CGSize(width: self.width - width, height: self.height - height)
     }
+    
+    /*** create new CGSize with replacement */
+    public func replace(w width: CGFloat? = nil, h height: CGFloat? = nil) -> CGSize {
+        return CGSize(width: width ?? self.width, height: height ?? self.height)
+    }
 }

@@ -1,6 +1,5 @@
 import SwiftUI
 
-@available(iOS 16, macOS 13, watchOS 9, *)
 extension Decimal {
     public var double: Double {
         return (self as NSDecimalNumber).doubleValue

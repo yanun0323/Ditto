@@ -6,13 +6,13 @@ import UIKit
 import AppKit
 #endif
 
-@available(iOS 16, macOS 13, watchOS 9, *)
 public struct System {
+    /** application bundle version */
     public static let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "-"
+    /** application bundle build */
     public static let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "-"
 }
 
-@available(iOS 16, macOS 13, watchOS 9, *)
 extension System {
     /**
      # async
@@ -27,7 +27,11 @@ extension System {
         }
     }
     
-    public static func async<T>(background: @escaping () -> T = {}, main: @escaping (T) -> Void) {
+    /**
+     # async
+     Invoke function in background thread and main thread with passing data
+     */
+    public static func asyncio<T>(background: @escaping () -> T = {}, main: @escaping (T) -> Void) {
         DispatchQueue.global().async {
             let data = background()
             DispatchQueue.main.async {
@@ -37,8 +41,11 @@ extension System {
     }
 }
 
-@available(iOS 16, macOS 13, watchOS 9, *)
 extension System {
+    /**
+     # doCatch
+     handle simple do/catch action
+     */
     public static func doCatch<T>(_ log: String, _ action: () throws -> T?) -> T? where T: Any {
         do {
             return try action()
@@ -50,31 +57,23 @@ extension System {
 }
 
 #if os(macOS)
-@available(macOS 13, *)
 extension System {
+    /**
+     # unfocus
+     unfocus current focus window
+     */
     public static func unfocus() {
         NSApp.keyWindow?.makeFirstResponder(nil)
     }
 }
-#endif
-
-@available(iOS 16, macOS 13, watchOS 9, *)
-extension System {
-#if os(watchOS)
-    public static let screen: CGSize = WKInterfaceDevice.current().screenBounds.size
 #elseif os(iOS)
-    public static let screen: CGSize = UIScreen.main.bounds.size
-#elseif os(macOS)
-    public static let screen: CGSize = NSScreen.main?.visibleFrame.size ?? .zero // You could implement this to force a CGFloat and get the full device screen size width regardless of the window size with .frame.size.width
-#endif
-    /** **\*Deprecated\*** use `System.screen.x(0.5).width` instead */
-    public static func screen(_ d: Dimension, _ ratio: CGFloat) -> CGFloat {
-        if d == .width {
-            return screen.width * ratio
-        }
-        return screen.height * ratio
-    }
-    public enum Dimension {
-        case width, height
+extension System {
+    /**
+     # dissmissKeyboard
+     dissmiss iOS keyboard
+     */
+    public static func dissmissKeyboard() {
+        UIApplication.shared.dismissKeyboard()
     }
 }
+#endif

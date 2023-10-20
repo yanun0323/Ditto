@@ -156,7 +156,7 @@ extension Http {
         - ignoreBody: It won't return the body if true. It helps increasing performance to ignore the body return.
         - action: Use this to modify request, such as set cookies, add headers or add data.
      */
-    public static func sendRequest(_ method: Method = .GET, toUrl path: String, ignoreBody: Bool = false, action: @escaping (inout URLRequest) -> Void = { _ in }) -> (String, Int?, Http.Error?) {
+    public static func sendRequestForString(_ method: Method = .GET, toUrl path: String, ignoreBody: Bool = false, action: @escaping (inout URLRequest) -> Void = { _ in }) -> (String, Int?, Http.Error?) {
         guard let url = URL(string: path) else {
             debug("[sendRequest: debug] failed to generate url from string: \(path)")
             return ("", nil, .errParseURL)

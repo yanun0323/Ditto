@@ -1,6 +1,5 @@
 import SwiftUI
 
-@available(iOS 16, macOS 13, watchOS 9, *)
 public struct Block: View {
     @State var width: CGFloat
     @State var height: CGFloat

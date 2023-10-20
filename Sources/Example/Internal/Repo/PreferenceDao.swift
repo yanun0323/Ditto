@@ -15,6 +15,6 @@ extension PreferenceDao where Self: PreferenceRepository {
 }
 
 extension UserDefaults {
-    @UserDefault(key: "AccentColor")
+    @UserDefaultState(key: "AccentColor")
     static var accentColor: Color?
 }

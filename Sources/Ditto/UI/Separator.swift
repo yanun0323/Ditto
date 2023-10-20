@@ -1,12 +1,10 @@
 import SwiftUI
 
-@available(iOS 16, macOS 13, watchOS 9, *)
 public enum Direction {
     case horizontal
     case vertical
 }
 
-@available(iOS 16, macOS 13, watchOS 9, *)
 public struct Separator: View {
     @State var direction: Direction
     @State var color: Color
@@ -30,7 +28,6 @@ public struct Separator: View {
 }
 
 // MARK: Private Property
-@available(iOS 16, macOS 13, watchOS 9, *)
 extension Separator {
     private var width: CGFloat? {
         return direction == .horizontal ? nil : safeSize

@@ -2,7 +2,6 @@ import Foundation
 import SwiftUI
 
 // MARK: Date Static function
-@available(iOS 16, macOS 13, watchOS 9, *)
 extension Date {
     public init?(from date: String, _ layout: DateFormatLayout, _ locale: Locale = Locale.current, _ timezone: TimeZone? = nil) {
         let dateFormatter = DateFormatter()
@@ -19,7 +18,6 @@ extension Date {
 }
 
 // MARK: Date Property
-@available(iOS 16, macOS 13, watchOS 9, *)
 extension Date {
     /** Return the second for 1970-01-01 00:00:00 UTC*/
     public var unix: Int {
@@ -65,7 +63,6 @@ extension Date {
 }
 
 // MARK: Date Function
-@available(iOS 16, macOS 13, watchOS 9, *)
 extension Date {
     public func string(_ layout: DateFormatLayout = .Default, _ locale: Locale = .current, _ timezone: TimeZone? = nil) -> String
     {
@@ -117,10 +114,8 @@ extension Date {
 }
 
 // MARK: - DateFormatLayout
-@available(iOS 16, macOS 13, watchOS 9, *)
 public typealias DateFormatLayout = String
 
-@available(iOS 16, macOS 13, watchOS 9, *)
 public extension DateFormatLayout {
     init(_ layout: String) {
         self = layout
@@ -159,7 +154,6 @@ public extension DateFormatLayout {
     static let Numeric: Self = "yyyyMMdd"
 }
 
-@available(iOS 16, macOS 13, watchOS 9, *)
 public enum DateSpan: Int, Identifiable, Hashable, CaseIterable, Codable {
     public var id: Int { self.rawValue }
     case none=0, day=1, week=2, month=3, year=4
@@ -181,7 +175,6 @@ public enum DateSpan: Int, Identifiable, Hashable, CaseIterable, Codable {
 }
 
 // MARK: - TimeInterval
-@available(iOS 16, macOS 13, watchOS 9, *)
 extension TimeInterval {
     
     public var seconds: Int {

@@ -1,6 +1,5 @@
 import SwiftUI
 
-@available(iOS 16, macOS 13, watchOS 9, *)
 extension View {
     @ViewBuilder
     public func debug(_ color: Color = .red, cover expected: CGSize? = nil) -> some View {
@@ -53,17 +52,21 @@ extension View {
             )
         }
     }
-    
+}
+
+#if os(iOS) || os(macOS) || os(watchOS)
+extension View {
     @ViewBuilder
     public func statusbarArea() -> some View {
-        Block(size: .statusbar)
+        Block(size: Device.statusbarArea)
     }
     
     @ViewBuilder
     public func homebarArea() -> some View {
-        Block(size: .homebar)
+        Block(size: Device.homebarArea)
     }
 }
+#endif
 
 #if DEBUG
 struct Gradient_Previews: PreviewProvider {

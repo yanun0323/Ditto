@@ -9,18 +9,15 @@ import AppKit
 #endif
 import SwiftUI
 
-@available(iOS 16, macOS 13, watchOS 9, *)
 extension Color {
-    public static let primary100: Self = .primary
-    public static let primary75: Self = .primary.opacity(0.75)
-    public static let primary50: Self = .primary.opacity(0.5)
-    public static let primary25: Self = .primary.opacity(0.25)
+    public static let primaryFull: Self = .primary
+    public static let primaryHalf: Self = .primary.opacity(0.5)
+    public static let primaryQuarter: Self = .primary.opacity(0.25)
     public static let section: Self  = .primary.opacity(0.1)
     public static let transparent: Self = .white.opacity(0.1).opacity(0.0101)
 }
 
 // MARK: Color Component
-@available(iOS 16, macOS 13, watchOS 9, *)
 extension Color {
 #if os(macOS)
     typealias SystemColor = NSColor
@@ -50,7 +47,6 @@ extension Color {
 }
 
 // MARK: Codable
-@available(iOS 16, macOS 13, watchOS 9, *)
 extension Color: Codable {
     public enum CodingKeys: String, CodingKey {
         case red, green, blue, alpha
@@ -81,7 +77,6 @@ extension Color: Codable {
 }
 
 // MARK: Hex
-@available(iOS 16, macOS 13, watchOS 9, *)
 extension Color {
     public init(hex: String?) {
         guard let str = hex else {

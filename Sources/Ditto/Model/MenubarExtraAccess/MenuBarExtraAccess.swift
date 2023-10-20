@@ -8,10 +8,6 @@
 import SwiftUI
 import Combine
 
-@available(macOS 13.0, *)
-@available(iOS, unavailable)
-@available(tvOS, unavailable)
-@available(watchOS, unavailable)
 extension Scene {
     /// Adds a presentation state binding to `MenuBarExtra`.
     /// If more than one MenuBarExtra are used in the app, provide the sequential index number of the `MenuBarExtra`.
@@ -32,10 +28,6 @@ extension Scene {
     }
 }
 
-@available(macOS 13.0, *)
-@available(iOS, unavailable)
-@available(tvOS, unavailable)
-@available(watchOS, unavailable)
 struct MenuBarExtraAccess<Content: Scene>: Scene {
     let index: Int
     let statusItemIntrospection: ((_ statusItem: NSStatusItem) -> Void)?

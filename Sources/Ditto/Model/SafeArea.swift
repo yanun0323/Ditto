@@ -44,17 +44,17 @@ extension Device {
 #elseif os(iOS)
 extension Device {
     public static let screen: CGSize = UIScreen.main.bounds.size
-    public static let safeAreaInsets: EdgeInsets = UIApplication.shared.keyWindow?.safeAreaInsets.insets ?? .init()
+    public static let safeAreaInsets: EdgeInsets = UIApplication.shared.rootWindow?.safeAreaInsets.insets ?? .init()
 }
 
 extension UIEdgeInsets {
-    var insets: EdgeInsets {
+    public var insets: EdgeInsets {
         EdgeInsets(top: top, leading: left, bottom: bottom, trailing: right)
     }
 }
 
 extension UIApplication {
-    var keyWindow: UIWindow? {
+    public var keyWindow: UIWindow? {
         connectedScenes
             .compactMap {
                 $0 as? UIWindowScene
@@ -66,6 +66,18 @@ extension UIApplication {
                 $0.isKeyWindow
             }
     }
+    
+    
+    public var rootWindow: UIWindow? {
+        connectedScenes
+            .compactMap {
+                $0 as? UIWindowScene
+            }
+            .flatMap {
+                $0.windows
+            }
+            .first
+    }
 }
 #elseif os(macOS)
 extension Device {
@@ -74,7 +86,7 @@ extension Device {
 }
 
 extension NSEdgeInsets {
-    var insets: EdgeInsets {
+    public var insets: EdgeInsets {
         EdgeInsets(top: top, leading: left, bottom: bottom, trailing: right)
     }
 }

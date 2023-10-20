@@ -14,9 +14,9 @@ public struct Device {
 }
 
 extension Device {
-    public static let safeArea: CGSize = safeAreaInsets.screenSize
-    public static let homebarArea: CGSize = CGSize(width: screen.width, height: safeAreaInsets.bottom)
-    public static let statusbarArea: CGSize = CGSize(width: screen.width, height: safeAreaInsets.top)
+    public static var safeArea: CGSize { safeAreaInsets.screenSize }
+    public static var homebarArea: CGSize { CGSize(width: screen.width, height: safeAreaInsets.bottom) }
+    public static var statusbarArea: CGSize { CGSize(width: screen.width, height: safeAreaInsets.top) }
 }
 
 public extension EdgeInsets {

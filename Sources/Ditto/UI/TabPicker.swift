@@ -17,9 +17,9 @@ public struct TabPicker: View {
     
     public init(selection: Binding<Int>, size: CGFloat = CGFloat(22), color: Color = Color.accentColor, items: [TabPickerItem]) {
         self._selection = selection
-        self.size = size
-        self.color = color
-        self.items = items
+        self._size = State(initialValue: size)
+        self._color = State(initialValue: color)
+        self._items = State(initialValue: items)
     }
     
     public var body: some View {

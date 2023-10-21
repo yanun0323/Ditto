@@ -2,8 +2,11 @@ import SwiftUI
 
 public struct TabPickerItem: Identifiable {
     public var id: String { self.image }
-    public var action: (() -> Void)? = nil
     public var image: String
+    
+    public init(image: String) {
+        self.image = image
+    }
 }
 
 public struct TabPicker: View {

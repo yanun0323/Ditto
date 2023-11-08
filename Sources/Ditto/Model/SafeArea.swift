@@ -57,7 +57,7 @@ extension UIApplication {
 }
 #elseif os(macOS)
 extension Device {
-    public static var screen: CGSize { NSScreen.main?.visibleFrame.screenSize ?? .zero } // You could implement this to force a CGFloat and get the full device screen size width regardless of the window size with .frame.size.width
+    public static var screen: CGSize { NSScreen.main?.visibleFrame.size ?? .zero } // You could implement this to force a CGFloat and get the full device screen size width regardless of the window size with .frame.size.width
     public static var safeAreaInsets: EdgeInsets { NSScreen.main?.safeAreaInsets.insets ?? .init() }
 }
 

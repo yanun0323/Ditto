@@ -28,7 +28,8 @@ public struct Loading: View {
         self.action = action
     }
     
-    @ViewBuilder
+    @MainActor
+@ViewBuilder
     private func build() -> some View {
         switch style {
             case .spine:
@@ -38,7 +39,8 @@ public struct Loading: View {
         }
     }
     
-    @ViewBuilder
+    @MainActor
+@ViewBuilder
     private func spine() -> some View {
         let count = 4
         ZStack {
@@ -60,7 +62,8 @@ public struct Loading: View {
         .frame(width: size, height: size)
     }
     
-    @ViewBuilder
+    @MainActor
+@ViewBuilder
     private func circle() -> some View {
         VStack {
             let diameter = size - lineWidth

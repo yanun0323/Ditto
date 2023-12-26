@@ -27,7 +27,8 @@ struct ExampleView: View {
         .onReceive(container.appstate.pubStudent) { handleConsumeStudent($0) }
     }
     
-    @ViewBuilder
+    @MainActor
+@ViewBuilder
     private func accentColorPanel() -> some View {
         HStack {
             ColorPicker(selection: $accentColor, supportsOpacity: false) {
@@ -40,7 +41,8 @@ struct ExampleView: View {
         }
     }
     
-    @ViewBuilder
+    @MainActor
+@ViewBuilder
     private func studentCreaterPanel() -> some View {
         VStack {
             HStack {
@@ -90,7 +92,8 @@ struct ExampleView: View {
         }
     }
     
-    @ViewBuilder
+    @MainActor
+@ViewBuilder
     private func studentList() -> some View {
         ScrollView(.vertical, showsIndicators: true) {
             if students.isEmpty {

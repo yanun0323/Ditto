@@ -27,7 +27,7 @@ extension EnvironmentValues {
 
 #if DEBUG
 extension DIContainer {
-    static var preview: DIContainer {
+    public static var preview: DIContainer {
         return DIContainer(isMock: true)
     }
 }

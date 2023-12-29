@@ -3,7 +3,7 @@ import SwiftUI
 public struct DIContainer: EnvironmentKey {
     public static var defaultValue: DIContainer { Self.default }
     public static var `default`: DIContainer {
-        return DIContainer(isMock: true)
+        return DIContainer()
     }
     
     public let isMock: Bool
@@ -25,4 +25,11 @@ extension EnvironmentValues {
     }
 }
 
+#if DEBUG
+extension DIContainer {
+    static var preview: DIContainer {
+        return DIContainer(isMock: true)
+    }
+}
+#endif
 

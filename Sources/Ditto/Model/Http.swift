@@ -26,18 +26,18 @@ extension Http {
 
 extension Http {
     public enum Error {
-        case errParseURL
-        case errDownloadData(String)
-        case errDecodeData(String)
+        case errParseURL(_ method: Method, _ url: String)
+        case errDownloadData(_ method: Method, _ url: String, _ msg: String)
+        case errDecodeData(_ method: Method, _ url: String, _ msg: String)
         
         public var message: String {
             switch self {
-                case .errParseURL:
-                    return "parse URL error, please check your url path"
-                case let .errDownloadData(msg):
-                    return "download data error, err: \(msg)"
-                case let .errDecodeData(msg):
-                    return "decode json data error, err: \(msg)"
+                case let .errParseURL(method, url):
+                return "\(method.rawValue): \(url)\n parse URL error, please check your url path"
+                case let .errDownloadData(method, url, msg):
+                    return "\(method.rawValue): \(url)\ndownload data error, err: \(msg)"
+                case let .errDecodeData(method, url, msg):
+                    return "\(method.rawValue): \(url)\ndecode json data error, err: \(msg)"
             }
         }
     }
@@ -93,7 +93,7 @@ extension Http {
     public static func sendRequest<T>(_ method: Http.Method = .GET, toUrl path: String, type: T.Type, action: @escaping (inout URLRequest) -> Void = { _ in }) -> (T?, Int?, Http.Error?) where T: Decodable {
         guard let url = URL(string: path) else {
             debug("[sendRequest: debug] failed to generate url from string: \(path)")
-            return (nil, nil, .errParseURL)
+            return (nil, nil, .errParseURL(method, path))
         }
         
         let channel = DispatchSemaphore(value: 0)
@@ -108,19 +108,19 @@ extension Http {
         URLSession.shared.dataTask(with: request) { data, response, error in
             defer { channel.signal() }
             guard error == nil else {
-                err = .errDownloadData(String(describing: error))
+                err = .errDownloadData(method, path, String(describing: error))
                 return
             }
             
             guard let res = response as? HTTPURLResponse else {
-                err = .errDownloadData("network connection error")
+                err = .errDownloadData(method, path, "network connection error")
                 return
             }
             
             code = res.statusCode
           
             guard let data = data else {
-                err = .errDownloadData("connection timeout")
+                err = .errDownloadData(method, path, "connection timeout")
                 return
             }
             
@@ -132,7 +132,7 @@ extension Http {
                 result = decoded
             } catch {
                 debug("[sendRequest: debug] decode data error, \(String(describing: error))")
-                err = .errDecodeData(String(describing: error))
+                err = .errDecodeData(method, path, String(describing: error))
             }
             
         }.resume()
@@ -159,7 +159,7 @@ extension Http {
     public static func sendRequestForString(_ method: Method = .GET, toUrl path: String, ignoreBody: Bool = false, action: @escaping (inout URLRequest) -> Void = { _ in }) -> (String, Int?, Http.Error?) {
         guard let url = URL(string: path) else {
             debug("[sendRequest: debug] failed to generate url from string: \(path)")
-            return ("", nil, .errParseURL)
+            return ("", nil, .errParseURL(method, path))
         }
         
         let channel = DispatchSemaphore(value: 0)
@@ -174,19 +174,19 @@ extension Http {
         URLSession.shared.dataTask(with: request) { data, response, error in
             defer { channel.signal() }
             guard error == nil else {
-                err = .errDownloadData(String(describing: error))
+                err = .errDownloadData(method, path, String(describing: error))
                 return
             }
             
             guard let res = response as? HTTPURLResponse else {
-                err = .errDownloadData("network connection error")
+                err = .errDownloadData(method, path, "network connection error")
                 return
             }
             
             code = res.statusCode
             
             guard let data = data else {
-                err = .errDownloadData("connection timeout")
+                err = .errDownloadData(method, path, "connection timeout")
                 return
             }
             

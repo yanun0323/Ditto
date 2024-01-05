@@ -170,6 +170,33 @@ extension AVLTree {
     }
 }
 
+// MARK: - Replacing new items
+
+extension AVLTree {
+    public func update(key: Key, payload: Payload? = nil) {
+        if let root = root {
+            insert(input: key, payload: payload, node: root)
+        } else {
+            root = Node(key: key, payload: payload)
+        }
+        size += 1
+    }
+
+    private func update(input: Key, payload: Payload?, node: Node) {
+        if input < node.key {
+            if let child = node.leftChild {
+                update(input: input, payload: payload, node: child)
+            }
+        } else if input > node.key {
+            if let child = node.rightChild {
+                update(input: input, payload: payload, node: child)
+            }
+        } else {
+            node.payload = payload
+        }
+    }
+}
+
 // MARK: - Balancing tree
 
 extension AVLTree {

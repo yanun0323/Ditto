@@ -56,7 +56,7 @@ extension View {
     // MARK: round
     @MainActor
     @ViewBuilder
-    public func round(radius: CGFloat = 7) -> some View {
+    public func round(_ radius: CGFloat = 7) -> some View {
         if radius == 0 {
             self
         } else {
@@ -68,7 +68,7 @@ extension View {
     @MainActor
     @ViewBuilder
     public func shadow(expand: CGFloat = 15) -> some View {
-        self.shadow(color: .black.opacity(0.3), radius: expand, y: expand*0.3)
+        self.shadow(color: .shadow, radius: expand, y: expand*0.3)
     }
     
     // MARK: paddings

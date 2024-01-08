@@ -29,9 +29,9 @@ public struct Section<V>: View where V: View {
                     .foregrounds(color)
                     .padding(.leading, 5)
             }
-            content()
+            content() 
                 .backgrounds(bg)
-                .cornerRadius(radius)
+                .round(radius)
         }
     }
 }

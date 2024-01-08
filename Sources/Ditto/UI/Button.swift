@@ -45,7 +45,7 @@ public struct Button<V>: View where V: View {
                 .overlay(content: content)
         }
         .buttonStyle(.plain)
-        .cornerRadius(radius)
+        .round(radius)
     }
 }
 

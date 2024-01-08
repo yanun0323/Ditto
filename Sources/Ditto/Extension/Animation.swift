@@ -1,7 +1,7 @@
 import SwiftUI
 
 extension Animation {
-    private static var `default` = Animation.easeInOut(duration: 0.15)
+    private static var `default` = Animation.easeInOut(duration: 0.1)
     
     public func setDefault(_ a: Animation) {
         Self.default = a

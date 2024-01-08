@@ -1,6 +1,7 @@
 import SwiftUI
 
 extension View {
+    // MARK: debug
     @MainActor
     @ViewBuilder
     public func debug(_ color: Color = .red, cover expected: CGSize? = nil) -> some View {
@@ -19,6 +20,7 @@ extension View {
     #endif
     }  
     
+    // MARK: expand
     @MainActor
     @ViewBuilder
     public func expand(width w: CGFloat = 1, height h: CGFloat = 1, alignment a: Alignment = .center) -> some View {
@@ -38,6 +40,7 @@ extension View {
         return f
     }
     
+    // MARK: frame
     @MainActor
     @ViewBuilder
     public func frame(size: CGSize, alignment a: Alignment = .center ) -> some View {
@@ -50,34 +53,121 @@ extension View {
         self.frame(maxWidth: size.width, maxHeight: size.height, alignment: a)
     }
     
+    // MARK: round
     @MainActor
     @ViewBuilder
-    public func foregroundGradient(_ colors: [Color], start: UnitPoint = .topLeading, end: UnitPoint = .trailing) -> some View {
-        if colors.count == 0 {
+    public func round(radius: CGFloat = 7) -> some View {
+        if radius == 0 {
             self
         } else {
-            self
-                .foregroundColor(.clear)
-                .overlay {
-                LinearGradient(colors: colors, startPoint: start, endPoint: end)
-                    .mask { self }
-            }
+            self.clipShape(RoundedRectangle(cornerRadius: radius))
         }
+    }
+    
+    // MARK: shadow
+    @MainActor
+    @ViewBuilder
+    public func shadow(expand: CGFloat = 15) -> some View {
+        self.shadow(color: .black.opacity(0.3), radius: expand, y: expand*0.3)
+    }
+    
+    // MARK: paddings
+    @MainActor
+    @ViewBuilder
+    public func paddings(_ edges: CGFloat...) -> some View {
+        paddings(edges)
     }
     
     @MainActor
     @ViewBuilder
-    public func backgroundGradient(_ colors: [Color], start: UnitPoint = .topLeading, end: UnitPoint = .trailing) -> some View {
-        if colors.count == 0 {
+    public func paddings(_ edges: [CGFloat]) -> some View {
+        switch edges.count {
+        case 0:
+            self.padding()
+        case 1:
+            self.padding(edges[0])
+        case 2:
             self
-        } else {
+                .padding(.vertical, edges[0])
+                .padding(.horizontal, edges[1])
+        case 4:
+            self
+                .padding(.top, edges[0])
+                .padding(.trailing, edges[1])
+                .padding(.bottom, edges[2])
+                .padding(.leading, edges[3])
+        default:
+            self
+        }
+    }
+    
+    // MARK: foregrounds
+    @MainActor
+    @ViewBuilder
+    public func foregrounds(_ colors: Color...) -> some View {
+        foregrounds(colors)
+    }
+    
+    @MainActor
+    @ViewBuilder
+    public func foregrounds(_ colors: [Color]) -> some View {
+        switch colors.count {
+        case 0:
+            if #available(iOS 17, macOS 14, watchOS 10, *) {
+                self.foregroundStyle(.primary)
+            } else {
+                self.foregroundColor(.primary)
+            }
+        case 1:
+            if #available(iOS 17, macOS 14, watchOS 10, *) {
+                self.foregroundStyle(colors[0])
+            } else {
+                self.foregroundColor(colors[0])
+            }
+        default:
+            if #available(iOS 17, macOS 14, watchOS 10, *) {
+                self
+                    .foregroundStyle(.clear)
+                    .overlay {
+                        LinearGradient(colors: colors, startPoint: .topLeading, endPoint: .trailing)
+                            .mask { self }
+                    }
+            } else {
+                self
+                    .foregroundColor(.clear)
+                    .overlay {
+                        LinearGradient(colors: colors, startPoint: .topLeading, endPoint: .trailing)
+                            .mask { self }
+                    }
+            }
+        }
+    }
+    
+    
+    // MARK: backgrounds
+    @MainActor
+    @ViewBuilder
+    public func backgrounds(_ colors: Color...) -> some View {
+        backgrounds(colors)
+    }
+    
+    @MainActor
+    @ViewBuilder
+    public func backgrounds(_ colors: [Color]) -> some View {
+        switch colors.count {
+        case 0:
+            self.background()
+        case 1:
+            self.background(colors[0])
+        default:
             self.background(
-                LinearGradient(colors: colors, startPoint: start, endPoint: end)
+                LinearGradient(colors: colors, startPoint: .topLeading, endPoint: .trailing)
             )
         }
     }
 }
 
+// MARK: statusbar
 #if os(iOS) || os(macOS) || os(watchOS)
 extension View {
     @MainActor
@@ -95,16 +185,16 @@ extension View {
 #endif
 
 #if DEBUG
-struct Gradient_Previews: PreviewProvider {
-    static var previews: some View {
-        VStack {
-            Text("Hello, world!")
-                .font(.largeTitle)
-                .foregroundGradient([.red, .purple])
-            Text("Hello, world!")
-                .font(.largeTitle)
-                .backgroundGradient([.red, .purple])
-        }
+#Preview {
+    VStack {
+        Text("Hello, world!")
+            .font(.largeTitle)
+            .foregrounds(.red, .purple)
+        Text("Hello, world!")
+            .font(.largeTitle)
+            .backgrounds(.red, .purple)
+        Text("Empty Background")
+            .backgrounds()
     }
 }
 #endif

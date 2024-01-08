@@ -22,7 +22,7 @@ public struct Separator: View {
     
     public var body: some View {
         Rectangle()
-            .foregroundColor(color)
+            .foregrounds(color)
             .frame(width: width, height: height)
     }
 }

@@ -1,23 +1,23 @@
 import SwiftUI
 
 public struct Section<V>: View where V: View {
-    var title: LocalizedStringKey
-    var font: Font
-    var color: Color
-    var radius: CGFloat
-    var bg: Color
-    var content: () -> V
+    @State var title: LocalizedStringKey
+    @State var font: Font
+    @State var color: Color
+    @State var radius: CGFloat
+    @State var bg: Color
+    @ViewBuilder var content: () -> V
     
     public init(
         _ title: LocalizedStringKey, font: Font = .caption, color: Color = .section,
         radius: CGFloat = 15,
         bg: Color = .section.opacity(0.5), content: @escaping () -> V
     ) {
-        self.title = title
-        self.font = font
-        self.color = color
-        self.radius = radius
-        self.bg = bg
+        self._title = .init(wrappedValue: title)
+        self._font = .init(wrappedValue: font)
+        self._color = .init(wrappedValue: color)
+        self._radius = .init(wrappedValue: radius)
+        self._bg = .init(wrappedValue: bg)
         self.content = content
     }
     
@@ -26,22 +26,22 @@ public struct Section<V>: View where V: View {
             if title != "" {
                 Text(title)
                     .font(font)
-                    .foregroundColor(color)
+                    .foregrounds(color)
                     .padding(.leading, 5)
             }
             content()
-                .background(bg)
+                .backgrounds(bg)
                 .cornerRadius(radius)
         }
     }
 }
 
 #if DEBUG
-struct Section_Previews: PreviewProvider {
-    static var previews: some View {
-        Section("123") {
-            Text("Hello")
-        }
+#Preview {
+    Section("123", bg: .section) {
+        Text("Hello")
+            .padding()
     }
+    .padding()
 }
 #endif

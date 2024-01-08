@@ -31,7 +31,7 @@ public struct TabPicker: View {
                 } content: {
                     Image(systemName: items[i].image)
                         .font(.system(size: size*0.8))
-                        .foregroundStyle(i == selection ? color : color.opacity(0.25))
+                        .foregrounds(i == selection ? color : color.opacity(0.25))
                 }
                 .tag(i)
 

@@ -15,6 +15,7 @@ extension Color {
     public static let primaryQuarter: Self = .primary.opacity(0.25)
     public static let section: Self  = .primary.opacity(0.1)
     public static let transparent: Self = .white.opacity(0.1).opacity(0.0101)
+    public static let ivory: Self = Color(hex: "F7F7F7")
 }
 
 // MARK: Color Component

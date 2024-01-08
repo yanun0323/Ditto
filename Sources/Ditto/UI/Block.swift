@@ -19,7 +19,7 @@ public struct Block: View {
     
     public var body: some View {
         Rectangle()
-            .foregroundColor(color)
+            .foregrounds(color)
             .frame(width: width <= 0 ? nil : width, height: height <= 0 ? nil : height)
     }
 }

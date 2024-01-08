@@ -8,28 +8,28 @@ extension Loading {
 
 public struct Loading: View {
     @State private var isLoading = false
-    public var style: Style
-    public var color: Color
-    public var size: CGFloat
-    public var lineWidth: CGFloat
-    public var speed: Double
-    public var action: (() -> Bool)?
+    @State public var style: Style
+    @State public var color: Color
+    @State public var size: CGFloat
+    @State public var lineWidth: CGFloat
+    @State public var speed: Double
+    @State public var action: (() -> Bool)?
     
     public var body: some View {
         build()
     }
     
     public init(style: Style = .spine, color: Color = .section, size: CGFloat = 50, lineWidth: CGFloat = 7, speed: Double = 1.2, action: (() -> Bool)? = nil) {
-        self.style = style
-        self.color = color
-        self.size = size
-        self.lineWidth = lineWidth
-        self.speed = speed
+        self._style = .init(wrappedValue: style)
+        self._color = .init(wrappedValue: color)
+        self._size = .init(wrappedValue: size)
+        self._lineWidth = .init(wrappedValue: lineWidth)
+        self._speed = .init(wrappedValue: speed)
         self.action = action
     }
     
     @MainActor
-@ViewBuilder
+    @ViewBuilder
     private func build() -> some View {
         switch style {
             case .spine:
@@ -40,7 +40,7 @@ public struct Loading: View {
     }
     
     @MainActor
-@ViewBuilder
+    @ViewBuilder
     private func spine() -> some View {
         let count = 4
         ZStack {
@@ -48,7 +48,7 @@ public struct Loading: View {
                 let opacity = 1 - CGFloat(i)/CGFloat(count)
                 let diameter = lineWidth
                 Circle()
-                    .foregroundColor(color)
+                    .foregrounds(color)
                     .frame(width: diameter, height: diameter)
                     .opacity(opacity)
                     .offset(y: -(size-lineWidth-lineWidth+diameter)*0.5)
@@ -63,7 +63,7 @@ public struct Loading: View {
     }
     
     @MainActor
-@ViewBuilder
+    @ViewBuilder
     private func circle() -> some View {
         VStack {
             let diameter = size - lineWidth

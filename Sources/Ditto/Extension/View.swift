@@ -1,8 +1,41 @@
 import SwiftUI
 
 extension View {
+    // MARK: layout
+    @ViewBuilder
+    public func laylout(push: Alignment) -> some View {
+        VStack {
+            switch push {
+            case .center, .bottom, .bottomLeading, .bottomTrailing:
+                Spacer()
+            default:
+                EmptyView()
+            }
+            HStack {
+                switch push {
+                case .center, .trailing, .topTrailing, .bottomTrailing:
+                    Spacer()
+                default:
+                    EmptyView()
+                }
+                self
+                switch push {
+                case .center, .leading, .topLeading, .bottomLeading:
+                    Spacer()
+                default:
+                    EmptyView()
+                }
+            }
+            switch push {
+            case .center, .top, .topLeading, .topTrailing:
+                Spacer()
+            default:
+                EmptyView()
+            }
+        }
+    }
+    
     // MARK: debug
-    @MainActor
     @ViewBuilder
     public func debug(_ color: Color = .red, cover expected: CGSize? = nil) -> some View {
     #if DEBUG
@@ -21,7 +54,6 @@ extension View {
     }  
     
     // MARK: expand
-    @MainActor
     @ViewBuilder
     public func expand(width w: CGFloat = 1, height h: CGFloat = 1, alignment a: Alignment = .center) -> some View {
         let safe = Device.safeArea
@@ -41,20 +73,17 @@ extension View {
     }
     
     // MARK: frame
-    @MainActor
     @ViewBuilder
     public func frame(size: CGSize, alignment a: Alignment = .center ) -> some View {
         self.frame(width: size.width, height: size.height, alignment: a)
     }
     
-    @MainActor
     @ViewBuilder
     public func frame(maxSize size: CGSize, alignment a: Alignment = .center ) -> some View {
         self.frame(maxWidth: size.width, maxHeight: size.height, alignment: a)
     }
     
     // MARK: round
-    @MainActor
     @ViewBuilder
     public func round(_ radius: CGFloat = 7) -> some View {
         if radius == 0 {
@@ -65,20 +94,17 @@ extension View {
     }
     
     // MARK: shadow
-    @MainActor
     @ViewBuilder
     public func shadow(expand: CGFloat = 15) -> some View {
         self.shadow(color: .shadow, radius: expand, y: expand*0.3)
     }
     
     // MARK: paddings
-    @MainActor
     @ViewBuilder
     public func paddings(_ edges: CGFloat...) -> some View {
         paddings(edges)
     }
     
-    @MainActor
     @ViewBuilder
     public func paddings(_ edges: [CGFloat]) -> some View {
         switch edges.count {
@@ -102,13 +128,11 @@ extension View {
     }
     
     // MARK: foregrounds
-    @MainActor
     @ViewBuilder
     public func foregrounds(_ colors: Color...) -> some View {
         foregrounds(colors)
     }
     
-    @MainActor
     @ViewBuilder
     public func foregrounds(_ colors: [Color]) -> some View {
         switch colors.count {
@@ -145,13 +169,11 @@ extension View {
     
     
     // MARK: backgrounds
-    @MainActor
     @ViewBuilder
     public func backgrounds(_ colors: Color...) -> some View {
         backgrounds(colors)
     }
     
-    @MainActor
     @ViewBuilder
     public func backgrounds(_ colors: [Color]) -> some View {
         switch colors.count {
@@ -170,13 +192,11 @@ extension View {
 // MARK: statusbar
 #if os(iOS) || os(macOS) || os(watchOS)
 extension View {
-    @MainActor
     @ViewBuilder
     public func statusbarArea() -> some View {
         Block(size: Device.statusbarArea)
     }
     
-    @MainActor
     @ViewBuilder
     public func homebarArea() -> some View {
         Block(size: Device.homebarArea)

@@ -9,7 +9,6 @@ extension Animation {
 }
 
 extension View {
-    @MainActor
     @ViewBuilder
     public func animation<Value: Equatable>(value v: Value) -> some View {
         self.animation(.default, value: v)

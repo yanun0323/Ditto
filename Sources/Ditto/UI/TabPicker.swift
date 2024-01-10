@@ -26,10 +26,11 @@ public struct TabPicker: View {
         HStack(spacing: 0) {
             Spacer()
             ForEach(0 ..< items.count, id: \.self) { i in
-                Button2(width: size, height: size) {
+                Button {
                     selection = i
-                } content: {
+                } label: {
                     Image(systemName: items[i].image)
+                        .frame(width: size, height: size)
                         .font(.system(size: size*0.8))
                         .foregrounds(i == selection ? color : color.opacity(0.25))
                 }

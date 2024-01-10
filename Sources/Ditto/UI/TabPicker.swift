@@ -26,7 +26,7 @@ public struct TabPicker: View {
         HStack(spacing: 0) {
             Spacer()
             ForEach(0 ..< items.count, id: \.self) { i in
-                Button(width: size, height: size) {
+                Button2(width: size, height: size) {
                     selection = i
                 } content: {
                     Image(systemName: items[i].image)

@@ -8,7 +8,6 @@ Ditto is a powerful pakage for swiftUI.
 - [Http](#http)
 - [Hotkey](#hotkey)
 - [UI](#ui)
-    - [Button](#button)
     - [Block](#block)
     - [Section](#section)
     - [Separator](#separator)
@@ -249,27 +248,6 @@ VStack {
 
 ## UI
 Custom Views for SwiftUI.
-
-### [**Button**][button]
-Build from `SwiftUI.Button`, but more powerful
-
-```swift
-    /* a transparent button, but it still be pressed when pressing the transparent area */
-    Button(width: 100, height: 20) {
-        print("Invoke Something Here")     
-    } content: {
-        Text("Transparent Button")
-    }
-
-    /* a gradient button */
-    Button(width: 50, height: 50, colors: [.cyan, .green], radius: 30, shadow: 5) {
-        print("Invoke Something Here")     
-    } content: {
-        Image(systemName: "plus")
-            .font(.system(size: 25))
-            .foregroundColor(.white)
-    }
-```
 
 ### [**Block**][block]
 Like `SwiftUI.Rectangle`, but you can define ***width***, ***height*** and ***color*** in constructor

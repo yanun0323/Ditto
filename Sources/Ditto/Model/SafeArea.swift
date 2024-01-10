@@ -71,7 +71,7 @@ extension NSEdgeInsets {
 #if DEBUG
 struct SafeAreaTestView: View {
     var body: some View {
-        SwiftUI.Button("print parameter") {
+        SwiftUI.Button2("print parameter") {
             print("\(Device.safeArea)")
             print("\(Device.statusbarArea)")
             print("\(Device.homebarArea)")

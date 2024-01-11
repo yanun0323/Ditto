@@ -102,7 +102,7 @@ extension View {
     // MARK: paddings
     @ViewBuilder
     public func paddings(_ edges: CGFloat...) -> some View {
-        paddings(edges)
+        self.paddings(edges)
     }
     
     @ViewBuilder
@@ -130,7 +130,7 @@ extension View {
     // MARK: foregrounds
     @ViewBuilder
     public func foregrounds(_ colors: Color...) -> some View {
-        foregrounds(colors)
+        self.foregrounds(colors)
     }
     
     @ViewBuilder
@@ -171,7 +171,7 @@ extension View {
     // MARK: backgrounds
     @ViewBuilder
     public func backgrounds(_ colors: Color...) -> some View {
-        backgrounds(colors)
+        self.backgrounds(colors)
     }
     
     @ViewBuilder

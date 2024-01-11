@@ -6,9 +6,18 @@ import CoreGraphics
 
 
 extension View {
+    public func hotkey(key: CGKeyCode, keyBase: KeyBase..., action: @escaping () -> Void) -> some View {
+        self.hotkey(key: key, keyBase: keyBase, action: action)
+    }
+    
     public func hotkey(key: CGKeyCode, keyBase: [KeyBase] = [], action: @escaping () -> Void) -> some View {
         self.modifier(HotKeysMod([Hotkey(keyBase: keyBase, key: key, action: action)]))
     }
+    
+    public func hotkeys( _ hotkeys: Hotkey... ) -> some View {
+        self.hotkeys(hotkeys)
+    }
+    
     public func hotkeys( _ hotkeys: [Hotkey] ) -> some View {
         self.modifier(HotKeysMod(hotkeys))
     }
@@ -20,6 +29,10 @@ public struct HotKeysMod: ViewModifier {
     public var hotkeys: [Hotkey]
     
     public init(_ hotkeys: [Hotkey] ) {
+        self.hotkeys = hotkeys
+    }
+    
+    public init(_ hotkeys: Hotkey... ) {
         self.hotkeys = hotkeys
     }
     

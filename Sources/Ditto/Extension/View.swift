@@ -1,6 +1,12 @@
 import SwiftUI
 
 extension View {
+    // MARK: rotate
+    @ViewBuilder
+    public func rotate(_ degrees: CGFloat, anchor: UnitPoint = .center) -> some View {
+        self.rotationEffect(Angle(degrees: degrees), anchor: anchor)
+    }
+    
     // MARK: layout
     @ViewBuilder
     public func layout(push: Alignment) -> some View {

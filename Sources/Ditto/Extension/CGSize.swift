@@ -9,6 +9,11 @@ extension CGSize {
 }
 
 extension CGSize {
+    /*** create new CGSize with modifying  */
+    public func modify(_ f: (_:CGSize) -> CGSize) -> CGSize {
+        return f(self)
+    }
+    
     /*** create new CGSize with input ratio */
     public func x(_ ratio: CGFloat) -> CGSize {
         return CGSize(width: self.width*ratio, height: self.height*ratio)

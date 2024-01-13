@@ -1,11 +1,11 @@
 import SwiftUI
 
 extension CGSize {
-    static public let statusbar: CGSize = Device.statusbarArea
-    static public let homebar: CGSize = Device.homebarArea
-    static public let safeArea: CGSize = Device.safeArea
-    static public let unsafeArea: CGSize = Device.screen
-    static public let screen: CGSize = Device.unsafeArea
+    static public var statusbar: CGSize { Device.statusbarArea }
+    static public var homebar: CGSize { Device.homebarArea }
+    static public var safeArea: CGSize { Device.safeArea }
+    static public var unsafeArea: CGSize { Device.screen }
+    static public var screen: CGSize { Device.unsafeArea }
 }
 
 extension CGSize {

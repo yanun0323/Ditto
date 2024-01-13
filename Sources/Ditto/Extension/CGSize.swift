@@ -1,6 +1,14 @@
 import SwiftUI
 
 extension CGSize {
+    static public let statusbar: CGSize = Device.statusbarArea
+    static public let homebar: CGSize = Device.homebarArea
+    static public let safeArea: CGSize = Device.safeArea
+    static public let unsafeArea: CGSize = Device.screen
+    static public let screen: CGSize = Device.unsafeArea
+}
+
+extension CGSize {
     /*** create new CGSize with input ratio */
     public func x(_ ratio: CGFloat) -> CGSize {
         return CGSize(width: self.width*ratio, height: self.height*ratio)

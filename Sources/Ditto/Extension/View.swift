@@ -3,7 +3,7 @@ import SwiftUI
 extension View {
     // MARK: layout
     @ViewBuilder
-    public func laylout(push: Alignment) -> some View {
+    public func layout(push: Alignment) -> some View {
         VStack {
             switch push {
             case .center, .bottom, .bottomLeading, .bottomTrailing:

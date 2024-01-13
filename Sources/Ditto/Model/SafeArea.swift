@@ -11,10 +11,12 @@ public struct Device {
     public var homebarArea: CGSize { Device.homebarArea }
     public var statusbarArea: CGSize { Device.statusbarArea }
     public var safeArea: CGSize { Device.safeArea }
+    public var unsafeArea: CGSize { Device.unsafeArea }
 }
 
 extension Device {
     public static var safeArea: CGSize { safeAreaInsets.screenSize }
+    public static var unsafeArea: CGSize { Device.screen }
     public static var homebarArea: CGSize { CGSize(width: screen.width, height: safeAreaInsets.bottom) }
     public static var statusbarArea: CGSize { CGSize(width: screen.width, height: safeAreaInsets.top) }
 }

@@ -28,7 +28,11 @@ let package = Package(
             name: "Ditto",
             dependencies: [
                 .product(name: "Sworm", package: "Sworm"),
-            ]),
+            ],
+            resources: [
+                .process("Font"),
+            ]
+        ),
         .testTarget(
             name: "DittoTests",
             dependencies: ["Ditto"]),

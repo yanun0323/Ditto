@@ -2,7 +2,7 @@ import Foundation
 
 public struct Http {
     #if DEBUG
-    private static var mode = Mode.debug
+    private static var mode = Mode.full
     #else
     private static var mode = Mode.release
     #endif
@@ -19,8 +19,21 @@ extension Http {
 }
 
 extension Http {
-    public enum Mode {
-        case release, debug
+    public enum Mode: UInt {
+        case full = 0
+        case debug = 1
+        case release = 2
+        
+        var string: String {
+            switch self {
+                case .full:
+                    return "FULL"
+                case .debug:
+                    return "DEBUG"
+                case .release:
+                    return "RELEASE"
+            }
+        }
     }
 }
 
@@ -46,9 +59,9 @@ extension Http {
 extension Http.Error: Error {}
 
 extension Http {
-    private static func debug(_ message: String) {
-        if Http.mode == .debug {
-            print(message)
+    private static func debug(level: Http.Mode = .debug, _ message: String) {
+        if level.rawValue >= Http.mode.rawValue {
+            print("[\(level.string)] message")
         }
     }
 }
@@ -92,7 +105,7 @@ extension Http {
      */
     public static func sendRequest<T>(_ method: Http.Method = .GET, toUrl path: String, type: T.Type, action: @escaping (inout URLRequest) -> Void = { _ in }) -> (T?, Int?, Http.Error?) where T: Decodable {
         guard let url = URL(string: path) else {
-            debug("[sendRequest: debug] failed to generate url from string: \(path)")
+            debug("sendRequest: failed to generate url from string: \(path)")
             return (nil, nil, .errParseURL(method, path))
         }
         
@@ -124,14 +137,15 @@ extension Http {
                 return
             }
             
-            debug("[sendRequest: debug] complete download, data length: \(data.count)")
-            debug("[sendRequest: debug] data: \n\(String(decoding: data, as: UTF8.self))")
+            debug("sendRequest: \(method.rawValue) \(path)")
+            debug("sendRequest: complete download, data length: \(data.count)")
+            debug("sendRequest: response body: \n\(String(decoding: data, as: UTF8.self))")
             
             do {
                 let decoded = try JSONDecoder().decode(T.self, from: data)
                 result = decoded
             } catch {
-                debug("[sendRequest: debug] decode data error, \(String(describing: error))")
+                debug("sendRequest: decode data error, \(String(describing: error))")
                 err = .errDecodeData(method, path, String(describing: error))
             }
             
@@ -158,7 +172,7 @@ extension Http {
      */
     public static func sendRequestForString(_ method: Method = .GET, toUrl path: String, ignoreBody: Bool = false, action: @escaping (inout URLRequest) -> Void = { _ in }) -> (String, Int?, Http.Error?) {
         guard let url = URL(string: path) else {
-            debug("[sendRequest: debug] failed to generate url from string: \(path)")
+            debug("sendRequest: failed to generate url from string: \(path)")
             return ("", nil, .errParseURL(method, path))
         }
         
@@ -190,11 +204,15 @@ extension Http {
                 return
             }
             
-            debug("[sendRequest: debug] complete download, data length: \(data.count)")
+            
+            debug("sendRequest: \(method.rawValue) \(path)")
+            debug("sendRequest: complete download, data length: \(data.count)")
             
             if !ignoreBody {
                 result = String(decoding: data, as: UTF8.self)
             }
+            
+            debug("sendRequest: response body: \n\(String(decoding: data, as: UTF8.self))")
             
         }.resume()
         channel.wait()

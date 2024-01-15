@@ -59,14 +59,14 @@ struct TabPicker_Previews: PreviewProvider {
                 TabPickerItem(image: "trash"),
                 TabPickerItem(image: "trash.fill")
             ])
-            .debug()
+            .warning()
             .frame(size: CGSize(width: 300, height: 50))
             
             TabPickerTest(size: 30, color: .primary, items: [
                 TabPickerItem(image: "trash"),
                 TabPickerItem(image: "trash.fill")
             ])
-            .debug()
+            .warning()
             .frame(size: CGSize(width: 300, height: 50))
         }
     }

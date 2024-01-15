@@ -2,7 +2,7 @@ import Foundation
 
 public struct Http {
     #if DEBUG
-    private static var mode = Mode.full
+    private static var mode = Mode.log
     #else
     private static var mode = Mode.release
     #endif
@@ -20,15 +20,15 @@ extension Http {
 
 extension Http {
     public enum Mode: UInt {
-        case full = 0
-        case debug = 1
+        case debug = 0
+        case warning = 1
         case release = 2
         
         var string: String {
             switch self {
-                case .full:
-                    return "FULL"
                 case .debug:
+                    return "DETAIL"
+                case .warning:
                     return "DEBUG"
                 case .release:
                     return "RELEASE"
@@ -59,10 +59,18 @@ extension Http {
 extension Http.Error: Error {}
 
 extension Http {
-    private static func debug(level: Http.Mode = .debug, _ message: String) {
+    private static func log(level: Http.Mode = .release, _ message: String) {
         if level.rawValue >= Http.mode.rawValue {
             print("[\(level.string)] \(message)")
         }
+    }
+    
+    private static func warn(_ message: String) {
+        log(level: .warning, message)
+    }
+    
+    private static func debug(_ message: String) {
+        log(level: .debug, message)
     }
 }
 
@@ -105,7 +113,7 @@ extension Http {
      */
     public static func sendRequest<T>(_ method: Http.Method = .GET, toUrl path: String, type: T.Type, action: @escaping (inout URLRequest) -> Void = { _ in }) -> (T?, Int?, Http.Error?) where T: Decodable {
         guard let url = URL(string: path) else {
-            debug("sendRequest: failed to generate url from string: \(path)")
+            warn("sendRequest: failed to generate url from string: \(path)")
             return (nil, nil, .errParseURL(method, path))
         }
         
@@ -137,15 +145,15 @@ extension Http {
                 return
             }
             
-            debug("sendRequest: \(method.rawValue) \(path)")
-            debug("sendRequest: complete download, data length: \(data.count)")
+            warn("sendRequest: \(method.rawValue) \(path)")
+            warn("sendRequest: complete download, data length: \(data.count)")
             debug("sendRequest: response body: \n\(String(decoding: data, as: UTF8.self))")
             
             do {
                 let decoded = try JSONDecoder().decode(T.self, from: data)
                 result = decoded
             } catch {
-                debug("sendRequest: decode data error, \(String(describing: error))")
+                warn("sendRequest: decode data error, \(String(describing: error))")
                 err = .errDecodeData(method, path, String(describing: error))
             }
             
@@ -172,7 +180,7 @@ extension Http {
      */
     public static func sendRequestForString(_ method: Method = .GET, toUrl path: String, ignoreBody: Bool = false, action: @escaping (inout URLRequest) -> Void = { _ in }) -> (String, Int?, Http.Error?) {
         guard let url = URL(string: path) else {
-            debug("sendRequest: failed to generate url from string: \(path)")
+            warn("sendRequest: failed to generate url from string: \(path)")
             return ("", nil, .errParseURL(method, path))
         }
         
@@ -205,8 +213,8 @@ extension Http {
             }
             
             
-            debug("sendRequest: \(method.rawValue) \(path)")
-            debug("sendRequest: complete download, data length: \(data.count)")
+            warn("sendRequest: \(method.rawValue) \(path)")
+            warn("sendRequest: complete download, data length: \(data.count)")
             
             if !ignoreBody {
                 result = String(decoding: data, as: UTF8.self)

@@ -79,7 +79,7 @@ public enum DittoFont: CaseIterable {
         }
     }
     
-    var name: String {
+    public var name: String {
         switch self {
         case .Cubic11R:
             return "Cubic 11"

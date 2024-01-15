@@ -61,7 +61,7 @@ extension Http.Error: Error {}
 extension Http {
     private static func debug(level: Http.Mode = .debug, _ message: String) {
         if level.rawValue >= Http.mode.rawValue {
-            print("[\(level.string)] message")
+            print("[\(level.string)] \(message)")
         }
     }
 }

@@ -2,7 +2,7 @@ import Foundation
 
 public struct Http {
     #if DEBUG
-    private static var mode = Mode.log
+    private static var mode = Mode.debug
     #else
     private static var mode = Mode.release
     #endif

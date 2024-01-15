@@ -27,9 +27,9 @@ extension Http {
         var string: String {
             switch self {
                 case .debug:
-                    return "DETAIL"
-                case .warning:
                     return "DEBUG"
+                case .warning:
+                    return "WARNING"
                 case .release:
                     return "RELEASE"
             }

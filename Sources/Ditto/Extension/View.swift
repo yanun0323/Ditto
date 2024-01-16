@@ -7,40 +7,6 @@ extension View {
         self.rotationEffect(Angle(degrees: degrees), anchor: anchor)
     }
     
-    // MARK: layout
-    @ViewBuilder
-    public func layout(push: Alignment) -> some View {
-        VStack {
-            switch push {
-            case .center, .bottom, .bottomLeading, .bottomTrailing:
-                Spacer()
-            default:
-                EmptyView()
-            }
-            HStack {
-                switch push {
-                case .center, .trailing, .topTrailing, .bottomTrailing:
-                    Spacer()
-                default:
-                    EmptyView()
-                }
-                self
-                switch push {
-                case .center, .leading, .topLeading, .bottomLeading:
-                    Spacer()
-                default:
-                    EmptyView()
-                }
-            }
-            switch push {
-            case .center, .top, .topLeading, .topTrailing:
-                Spacer()
-            default:
-                EmptyView()
-            }
-        }
-    }
-    
     // MARK: debug
     @ViewBuilder
     public func debug(_ color: Color = .red, cover expected: CGSize? = nil) -> some View {

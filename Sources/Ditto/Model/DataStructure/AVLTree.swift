@@ -414,42 +414,43 @@ extension AVLTree {
     }
 }
 
-// MARK: - Advanced Stuff
+// MARK: - Iterate
 
 extension AVLTree {
-    public func ascend(node: Node?, _ completion: (Node) -> Void) {
+    public func ascend(_ completion: (Key, Payload?) -> Void) where Key: Comparable {
+        self.ascend(node: self.root, completion)
+    }
+    
+    private func ascend(node: Node?, _ completion: (Key, Payload?) -> Void) where Key: Comparable{
         if let node = node {
-            ascend(node: node.leftChild) { lnode in
-                completion(lnode)
-            }
-            completion(node)
-            ascend(node: node.rightChild) { rnode in
-                completion(rnode)
-            }
+            ascend(node: node.leftChild, completion)
+            completion(node.key, node.payload)
+            ascend(node: node.rightChild, completion)
         }
     }
+    
+    public func descend(_ completion: (Key, Payload?) -> Void) { 
+        self.descend(node: self.root, completion)
+    }
+    
 
-    public func descend(node: Node?, _ completion: (Node) -> Void) {
+    private func descend(node: Node?, _ completion: (Key, Payload?) -> Void) {
         if let node = node {
-            descend(node: node.rightChild) { rnode in
-                completion(rnode)
-            }
-            descend(node: node.leftChild) { lnode in
-                completion(lnode)
-            }
-            completion(node)
+            descend(node: node.rightChild, completion)
+            descend(node: node.leftChild, completion)
+            completion(node.key, node.payload)
         }
     }
+    
+    public func postOrder(_ completion: (Key, Payload?) -> Void) {
+        self.postOrder(node: self.root, completion)
+    }
 
-    public func doInPostOrder(node: Node?, _ completion: (Node) -> Void) {
+    private func postOrder(node: Node?, _ completion: (Key, Payload?) -> Void) {
         if let node = node {
-            doInPostOrder(node: node.leftChild) { lnode in
-                completion(lnode)
-            }
-            doInPostOrder(node: node.rightChild) { rnode in
-                completion(rnode)
-            }
-            completion(node)
+            postOrder(node: node.leftChild, completion)
+            postOrder(node: node.rightChild, completion)
+            completion(node.key, node.payload)
         }
     }
 }

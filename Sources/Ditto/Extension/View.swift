@@ -1,6 +1,12 @@
 import SwiftUI
 
 extension View {
+    // MARK: scale
+    @ViewBuilder
+    public func scale(_ size: CGFloat, anchor: UnitPoint = .center) -> some View {
+        self.scaleEffect(CGSize(width: size, height: size), anchor: anchor)
+    }
+    
     // MARK: rotate
     @ViewBuilder
     public func rotate(_ degrees: CGFloat, anchor: UnitPoint = .center) -> some View {

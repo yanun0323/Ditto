@@ -34,7 +34,7 @@ public struct TabPicker: View {
             Spacer()
             ForEach(0 ..< items.count, id: \.self) { i in
                 Button {
-                    selection = i
+                    _selection.wrappedValue = i
                 } label: {
                     Image(systemName: items[i].image)
                         .frame(width: size, height: size)
@@ -50,35 +50,28 @@ public struct TabPicker: View {
 }
 
 #if DEBUG
-struct TabPicker_Previews: PreviewProvider {
-    @State static var selected = 0
-    
-    static var previews: some View {
-        VStack {
-            TabPickerTest(items: [
-                TabPickerItem(image: "trash"),
-                TabPickerItem(image: "trash.fill")
-            ])
-            .debug()
-            .frame(size: CGSize(width: 300, height: 50))
-            
-            TabPickerTest(size: 30, color: .primary, items: [
-                TabPickerItem(image: "trash"),
-                TabPickerItem(image: "trash.fill")
-            ])
-            .debug()
-            .frame(size: CGSize(width: 300, height: 50))
-        }
+#Preview {
+    @State var selected: Int = 0
+    var b: Binding<Int> = Binding {
+        return selected
+    } set: { val in
+        selected = val
     }
-}
 
-struct TabPickerTest: View {
-    @State private var selected: Int = 0
-    @State var size: CGFloat = 22
-    @State var color: Color = .accentColor
-    @State var items: [TabPickerItem]
-    var body: some View {
-        TabPicker(selection: $selected, size: size, color: color, items: items)
+    return VStack {
+        TabPicker(selection: b, items: [
+            TabPickerItem(image: "trash"),
+            TabPickerItem(image: "trash.fill")
+        ])
+        .debug()
+        .frame(size: CGSize(width: 300, height: 50))
+        
+        TabPicker(selection: b, size: 30, color: .primary, items: [
+            TabPickerItem(image: "trash"),
+            TabPickerItem(image: "trash.fill")
+        ])
+        .debug()
+        .frame(size: CGSize(width: 300, height: 50))
     }
 }
 #endif

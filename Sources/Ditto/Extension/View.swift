@@ -1,6 +1,23 @@
 import SwiftUI
 
 extension View {
+    // MARK: pixel
+    @MainActor
+    @ViewBuilder
+    public func pixel(size: CGFloat? = nil, weight: Font.Weight = .regular
+    ) -> some View {
+        #if os(macOS)
+        let size = size ?? 13
+        #else
+        let size = size ?? 17
+        #endif
+        self
+            .font(.system(size: size*10, weight: weight))
+            .mosaic(9)
+            .scale(0.1)
+            .frame(width: size, height: size)
+    }
+    
     // MARK: scale
     @ViewBuilder
     public func scale(_ size: CGFloat, anchor: UnitPoint = .center) -> some View {

@@ -43,14 +43,34 @@ extension System {
 
 extension System {
     /**
-     # doCatch
+     # try
      handle simple do/catch action
      */
-    public static func doCatch<T>(_ log: String, _ action: () throws -> T?) -> T? where T: Any {
+    public static func `try`(_ log: String? = nil, _ action: () throws -> Void){
+        do {
+            try action()
+        } catch {
+            if let log = log {
+                print("Error: \(log), err: \(error)")
+            } else {
+                print("Error: error")
+            }
+        }
+    }
+    
+    /**
+     # tryio
+     handle simple do/catch action with return data
+     */
+    public static func tryio<T>(_ log: String? = nil, _ action: () throws -> T?) -> T? where T: Any {
         do {
             return try action()
         } catch {
-            print("[ERROR] \(log), err: \(error)")
+            if let log = log {
+                print("Error: \(log), err: \(error)")
+            } else {
+                print("Error: error")
+            }
         }
         return nil
     }

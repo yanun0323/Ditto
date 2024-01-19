@@ -53,7 +53,7 @@ extension System {
             if let log = log {
                 print("Error: \(log), err: \(error)")
             } else {
-                print("Error: error")
+                print("Error: \(error)")
             }
         }
     }
@@ -69,7 +69,7 @@ extension System {
             if let log = log {
                 print("Error: \(log), err: \(error)")
             } else {
-                print("Error: error")
+                print("Error: \(error)")
             }
         }
         return nil

@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/yanun0323/Sworm",
       "state" : {
-        "revision" : "f85aa46e4f824248145ecf17833fcb6443150459",
-        "version" : "0.1.4"
+        "revision" : "95e6c49fa1597f3b777439eb398bef0a33e4a783",
+        "version" : "0.2.0"
       }
     }
   ],

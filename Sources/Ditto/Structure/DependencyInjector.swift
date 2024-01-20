@@ -1,35 +1,51 @@
 import SwiftUI
 
-public struct DIContainer: EnvironmentKey {
-    public static var defaultValue: DIContainer { Self.default }
-    public static var `default`: DIContainer {
-        return DIContainer()
-    }
+/** Dependency Injector defines the clean architecture manager instance
+ ```swift
+ struct DIContainer: DependencyInjector {
+     
+     static var defaultValue: DIContainer { DIContainer(mock: true) }
+     
+     
+     var appstate: AppState
+     var interactor: Interactor
+     
+     init(mock inMemory: Bool) {
+         let appstate = AppState()
+         self.appstate = appstate
+         self.interactor = Interactor(appstate, Dao(mock: inMemory))
+     }
+ }
+
+ extension View {
+     func inject(_ container: DIContainer) -> some View {
+         self.environment(\.container, container)
+     }
+ }
+
+ extension EnvironmentValues {
+     var container: DIContainer {
+         get { self[DIContainer.self] }
+         set { self[DIContainer.self] = newValue }
+     }
+ }
+
+ #if DEBUG
+ extension DIContainer {
+     static var preview: DIContainer {
+         return DIContainer(mock: true)
+     }
+ }
+ #endif
+ ```
+ */
+public protocol DependencyInjector: EnvironmentKey {
+    associatedtype AppStateType
+    associatedtype InteractorType
     
-    public let isMock: Bool
-    public init(isMock: Bool = false) {
-        self.isMock = isMock
-    }
+    var appstate: AppStateType { get set }
+    var interactor: InteractorType { get set }
+    
+    init(mock inMemory: Bool)
 }
-
-extension View {
-    public func inject(_ container: DIContainer) -> some View {
-        self.environment(\.injected, container)
-    }
-}
-
-extension EnvironmentValues {
-    public var injected: DIContainer {
-        get { self[DIContainer.self] }
-        set { self[DIContainer.self] = newValue }
-    }
-}
-
-#if DEBUG
-extension DIContainer {
-    public static var preview: DIContainer {
-        return DIContainer(isMock: true)
-    }
-}
-#endif
 

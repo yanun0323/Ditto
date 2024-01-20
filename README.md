@@ -40,17 +40,17 @@ Project
 - **UI**
     - App views cross different platform
 - **System**
-    - `DIContainer` ***Dependency Injector*** instance. contain `AppState` and `Interaction`
+    - `DIContainer` ***Dependency Injector*** instance. contain `AppState` and `Interactor`
     - `AppState` ***Stateful***, stores value and data publisher, it store `state` of App.
 - **Interactor**
-    - ***Stateless***, contain all of the business logic and `Repo`, `AppState` instances.
+    - ***Stateless***, contain all of the business logic and `Repository`, `AppState` instances.
     - Access data through `Repo`.
 - **Model**
     - Define the structures of data
 - **Domain**
     - Define `Protocol` which interact with the database or other sources.
     - It separates Application layer and Repository Layer
-- **Repo**
+- **Repository**
     - Implement the `Protocol` from `Domain`
     - Easily change functions here to get the data from different source.
 - **Other**
@@ -73,6 +73,57 @@ Check [`Repo Folder`][sql] for more information, and more use cases [`DataDao.sw
 Inspired by [`clean-architecture-swiftui`](https://github.com/nalexn/clean-architecture-swiftui)
 
 #### Sample Code
+
+
+`System.swift`
+```swift
+// Define AppState & Interactor in DIContainer
+ struct DIContainer: DependencyInjector {
+     static var defaultValue: DIContainer { DIContainer(mock: true) }
+     
+     var appstate: AppState
+     var interactor: Interactor
+     
+     init(mock inMemory: Bool) {
+         let appstate = AppState()
+         self.appstate = appstate
+         self.interactor = Interactor(appstate, repo: Dao(mock: inMemory))
+     }
+ }
+
+ extension View {
+     func inject(_ container: DIContainer) -> some View {
+         self.environment(\.container, container)
+     }
+ }
+
+ extension EnvironmentValues {
+     var container: DIContainer {
+         get { self[DIContainer.self] }
+         set { self[DIContainer.self] = newValue }
+     }
+ }
+
+ #if DEBUG
+ extension DIContainer {
+     static var preview: DIContainer {
+         return DIContainer(mock: true)
+     }
+ }
+ #endif
+
+// Define Interactor
+struct Interactor {
+    init(_ appstate: AppState, repo: Repository)
+}
+
+// Define AppState
+struct AppState {
+    init()
+}
+
+```
+
 `MyApp.swift`
 ```swift
 // Inject DIContainer into App
@@ -92,7 +143,7 @@ struct MyApp: App {
 ```swift
 // Get DIContainer from environment
 struct ContentView: View {
-    @Environment(\.injected) private var container: DIContainer
+    @Environment(\.container) private var container: DIContainer
 
     var body: some View {
         // ...
@@ -103,61 +154,32 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
-                .inject(Container(isMock: true))
+                .inject(.preview)
     }
 }
 ```
 
-`System.swift`
-```swift
-// Define AppState & Interactor in DIContainer
-extension DIContainer {
-    var appState: AppState { AppState.get() }
-    var interactor: Interactor { Interactor.get(isMock: self.isMock) }
-}
-
-// Define Interactor default value
-struct Interactor {
-    private static var `default`: Interactor? = nil
-
-    public static func get(isMock: Bool) -> Self {
-        if Self.default == nil {
-            Self.default = Interactor(isMock: isMock)
-        }
-        return Self.default!
-    }
-}
-
-// Define AppState default value
-struct AppState {
-    private static var `default`: AppState? = nil
-
-    public static func get() -> Self {
-        if Self.default == nil {
-            Self.default = Self()
-        }
-        return Self.default!
-    }
-}
-
-```
-
-## UserDefault
+## UserDefaultState
 Property Wrapper for `UserDefaults`.
 
 #### Sample Code
 ```swift
-extension UserDefaults {
-    @UserDefault(key: "username")
-    static var username: String?
-}
- 
-let subscription = UserDefaults.$username.sink { username in
-    print("New username: \(username)")
-}
+ // define
+ extension UserDefaults {
+    @UserDefaultState(key: "USERNAME", defaultValue: "yanun", container: .standard)
+    static var username: String
 
-UserDefaults.username = "Test"
-// Prints: New username: Test
+    @UserDefaultState(key: "username")
+    static var username: String?
+ }
+    
+ // usage
+ let subscription = UserDefaults.$username.sink { username in
+    print("New username: \(username)")
+ }
+     
+ UserDefaults.username = "Test"
+ // prints: New username: Test
 ```
 
 ## System
@@ -178,28 +200,55 @@ Useful function for system.
         screen.width    /* device width *
     ```
 - _static function_
-    - **async** : invoke function in background thread and and transport data to main thread. 
+
+    - **async** : invoke function in background thread and main thread. 
+    ```swift
+        func foo() {
+            
+        }
+
+        System.async {
+            foo()
+        } main: {
+            /* Change View */
+        }
+    ```
+
+    - **asyncio** : invoke function in background thread and passing data to main thread. 
     ```swift
         func foo() -> bool {
             return true
         }
 
-        System.async {
+        System.asyncio {
             return foo()
         } main: { data in
             /* Change View */
         }
     ```
-    - **doCatch** : invoke function which contains `throws` safely, and print log gracefully when error occurs.
+
+    - **try** : invoke function which contains `throws` safely. print log gracefully when error occurs.
+    ```swift
+        func foo() throws {
+
+        }
+
+        System.try("foo") {
+            try foo()
+        }
+    ```
+
+    - **tryio** : invoke function which contains `throws` with return value safely. print log gracefully when error occurs.
     ```swift
         func foo() throws -> Bool {
             return true
         }
 
-        System.doCatch("foo") {
+        System.tryio("foo") {
             return try foo()
         } ?? false
     ```
+
     - **unfocus** : **_`macOS only`_** unfocus all input field.
     ```swift
         System.unfocus()
@@ -211,10 +260,9 @@ Wrapper for Http request.
 ### Sample Code
 ```swift
 let url = "http://api/user"
-    let user = Http.SendRequest(.GET, toUrl: url, type: User.self) { req in
-    var request = req
+    let (user, code, error) = Http.SendRequest(.GET, toUrl: url, type: User.self) { req in
+    req.setHeader("Token", "foo")
     // do something ...
-    return request
 }
 ```
 

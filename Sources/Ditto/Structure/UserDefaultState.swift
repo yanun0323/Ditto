@@ -4,15 +4,21 @@ import Combine
 /**
  Property Wrapper for UserDefaults
  
- ```
+ ```swift
+ // define
  extension UserDefaults {
- @UserDefaultState(key: "username")
- static var username: String?
+    @UserDefaultState(key: "USERNAME", defaultValue: "yanun", container: .standard)
+    static var username: String
+
+    @UserDefaultState(key: "username")
+    static var username: String?
  }
- 
+    
+ // usage
  let subscription = UserDefaults.$username.sink { username in
- print("New username: \(username)")
+    print("New username: \(username)")
  }
+     
  UserDefaults.username = "Test"
  // Prints: New username: Test
  ```
@@ -75,4 +81,9 @@ public protocol AnyOptional {
 
 extension Optional: AnyOptional {
     public var isNil: Bool { self == nil }
+}
+
+extension UserDefaults {
+    @UserDefaultState(key: "USERNAME", defaultValue: "yanun", container: .standard)
+    static var username: String
 }

@@ -3,9 +3,7 @@ import SwiftUI
 /** Dependency Injector defines the clean architecture manager instance
  ```swift
  struct DIContainer: DependencyInjector {
-     
      static var defaultValue: DIContainer { DIContainer(mock: true) }
-     
      
      var appstate: AppState
      var interactor: Interactor

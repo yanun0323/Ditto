@@ -1,42 +1,28 @@
 import SwiftUI
 
-extension Loading {
-    public enum Style {
-        case spine, circle
+extension View {
+    @ViewBuilder
+    public func spinning(frame size: CGFloat, speed: CGFloat = 1.2) -> some View {
+        Loading(icon: self, frame: size, speed: speed)
     }
 }
 
-public struct Loading: View {
+public struct Loading<Content: View>: View {
     @State private var isLoading = false
-    @State public var style: Style
-    @State public var color: Color
-    @State public var size: CGFloat
-    @State public var lineWidth: CGFloat
-    @State public var speed: Double
-    @State public var action: (() -> Bool)?
+    @State private var frame: CGFloat
+    @State private var speed: CGFloat
+    private let icon: Content
+    
+    var lineWidth: CGFloat { frame*0.15 }
     
     public var body: some View {
-        build()
+        spine()
     }
     
-    public init(style: Style = .spine, color: Color = .section, size: CGFloat = 50, lineWidth: CGFloat = 7, speed: Double = 1.2, action: (() -> Bool)? = nil) {
-        self._style = .init(wrappedValue: style)
-        self._color = .init(wrappedValue: color)
-        self._size = .init(wrappedValue: size)
-        self._lineWidth = .init(wrappedValue: lineWidth)
+    public init(icon: Content = Circle(), frame: CGFloat = 50, speed: CGFloat = 1.2) {
+        self._frame = .init(wrappedValue: frame)
         self._speed = .init(wrappedValue: speed)
-        self.action = action
-    }
-    
-    @MainActor
-    @ViewBuilder
-    private func build() -> some View {
-        switch style {
-            case .spine:
-                spine()
-            case .circle:
-                circle()
-        }
+        self.icon = icon
     }
     
     @MainActor
@@ -47,11 +33,10 @@ public struct Loading: View {
             ForEach(0...(count-1), id: \.self) { i in
                 let opacity = 1 - CGFloat(i)/CGFloat(count)
                 let diameter = lineWidth
-                Circle()
-                    .foregrounds(color)
+                icon
                     .frame(width: diameter, height: diameter)
                     .opacity(opacity)
-                    .offset(y: -(size-lineWidth-lineWidth+diameter)*0.5)
+                    .offset(y: -(frame-lineWidth-lineWidth+diameter)*0.5)
                     .rotationEffect(Angle(degrees:-Double(i)*40))
                     .rotationEffect(Angle(degrees:isLoading ? 360 : 0))
                     .animation(.linear(duration: speed).repeatForever(autoreverses: false), value: isLoading)
@@ -59,33 +44,20 @@ public struct Loading: View {
                     .transition(.opacity)
             }
         }
-        .frame(width: size, height: size)
+        .frame(width: frame, height: frame)
     }
-    
-    @MainActor
-    @ViewBuilder
-    private func circle() -> some View {
-        VStack {
-            let diameter = size - lineWidth
-            Circle()
-                .trim(from: 0, to: 0.65)
-                .stroke(color, style: StrokeStyle(lineWidth: lineWidth))
-                .frame(width: diameter, height: diameter)
-                .rotationEffect(Angle(degrees:isLoading ? 360 : 0))
-                .animation(.linear(duration: speed).repeatForever(autoreverses: false), value: isLoading)
-                .onAppear { isLoading = true }
-                .transition(.opacity)
-        }
-        .frame(width: size, height: size)
-    }
-    
 }
 
-struct DownloadingView_Previews: PreviewProvider {
-    static var previews: some View {
-        VStack(spacing: 50) {
-            Loading()
-            Loading(style: .circle)
-        }
+#if DEBUG
+#Preview {
+    VStack(spacing: 50) {
+        Loading()
+        Loading(frame: 80)
+        Loading(icon: Image(systemName: "applelogo"), frame: 100)
+        Circle()
+            .spinning(frame: 50, speed: 1)
+        Rectangle()
+            .spinning(frame: 80, speed: 1.5)
     }
 }
+#endif

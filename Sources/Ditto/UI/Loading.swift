@@ -2,8 +2,8 @@ import SwiftUI
 
 extension View {
     @ViewBuilder
-    public func spinning(frame size: CGFloat, speed: CGFloat = 1.2) -> some View {
-        Loading(icon: self, frame: size, speed: speed)
+    public func spinning(frame size: CGFloat, speed: CGFloat = 1.2, fixed: Bool = false) -> some View {
+        Loading(icon: self, frame: size, speed: speed, fixed: fixed)
     }
 }
 
@@ -11,6 +11,7 @@ public struct Loading<Content: View>: View {
     @State private var isLoading = false
     @State private var frame: CGFloat
     @State private var speed: CGFloat
+    @State private var fixed: Bool
     private let icon: Content
     
     var lineWidth: CGFloat { frame*0.15 }
@@ -19,9 +20,10 @@ public struct Loading<Content: View>: View {
         spine()
     }
     
-    public init(icon: Content = Circle(), frame: CGFloat = 50, speed: CGFloat = 1.2) {
+    public init(icon: Content = Circle(), frame: CGFloat = 50, speed: CGFloat = 1.2, fixed: Bool = false) {
         self._frame = .init(wrappedValue: frame)
         self._speed = .init(wrappedValue: speed)
+        self._fixed = .init(wrappedValue: fixed)
         self.icon = icon
     }
     
@@ -34,11 +36,13 @@ public struct Loading<Content: View>: View {
                 let opacity = 1 - CGFloat(i)/CGFloat(count)
                 let diameter = lineWidth
                 icon
+                    .rotate(fixed ? Double(i)*40 : 0)
+                    .rotate(fixed && isLoading ? 0 : 360)
                     .frame(width: diameter, height: diameter)
                     .opacity(opacity)
                     .offset(y: -(frame-lineWidth-lineWidth+diameter)*0.5)
-                    .rotationEffect(Angle(degrees:-Double(i)*40))
-                    .rotationEffect(Angle(degrees:isLoading ? 360 : 0))
+                    .rotate(-Double(i)*40)
+                    .rotate(isLoading ? 360 : 0)
                     .animation(.linear(duration: speed).repeatForever(autoreverses: false), value: isLoading)
                     .onAppear { isLoading = true }
                     .transition(.opacity)
@@ -53,11 +57,13 @@ public struct Loading<Content: View>: View {
     VStack(spacing: 50) {
         Loading()
         Loading(frame: 80)
-        Loading(icon: Image(systemName: "applelogo"), frame: 100)
+        Loading(icon: Image(systemName: "applelogo"), frame: 100, fixed: true)
         Circle()
             .spinning(frame: 50, speed: 1)
         Rectangle()
             .spinning(frame: 80, speed: 1.5)
+        Rectangle()
+            .spinning(frame: 80, speed: 1.5, fixed: true)
     }
 }
 #endif

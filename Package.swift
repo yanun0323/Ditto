@@ -17,7 +17,6 @@ let package = Package(
             targets: ["Ditto"])
     ],
     dependencies: [
-        .package(url: "https://github.com/yanun0323/Sworm", from: "0.1.0"),
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
     ],
@@ -27,7 +26,6 @@ let package = Package(
         .target(
             name: "Ditto",
             dependencies: [
-                .product(name: "Sworm", package: "Sworm"),
             ],
             resources: [
                 .process("Font"),

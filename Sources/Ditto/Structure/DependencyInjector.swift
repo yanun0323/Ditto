@@ -8,7 +8,7 @@ import SwiftUI
      var appstate: AppState
      var interactor: Interactor
      
-     init(mock inMemory: Bool) {
+     init(with provider: InjectionProvider) {
          let appstate = AppState()
          self.appstate = appstate
          self.interactor = Interactor(appstate, Dao(mock: inMemory))
@@ -41,9 +41,7 @@ public protocol DependencyInjector: EnvironmentKey {
     associatedtype AppStateType
     associatedtype InteractorType
     
-    var appstate: AppStateType { get set }
-    var interactor: InteractorType { get set }
-    
-    init(mock inMemory: Bool)
+    var appstate: AppStateType { get }
+    var interactor: InteractorType { get }
 }
 

@@ -2,7 +2,7 @@ import SwiftUI
 
 extension View {
     @ViewBuilder
-    public func spinning(frame size: CGFloat, speed: CGFloat = 1.2, fixed: Bool = false) -> some View {
+    public func makeLoading(frame size: CGFloat, speed: CGFloat = 1.2, fixed: Bool = false) -> some View {
         Loading(icon: self, frame: size, speed: speed, fixed: fixed)
     }
 }
@@ -59,11 +59,11 @@ public struct Loading<Content: View>: View {
         Loading(frame: 80)
         Loading(icon: Image(systemName: "applelogo"), frame: 100, fixed: true)
         Circle()
-            .spinning(frame: 50, speed: 1)
+            .makeLoading(frame: 50, speed: 1)
         Rectangle()
-            .spinning(frame: 80, speed: 1.5)
+            .makeLoading(frame: 80, speed: 1.5)
         Rectangle()
-            .spinning(frame: 80, speed: 1.5, fixed: true)
+            .makeLoading(frame: 80, speed: 1.5, fixed: true)
     }
 }
 #endif

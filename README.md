@@ -334,6 +334,5 @@ Better than `SwiftUI.Divider`
 ```
 
 [block]: https://github.com/yanun0323/Ditto/tree/master/Sources/Ditto/UI/Block.swift
-[button]: https://github.com/yanun0323/Ditto/tree/master/Sources/Ditto/UI/Button.swift
 [section]: https://github.com/yanun0323/Ditto/tree/master/Sources/Ditto/UI/Section.swift
 [separator]: https://github.com/yanun0323/Ditto/tree/master/Sources/Ditto/UI/Separator.swift

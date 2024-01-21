@@ -69,8 +69,8 @@ extension View {
     
     // MARK: frame
     @ViewBuilder
-    public func frame(_ width: CGFloat, _ height: CGFloat, alignment a: Alignment = .center ) -> some View {
-        self.frame(width: width, height: height, alignment: a)
+    public func frame(_ size: CGFloat, alignment a: Alignment = .center ) -> some View {
+        self.frame(width: size, height: size, alignment: a)
     }
     
     @ViewBuilder

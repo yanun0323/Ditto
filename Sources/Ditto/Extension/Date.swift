@@ -15,6 +15,8 @@ extension Date {
     public init(_ unixDay: Int) {
         self = Date(timeIntervalSince1970: TimeInterval(unixDay * 86_400))
     }
+    
+    public static let zero = Date(timeIntervalSince1970: 0)
 }
 
 // MARK: Date Property

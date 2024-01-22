@@ -52,7 +52,7 @@ public struct TabPicker: View {
 #if DEBUG
 #Preview {
     @State var selected: Int = 0
-    var b: Binding<Int> = Binding {
+    let b: Binding<Int> = Binding {
         return selected
     } set: { val in
         selected = val

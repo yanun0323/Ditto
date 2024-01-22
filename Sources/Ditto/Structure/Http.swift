@@ -1,25 +1,17 @@
 import Foundation
 
-public struct Http {
+public struct Http {}
+
+// MARK: - Mode & Log
+
+extension Http {
     #if DEBUG
-    private static var mode = Mode.debug
+    private static var level = LogLevel.debug
     #else
-    private static var mode = Mode.release
+    private static var level = LogLevel.release
     #endif
-}
-
-extension Http {
-    public enum Method: String {
-        case GET = "GET"
-        case POST = "POST"
-        case PUT = "PUT"
-        case PATCH = "PATCH"
-        case DELETE = "DELETE"
-    }
-}
-
-extension Http {
-    public enum Mode: UInt {
+    
+    public enum LogLevel: UInt {
         case debug = 0
         case warning = 1
         case release = 2
@@ -35,7 +27,45 @@ extension Http {
             }
         }
     }
+    
+    /**
+     Set http log level. If mode is debug, print request log in console.
+    - Default Value:
+     ```
+     #if DEBUG
+     private static var level = LogLevel.debug
+     #else
+     private static var level = LogLevel.release
+     #endif
+     ```
+     */
+    public static func setLogLevel(_ level: Http.LogLevel) {
+        Http.level = level
+    }
+    
+    /**
+     Get http log level.
+     */
+    public static func logLevel() -> Http.LogLevel {
+        return Http.level
+    }
+    
+    private static func log(level: Http.LogLevel = .release, _ message: String) {
+        if level.rawValue >= Http.level.rawValue {
+            print("[\(level.string)] \(message)")
+        }
+    }
+    
+    private static func warn(_ message: String) {
+        log(level: .warning, message)
+    }
+    
+    private static func debug(_ message: String) {
+        log(level: .debug, message)
+    }
 }
+
+// MARK: - Error
 
 extension Http {
     public enum Error {
@@ -58,43 +88,17 @@ extension Http {
 
 extension Http.Error: Error {}
 
-extension Http {
-    private static func log(level: Http.Mode = .release, _ message: String) {
-        if level.rawValue >= Http.mode.rawValue {
-            print("[\(level.string)] \(message)")
-        }
-    }
-    
-    private static func warn(_ message: String) {
-        log(level: .warning, message)
-    }
-    
-    private static func debug(_ message: String) {
-        log(level: .debug, message)
-    }
-}
+
+// MARK: - Method & Request
 
 extension Http {
-    /**
-     Set http mode. If mode is debug, print request log in console.
-    - Default Value:
-     ```
-     #if DEBUG
-     private static var mode = Mode.debug
-     #else
-     private static var mode = Mode.release
-     #endif
-     ```
-     */
-    public static func setMode(_ mode: Http.Mode) {
-        Http.mode = mode
-    }
     
-    /**
-     Get http mode.
-     */
-    public static func getMode() -> Http.Mode {
-        return Http.mode
+    public enum Method: String {
+        case GET = "GET"
+        case POST = "POST"
+        case PUT = "PUT"
+        case PATCH = "PATCH"
+        case DELETE = "DELETE"
     }
     
     /**

@@ -1,3 +1,4 @@
+import SwiftUI
 // The MIT License (MIT)
 
 // Copyright (c) 2016 Mike Taghavi (mitghi[at]me.com)
@@ -19,6 +20,8 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
+
+@Observable
 public class TreeNode<Key: Comparable, Payload> {
     public typealias Node = TreeNode<Key, Payload>
 
@@ -87,7 +90,7 @@ public class TreeNode<Key: Comparable, Payload> {
 }
 
 // MARK: - The AVL tree
-
+@Observable
 open class AVLTree<Key: Comparable, Payload> {
     public typealias Node = TreeNode<Key, Payload>
 

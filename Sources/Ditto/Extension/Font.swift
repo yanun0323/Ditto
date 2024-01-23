@@ -135,21 +135,12 @@ public enum DittoFont: CaseIterable {
 
 extension View {
     @ViewBuilder
-    public func font(name font: DittoFont, size: CGFloat? = nil) -> some View {
-        if let size = size {
-            self.font(.custom(font.name, size: size))
-        } else {
-            #if os(macOS)
-            self.font(.custom(font.name, size: 13))
-            #else
-            self.font(.custom(font.name, size: 17))
-            #endif
-        }
-        
+    public func font(name font: DittoFont, size: CGFloat) -> some View {
+        self.font(.custom(font.name, size: size))
     }
     
     @ViewBuilder
-    public func font(name font: DittoFont, style: Font.TextStyle) -> some View {
+    public func font(name font: DittoFont, _ style: Font.TextStyle = .body) -> some View {
         self.font(.custom(font.name, size: style.size))
     }
 }

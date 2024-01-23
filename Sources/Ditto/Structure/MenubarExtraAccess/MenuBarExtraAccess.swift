@@ -48,11 +48,11 @@ struct MenuBarExtraAccess<Content: Scene>: Scene {
     
     var body: some Scene {
         menuBarExtra
-            .onChange(of: observerSetup()) { newValue in
+            .onChange(of: observerSetup()) {
                 // do nothing here - the method runs setup when polled by SwiftUI
             }
-            .onChange(of: isMenuPresented) { newValue in
-                setPresented(newValue)
+            .onChange(of: isMenuPresented) {
+                setPresented(isMenuPresented)
             }
             //.onChange(of: isToggling) { newValue in
             //    guard newValue == true else { return }

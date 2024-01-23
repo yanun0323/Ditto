@@ -147,24 +147,89 @@ extension View {
         }
         
     }
+    
+    @ViewBuilder
+    public func font(name font: DittoFont, style: Font.TextStyle) -> some View {
+        self.font(.custom(font.name, size: style.size))
+    }
+}
+
+fileprivate extension Font.TextStyle {
+    #if os(macOS)
+    var size: CGFloat {
+        switch self {
+        case .largeTitle:
+            return 26
+        case .title:
+            return 22
+        case .title2:
+            return 18
+        case .title3:
+            return 16
+        case .headline:
+            return 14
+        case .subheadline:
+            return 12
+        case .body:
+            return 14
+        case .callout:
+            return 13
+        case .footnote:
+            return 11
+        case .caption:
+            return 11
+        case .caption2:
+            return 11
+        @unknown default:
+            return 17
+        }
+    }
+    #else
+    var size: CGFloat {
+        switch self {
+        case .largeTitle:
+            return 32
+        case .title:
+            return 27
+        case .title2:
+            return 22
+        case .title3:
+            return 20
+        case .headline:
+            return 18
+        case .subheadline:
+            return 15
+        case .body:
+            return 17
+        case .callout:
+            return 16
+        case .footnote:
+            return 14
+        case .caption:
+            return 13
+        case .caption2:
+            return 12
+        @unknown default:
+            return 17
+        }
+    }
+    #endif
 }
 
 #if DEBUG
 #Preview {
-    Ditto.registerFonts()
-    return VStack {
+    Ditto.registerFonts([.Roboto, .Cubic11R])
+    return FontTestView(26, .largeTitle, font: .Cubic11R)
+}
+
+@ViewBuilder
+func FontTestView(_ size: CGFloat, _ style: Font.TextStyle, font: DittoFont) -> some View {
+    VStack {
         Text("Font Test 測試")
-            .font(name: .Roboto)
+            .font(name: font, size: size)
         Text("Font Test 測試")
-            .font(.custom(DittoFont.Cubic11R.name, size: 17))
-        Text("Font Test 測試")
-            .font(.custom(DittoFont.Cubic11R.name, fixedSize: 17))
-        Text("Font Test 測試")
-            .font(.body)
-        Text("Font Test 測試")
-            .font(.system(size: 17))
+            .font(.system(style))
     }
-    .paddings(30)
-//    .dynamicTypeSize(.xLarge)
+    .paddings()
 }
 #endif

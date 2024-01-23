@@ -2,8 +2,12 @@ import Foundation
 import SwiftUI
 
 public class Ditto {
-    public static func registerFonts() {
-        DittoFont.allCases.forEach {
+    public static func registerFonts(_ fonts: DittoFont...) {
+        Ditto.registerFonts(fonts)
+    }
+    
+    public static func registerFonts(_ fonts: [DittoFont]) {
+        fonts.forEach {
             registerFont(bundle: .module, fontName: $0.filename, fontExtension: "ttf")
         }
     }

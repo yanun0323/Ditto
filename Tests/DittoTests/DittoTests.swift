@@ -6,6 +6,6 @@ final class DittoTests: XCTestCase {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
-//        XCTAssertEqual(Ditto().text, "Hello, World!")
+        XCTAssertNotEqual(Date.zero, Date(2024, 1, 23, 0, 0, 0))
     }
 }

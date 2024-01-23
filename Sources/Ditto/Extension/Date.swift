@@ -21,14 +21,14 @@ public enum SpanComponent {
 extension Date {
     public init(_ year: Int, _ month: Int, _ day: Int, _ hour: Int, _ minute: Int, _ second: Int, locale: Locale = .autoupdatingCurrent) {
         var comp = DateComponents()
-        comp.year = year
-        comp.month = month
-        comp.day = day
-        comp.hour = hour
-        comp.minute = minute
-        comp.second = second
+        comp.setValue(year, for: .year)
+        comp.setValue(month, for: .month)
+        comp.setValue(day, for: .day)
+        comp.setValue(hour, for: .hour)
+        comp.setValue(minute, for: .minute)
+        comp.setValue(second, for: .second)
         comp.timeZone = locale.timeZone
-        self = comp.date!
+        self = Calendar.current.date(from: comp) ?? .zero
     }
 
     public init?(from date: String, _ layout: DateFormatLayout, _ locale: Locale = .autoupdatingCurrent) {

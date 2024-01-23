@@ -31,11 +31,11 @@ extension Date {
         self = Calendar.current.date(from: comp) ?? .zero
     }
 
-    public init?(from date: String, _ layout: DateFormatLayout, _ locale: Locale = .autoupdatingCurrent) {
+    public init?(from date: String, _ layout: DateFormatLayout, _ timeZone: TimeZone = .autoupdatingCurrent) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = layout
-        dateFormatter.locale = locale
-        dateFormatter.timeZone = locale.timeZone
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.timeZone = timeZone
         guard let result = dateFormatter.date(from: date) else { return nil }
         self = result
     }

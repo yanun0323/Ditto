@@ -437,8 +437,8 @@ extension AVLTree {
     private func descend(node: Node?, _ completion: (Key, Payload?) -> Void) {
         if let node = node {
             descend(node: node.rightChild, completion)
-            descend(node: node.leftChild, completion)
             completion(node.key, node.payload)
+            descend(node: node.leftChild, completion)
         }
     }
     

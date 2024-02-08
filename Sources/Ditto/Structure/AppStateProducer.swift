@@ -20,9 +20,9 @@ import SwiftUI
  }
  ```
  */
-protocol AppStateProducer {}
+public protocol AppStateProducer {}
 
-extension AppStateProducer {
+public extension AppStateProducer {
     func consume<Value: Publisher>(keyPath: WritableKeyPath<Self, Value>, _ perform: @escaping (Value.Output) -> Void) -> AnyCancellable {
         self[keyPath: keyPath].sink { _ in } receiveValue: { output in
             perform(output)

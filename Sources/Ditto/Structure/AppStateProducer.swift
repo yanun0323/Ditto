@@ -9,12 +9,12 @@ import SwiftUI
      var passthrough = PassthroughSubject<Int?, Never>()
  }
 
- extension WritableKeyPath {
-     static var current: WritableKeyPath<AppState, CurrentValueSubject<Int, Never>> {
+ extension KeyPath {
+     static var current: KeyPath<AppState, CurrentValueSubject<Int, Never>> {
          return \AppState.current
      }
      
-     static var passthrough: WritableKeyPath<AppState, PassthroughSubject<Int?, Never>> {
+     static var passthrough: KeyPath<AppState, PassthroughSubject<Int?, Never>> {
          return \AppState.passthrough
      }
  }
@@ -23,7 +23,19 @@ import SwiftUI
 public protocol AppStateProducer {}
 
 public extension AppStateProducer {
-    func consume<Value: Publisher>(keyPath: WritableKeyPath<Self, Value>, _ perform: @escaping (Value.Output) -> Void) -> AnyCancellable {
+    func consume<Value: Publisher>(keyPath: KeyPath<Self, Value>, _ perform: @escaping (Value.Output) -> Void) -> AnyCancellable {
+        self[keyPath: keyPath].sink { _ in } receiveValue: { output in
+            perform(output)
+        }
+    }
+    
+    func consume<Value: Publisher>(writable keyPath: WritableKeyPath<Self, Value>, _ perform: @escaping (Value.Output) -> Void) -> AnyCancellable {
+        self[keyPath: keyPath].sink { _ in } receiveValue: { output in
+            perform(output)
+        }
+    }
+    
+    func consume<Value: Publisher>(reference keyPath: ReferenceWritableKeyPath<Self, Value>, _ perform: @escaping (Value.Output) -> Void) -> AnyCancellable {
         self[keyPath: keyPath].sink { _ in } receiveValue: { output in
             perform(output)
         }
@@ -36,7 +48,7 @@ struct AppState: AppStateProducer {
     var passthrough = PassthroughSubject<Int?, Never>()
 }
 
-extension WritableKeyPath {
+extension KeyPath {
     static var current: WritableKeyPath<AppState, CurrentValueSubject<Int, Never>> {
         return \AppState.current
     }
@@ -47,8 +59,8 @@ extension WritableKeyPath {
 }
 
 struct DIContainer<State> where State: AppStateProducer {
-    var appstate: State
-    var interactor: AppState
+    let appstate: State
+    let interactor: AppState
 }
 
 struct AppStateView: View {

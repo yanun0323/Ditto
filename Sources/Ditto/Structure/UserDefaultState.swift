@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import SwiftUI
 
 /**
  Property Wrapper for UserDefaults
@@ -83,7 +84,41 @@ extension Optional: AnyOptional {
     public var isNil: Bool { self == nil }
 }
 
+#if DEBUG
+
 extension UserDefaults {
-    @UserDefaultState(key: "USERNAME", defaultValue: "yanun", container: .standard)
-    static var username: String
+    @UserDefaultState(key: "COUNT", defaultValue: 0, container: .standard)
+    static var count: Int
 }
+
+#Preview {
+    PreviewView()
+}
+
+struct PreviewView: View {
+    @State private var cancel: [AnyCancellable] = []
+    @State private var count = 0
+    
+    var body: some View {
+        VStack {
+            Text(count.description)
+            Button {
+                UserDefaults.count += 1
+            } label: {
+                Text("Add")
+            }
+        }
+        .paddings()
+        .onAppear {
+            cancel.append(UserDefaults.$count.sink { count in
+                self.count = count
+            })
+        }
+        .onDisappear {
+            cancel.forEach { c in
+                c.cancel()
+            }
+        }
+    }
+}
+#endif

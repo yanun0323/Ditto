@@ -21,7 +21,7 @@ extension System {
     public static func async(background: @escaping () -> Void = {}, main: @escaping () -> Void) {
         DispatchQueue.global().async {
             background()
-            DispatchQueue.main.async {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
                 main()
             }
         }
@@ -34,7 +34,7 @@ extension System {
     public static func asyncio<T>(background: @escaping () -> T = {}, main: @escaping (T) -> Void) {
         DispatchQueue.global().async {
             let data = background()
-            DispatchQueue.main.async {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
                 main(data)
             }
         }
@@ -99,11 +99,35 @@ extension System {
 #elseif os(iOS)
 extension System {
     /**
-     # dissmissKeyboard
-     dissmiss iOS keyboard
+     # dismissKeyboard
+     dismiss iOS keyboard
      */
-    public static func dissmissKeyboard() {
+    public static func dismissKeyboard() {
         UIApplication.shared.dismissKeyboard()
+    }
+}
+#endif
+
+#if DEBUG
+#Preview {
+    SystemPreview()
+        .paddings()
+}
+
+struct SystemPreview: View {
+    @State private var num = 1
+    var body: some View {
+        VStack {
+            Text("\(num)")
+            Button {
+                num += 1
+                System.async {
+                    num+=1
+                }
+            } label: {
+                Text("Add")
+            }
+        }
     }
 }
 #endif

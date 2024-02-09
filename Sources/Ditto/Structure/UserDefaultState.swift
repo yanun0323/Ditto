@@ -110,6 +110,7 @@ struct PreviewView: View {
         }
         .paddings()
         .onAppear {
+            UserDefaults.count = 0
             cancel.append(UserDefaults.$count.sink { count in
                 self.count = count
             })

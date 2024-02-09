@@ -69,12 +69,30 @@ extension View {
     
     // MARK: frame
     @ViewBuilder
-    public func frame(_ size: CGFloat, alignment a: Alignment = .center ) -> some View {
-        self.frame(width: size, height: size, alignment: a)
+    public func frame(_ edges: CGFloat..., alignment a: Alignment = .center) -> some View {
+        switch edges.count {
+        case 1:
+            self.frame(width: edges[0], height: edges[0], alignment: a)
+        case 2:
+            self.frame(width: edges[1], height: edges[0], alignment: a)
+        default:
+            self.frame(width: nil, height: nil, alignment: a)
+        }
+    }
+    @ViewBuilder
+    public func frame(max edges: CGFloat..., alignment a: Alignment = .center) -> some View {
+        switch edges.count {
+        case 1:
+            self.frame(maxWidth: edges[0], maxHeight: edges[0], alignment: a)
+        case 2:
+            self.frame(maxWidth: edges[1], maxHeight: edges[0], alignment: a)
+        default:
+            self.frame(maxWidth: nil, maxHeight: nil, alignment: a)
+        }
     }
     
     @ViewBuilder
-    public func frame(size: CGSize, alignment a: Alignment = .center ) -> some View {
+    public func frame(size: CGSize, alignment a: Alignment = .center) -> some View {
         self.frame(width: size.width, height: size.height, alignment: a)
     }
     

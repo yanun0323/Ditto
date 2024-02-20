@@ -18,10 +18,10 @@ extension System {
      # async
      Invoke function in background thread and main thread
      */
-    public static func async(background: @escaping () -> Void = {}, main: @escaping () -> Void) {
+    public static func async(delay: TimeInterval = 0, background: @escaping () -> Void = {}, main: @escaping () -> Void) {
         DispatchQueue.global().async {
             background()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01 + delay) {
                 main()
             }
         }
@@ -31,10 +31,10 @@ extension System {
      # async
      Invoke function in background thread and main thread with passing data
      */
-    public static func asyncio<T>(background: @escaping () -> T = {}, main: @escaping (T) -> Void) {
+    public static func asyncio<T>(delay: TimeInterval = 0, background: @escaping () -> T = {}, main: @escaping (T) -> Void) {
         DispatchQueue.global().async {
             let data = background()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01 + delay) {
                 main(data)
             }
         }

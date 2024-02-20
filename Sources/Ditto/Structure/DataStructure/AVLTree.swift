@@ -180,7 +180,7 @@ extension AVLTree {
 // MARK: - Replacing new items
 
 extension AVLTree {
-    public func update(key: Key, payload: Payload? = nil) {
+    public func update(key: Key, payload: Payload?) {
         if let root = root {
             insert(input: key, payload: payload, node: root)
         } else {

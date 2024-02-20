@@ -27,8 +27,7 @@ let package = Package(
         .target(
             name: "Ditto",
             resources: [
-//                .process("Font"),
-                .copy("Font"),
+                .process("Font"),
             ]
         ),
         .testTarget(

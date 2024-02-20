@@ -102,6 +102,10 @@ open class AVLTree<Key: Comparable, Payload> {
     public var isEmpty: Bool {
         return size == 0
     }
+    
+    public var count: Int {
+        return size
+    }
 }
 
 // MARK: - Searching

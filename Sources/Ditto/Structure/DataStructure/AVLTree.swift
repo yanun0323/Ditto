@@ -98,6 +98,10 @@ open class AVLTree<Key: Comparable, Payload> {
     fileprivate(set) var size = 0
 
     public init() {}
+    
+    public var isEmpty: Bool {
+        return size == 0
+    }
 }
 
 // MARK: - Searching
@@ -113,7 +117,7 @@ extension TreeNode {
 }
 
 extension AVLTree {
-    subscript(key: Key) -> Payload? {
+    public subscript(key: Key) -> Payload? {
         get { return search(input: key) }
         set { insert(key: key, payload: newValue) }
     }

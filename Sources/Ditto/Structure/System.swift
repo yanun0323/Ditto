@@ -44,8 +44,7 @@ extension System {
 }
 
 extension System {
-    func shell(launchPath: String = "/usr/bin", arguments: [String]) -> String {
-
+    public func shell(launchPath: String = "/usr/bin", arguments: [String]) -> String {
         let process = Process()
         process.launchPath = launchPath
         process.arguments = arguments

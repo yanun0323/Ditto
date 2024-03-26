@@ -103,8 +103,8 @@ extension System {
             pasteboard.clearContents()
             pasteboard.setString(text, forType: .string)
         }
-        
-        public static func shell(launchPath: String = "/bin/sh", arguments: [String]) -> String {
+
+        public static func cmd(launchPath: String = "/usr/bin/env", arguments: [String]) -> String {
 
             let process = Process()
             process.launchPath = launchPath
@@ -119,11 +119,11 @@ extension System {
             // remove the trailing new-line char
             if output_from_command.count > 0 {
                 let lastIndex = output_from_command.index(before: output_from_command.endIndex)
-                return String(output_from_command[output_from_command.startIndex ..< lastIndex])
+                return String(output_from_command[output_from_command.startIndex..<lastIndex])
             }
             return output_from_command
         }
-        
+
         public static func shell(_ cmd: String) -> String? {
             let pipe = Pipe()
             let process = Foundation.Process()

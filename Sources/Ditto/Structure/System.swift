@@ -104,11 +104,10 @@ extension System {
             pasteboard.setString(text, forType: .string)
         }
 
-        public static func cmd(launchPath: String = "/usr/bin/env", arguments: [String]) -> String {
-
+        public static func cmd(launchPath: String = "/usr/bin/env", _ cmd: String) -> String {
             let process = Process()
             process.launchPath = launchPath
-            process.arguments = arguments
+            process.arguments = cmd.components(separatedBy: [" "])
 
             let pipe = Pipe()
             process.standardOutput = pipe

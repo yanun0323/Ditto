@@ -1,3 +1,4 @@
+import Foundation
 import SwiftUI
 
 #if os(iOS)
@@ -43,26 +44,6 @@ extension System {
     }
 }
 
-extension System {
-    public static func shell(launchPath: String = "/usr/bin", arguments: [String]) -> String {
-        let process = Process()
-        process.launchPath = launchPath
-        process.arguments = arguments
-
-        let pipe = Pipe()
-        process.standardOutput = pipe
-        process.launch()
-
-        let output_from_command = String(data: pipe.fileHandleForReading.readDataToEndOfFile(), encoding: String.Encoding.utf8)!
-
-        // remove the trailing new-line char
-        if output_from_command.characters.count > 0 {
-            let lastIndex = output_from_command.index(before: output_from_command.endIndex)
-            return output_from_command[output_from_command.startIndex..<lastIndex]
-        }
-        return output_from_command
-    }
-}
 
 extension System {
     /**
@@ -122,7 +103,39 @@ extension System {
             pasteboard.clearContents()
             pasteboard.setString(text, forType: .string)
         }
+        
+        public static func shell(launchPath: String = "/bin/sh", arguments: [String]) -> String {
+
+            let process = Process()
+            process.launchPath = launchPath
+            process.arguments = arguments
+
+            let pipe = Pipe()
+            process.standardOutput = pipe
+            process.launch()
+
+            let output_from_command = String(data: pipe.fileHandleForReading.readDataToEndOfFile(), encoding: String.Encoding.utf8)!
+
+            // remove the trailing new-line char
+            if output_from_command.count > 0 {
+                let lastIndex = output_from_command.index(before: output_from_command.endIndex)
+                return String(output_from_command[output_from_command.startIndex ..< lastIndex])
+            }
+            return output_from_command
+        }
+        
+        public static func shell(_ cmd: String) -> String? {
+            let pipe = Pipe()
+            let process = Foundation.Process()
+            process.launchPath = "/bin/sh"
+            process.arguments = ["-c", String(format: "%@", cmd)]
+            process.standardOutput = pipe
+            let fileHandle = pipe.fileHandleForReading
+            process.launch()
+            return String(data: fileHandle.readDataToEndOfFile(), encoding: .utf8)
+        }
     }
+
 #elseif os(iOS)
     extension System {
         /**

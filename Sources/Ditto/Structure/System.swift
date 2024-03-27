@@ -104,6 +104,44 @@ extension System {
             pasteboard.clearContents()
             pasteboard.setString(text, forType: .string)
         }
+        
+        /**
+        # shell
+        executes shell command
+        */
+        public static func shell(bin: String = "/usr/bin/env", _ cmd: String, channel: PassthroughSubject<String, Never>) {
+            var err: Error?
+            
+            let process = Process()
+            process.launchPath = bin
+            process.arguments = cmd.components(separatedBy: [" "])
+            process.terminationHandler = { _ in
+                if let err = err {
+                    channel.send("\(err)")
+                }
+            }
+            
+            let pipe = Pipe()
+            pipe.fileHandleForReading.readabilityHandler = { p in
+                if let msg = String(data: p.availableData, encoding: String.Encoding.utf8)?.trimmingCharacters(in: ["\n"," "]),
+                      msg.count != 0  {
+                    channel.send(msg)
+                }
+                
+                if !process.isRunning {
+                    process.terminate()
+                }
+            }
+            pipe.fileHandleForReading.waitForDataInBackgroundAndNotify()
+            process.standardOutput = pipe
+            
+            do {
+                try process.run()
+            } catch {
+                err = error
+            }
+        }
+        
         /**
         # shell
         executes shell command

@@ -34,7 +34,7 @@ final class DittoTests: XCTestCase {
     }
     
     func testCommand() throws {
-        let channel = System.command("/usr/local/bin/ollama pull stable-code:code")
+        let channel = System.shell("/usr/local/bin/ollama")
         var count = 0
         let limitation = 60
         let p = channel.sink { error in

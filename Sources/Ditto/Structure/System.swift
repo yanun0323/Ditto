@@ -1,5 +1,6 @@
 import Foundation
 import SwiftUI
+import Combine
 
 #if os(iOS)
     import UIKit
@@ -96,42 +97,53 @@ extension System {
 
         /**
      # copy
-     Copy text to system clipboard
+     copies text to system clipboard
      */
         public static func copy(_ text: String) {
             let pasteboard = NSPasteboard.general
             pasteboard.clearContents()
             pasteboard.setString(text, forType: .string)
         }
-
-        public static func cmd(launchPath: String = "/usr/bin/env", _ cmd: String) -> String {
+        /**
+        # shell
+        executes shell command
+        */
+        public static func shell(bin: String = "/usr/bin/env", _ cmd: String) -> AnyPublisher<String, Error> {
+            let channel = PassthroughSubject<String, Error>()
+            var err: Error?
+            
             let process = Process()
-            process.launchPath = launchPath
+            process.launchPath = bin
             process.arguments = cmd.components(separatedBy: [" "])
-
-            let pipe = Pipe()
-            process.standardOutput = pipe
-            process.launch()
-
-            let output_from_command = String(data: pipe.fileHandleForReading.readDataToEndOfFile(), encoding: String.Encoding.utf8)!
-
-            // remove the trailing new-line char
-            if output_from_command.count > 0 {
-                let lastIndex = output_from_command.index(before: output_from_command.endIndex)
-                return String(output_from_command[output_from_command.startIndex..<lastIndex])
+            process.terminationHandler = { _ in
+                if let err = err {
+                    channel.send(completion: .failure(err))
+                } else {
+                    channel.send(completion: .finished)
+                }
             }
-            return output_from_command
-        }
-
-        public static func shell(_ cmd: String) -> String? {
+            
             let pipe = Pipe()
-            let process = Foundation.Process()
-            process.launchPath = "/bin/sh"
-            process.arguments = ["-c", String(format: "%@", cmd)]
+            pipe.fileHandleForReading.readabilityHandler = { p in
+                if let msg = String(data: p.availableData, encoding: String.Encoding.utf8)?.trimmingCharacters(in: ["\n"," "]),
+                      msg.count != 0  {
+                    channel.send(msg)
+                }
+                
+                if !process.isRunning {
+                    process.terminate()
+                }
+            }
+            pipe.fileHandleForReading.waitForDataInBackgroundAndNotify()
             process.standardOutput = pipe
-            let fileHandle = pipe.fileHandleForReading
-            process.launch()
-            return String(data: fileHandle.readDataToEndOfFile(), encoding: .utf8)
+            
+            do {
+                try process.run()
+            } catch {
+                err = error
+            }
+            
+            return channel.eraseToAnyPublisher()
         }
     }
 

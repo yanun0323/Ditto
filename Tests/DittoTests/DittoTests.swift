@@ -1,4 +1,5 @@
 import XCTest
+import Combine
 @testable import Ditto
 
 final class DittoTests: XCTestCase {
@@ -30,5 +31,23 @@ final class DittoTests: XCTestCase {
         
         XCTAssertEqual(elem, acendResult)
         XCTAssertEqual(elem.reversed(), descendResult)
+    }
+    
+    func testCommand() throws {
+        let channel = System.command("/usr/local/bin/ollama pull stable-code:code")
+        var count = 0
+        let limitation = 60
+        let p = channel.sink { error in
+            print(error)
+            count = limitation
+        } receiveValue: { msg in
+            print(msg)
+        }
+        
+        while count < limitation {
+            count += 1
+            sleep(1)
+        }
+        p.cancel()
     }
 }

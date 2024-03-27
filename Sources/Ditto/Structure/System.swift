@@ -109,79 +109,87 @@ extension System {
         # shell
         executes shell command
         */
-        public static func shell(bin: String = "/usr/bin/env", _ cmd: String, channel: PassthroughSubject<String, Never>) {
-            var err: Error?
-            
-            let process = Process()
-            process.launchPath = bin
-            process.arguments = cmd.components(separatedBy: [" "])
-            process.terminationHandler = { _ in
-                if let err = err {
-                    channel.send("\(err)")
-                }
-            }
-            
-            let pipe = Pipe()
-            pipe.fileHandleForReading.readabilityHandler = { p in
-                if let msg = String(data: p.availableData, encoding: String.Encoding.utf8)?.trimmingCharacters(in: ["\n"," "]),
-                      msg.count != 0  {
-                    channel.send(msg)
-                }
-                
-                if !process.isRunning {
-                    process.terminate()
-                }
-            }
-            pipe.fileHandleForReading.waitForDataInBackgroundAndNotify()
-            process.standardOutput = pipe
-            
-            do {
-                try process.run()
-            } catch {
-                err = error
-            }
+        public static func shell(_ cmd: String, receive valueHandler: ((String) -> Void)? = nil) -> String? {
+            return shell(cmd, completion: nil, receive: valueHandler)
         }
         
         /**
         # shell
         executes shell command
         */
-        public static func shell(bin: String = "/usr/bin/env", _ cmd: String) -> AnyPublisher<String, Error> {
-            let channel = PassthroughSubject<String, Error>()
-            var err: Error?
+        public static func shell(_ cmd: String, completion errHandler: ((Subscribers.Completion<Error>) -> Void)?, receive valueHandler: ((String) -> Void)?) -> String? {
+            if errHandler != nil && valueHandler != nil {
+                System.async {
+                    shellAsync(cmd, completion: errHandler, receive: valueHandler)
+                }
+                return nil
+            }
             
+            return shellAwait(cmd)
+        }
+        
+        private static func shellAwait(_ cmd: String) -> String? {
             let process = Process()
-            process.launchPath = bin
-            process.arguments = cmd.components(separatedBy: [" "])
-            process.terminationHandler = { _ in
-                if let err = err {
-                    channel.send(completion: .failure(err))
-                } else {
-                    channel.send(completion: .finished)
-                }
-            }
-            
             let pipe = Pipe()
-            pipe.fileHandleForReading.readabilityHandler = { p in
-                if let msg = String(data: p.availableData, encoding: String.Encoding.utf8)?.trimmingCharacters(in: ["\n"," "]),
-                      msg.count != 0  {
-                    channel.send(msg)
-                }
-                
-                if !process.isRunning {
-                    process.terminate()
-                }
-            }
-            pipe.fileHandleForReading.waitForDataInBackgroundAndNotify()
+            
+            process.launchPath = "/usr/bin/env"
+            process.arguments = cmd.components(separatedBy: CharacterSet.whitespaces)
             process.standardOutput = pipe
             
             do {
                 try process.run()
+                process.waitUntilExit()
+                guard let data = try pipe.fileHandleForReading.readToEnd() else {
+                    return "error: data read to end"
+                }
+                
+                
+                guard let msg = String(data: data, encoding: String.Encoding.utf8),
+                      msg.trimmingCharacters(in: ["\n"," "]).count != 0  else {
+                    return "error: parse data to message"
+                }
+                
+                return msg
             } catch {
-                err = error
+                return "error: \(error)"
+            }
+        }
+        
+        private static func shellAsync(_ cmd: String, completion errHandler: ((Subscribers.Completion<Error>) -> Void)?, receive valueHandler: ((String) -> Void)?) {
+            let channel = PassthroughSubject<String, Error>()
+            let process = Process()
+            let pipe = Pipe()
+            
+            pipe.fileHandleForReading.readabilityHandler = { p in
+                if let msg = String(data: p.availableData, encoding: String.Encoding.utf8),
+                      msg.trimmingCharacters(in: ["\n"," "]).count != 0  {
+                    channel.asyncSend(msg)
+                }
+            }
+            pipe.fileHandleForReading.waitForDataInBackgroundAndNotify()
+            process.terminationHandler = { _ in
+                channel.asyncSend(completion: .finished)
             }
             
-            return channel.eraseToAnyPublisher()
+            process.launchPath = "/usr/bin/env"
+            process.arguments = cmd.components(separatedBy: CharacterSet.whitespaces)
+            process.standardOutput = pipe
+            
+            var subscribtion: AnyCancellable?
+            subscribtion = channel.sink { error in
+                errHandler?(error)
+                subscribtion?.cancel()
+                subscribtion = nil
+            } receiveValue: { msg in
+                valueHandler?(msg)
+            }
+            
+            do {
+                try process.run()
+                process.waitUntilExit()
+            } catch {
+                channel.asyncSend("\(error)")
+            }
         }
     }
 
@@ -200,11 +208,13 @@ extension System {
 #if DEBUG
     #Preview {
         SystemPreview()
-            .paddings()
     }
 
     struct SystemPreview: View {
+        @State private var publisher = PassthroughSubject<String, Never>()
+        @State private var sub: AnyCancellable?
         @State private var num = 1
+        @State private var info = "-"
         var body: some View {
             VStack {
                 Text("\(num)")
@@ -216,6 +226,44 @@ extension System {
                 } label: {
                     Text("Add")
                 }
+                
+                Button {
+                    let result = System.shell("/usr/local/bin/ollama list") ?? "-"
+                    publisher.asyncSend(result)
+                } label: {
+                    Text("list")
+                }
+                
+                Button {
+                    let result = System.shell("/usr/local/bin/ollama rm stable-code:code") ?? "-"
+                    publisher.asyncSend(result)
+                } label: {
+                    Text("remove")
+                }
+                
+                Button {
+                    var result = ""
+                    let output = System.shell("/usr/local/bin/ollama pull stable-code:code") { err in
+                        publisher.asyncSend(result)
+                    } receive: { msg in
+                        result.append(result)
+                    }
+                    publisher.asyncSend(output ?? "...")
+                } label: {
+                    Text("pull")
+                }
+                
+                ScrollView(.vertical) {
+                    VStack(alignment: .leading) {
+                        ForEach(info.components(separatedBy: "\n"), id: \.self) { text in
+                            Text(text)
+                        }
+                    }
+                }
+            }
+            .frame(width: 500)
+            .onReceive(publisher) { msg in
+                info = msg
             }
         }
     }

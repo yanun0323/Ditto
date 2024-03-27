@@ -34,20 +34,17 @@ final class DittoTests: XCTestCase {
     }
     
     func testCommand() throws {
-        let channel = System.shell("/usr/local/bin/ollama")
         var count = 0
-        let limitation = 60
-        let p = channel.sink { error in
-            print(error)
-            count = limitation
-        } receiveValue: { msg in
-            print(msg)
+        let limitation = 3
+        System.shell("/usr/local/bin/ollama 123") { err in
+            print("err: \(err)")
+        } receive: { msg in
+            print("msg: \(msg)")
         }
         
         while count < limitation {
             count += 1
             sleep(1)
         }
-        p.cancel()
     }
 }

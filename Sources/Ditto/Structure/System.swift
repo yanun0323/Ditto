@@ -54,8 +54,7 @@ extension System {
     public static func `try`(_ log: String? = nil, _ action: () throws -> Void) {
         do {
             try action()
-        }
-        catch {
+        } catch {
             if let log = log {
                 print("Error: \(log), err: \(error)")
             }
@@ -72,16 +71,15 @@ extension System {
     public static func tryio<T>(_ log: String? = nil, _ action: () throws -> T?) -> T? where T: Any {
         do {
             return try action()
-        }
-        catch {
+        } catch {
             if let log = log {
                 print("Error: \(log), err: \(error)")
             }
             else {
                 print("Error: \(error)")
             }
+            return nil
         }
-        return nil
     }
 }
 

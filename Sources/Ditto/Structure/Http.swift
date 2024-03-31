@@ -133,6 +133,8 @@ extension Http {
                 do {
                     let (stream, _) = try await URLSession.shared.bytes(for: req)
                     for try await line in stream.lines {
+                        warn("streaming: complete download, data length: \(line.count)")
+                        debug("streaming: response body: \n\(line)")
                         guard let data = line.data(using: .utf8) else { continue }
                         publisher.send(try JSONDecoder().decode(T.self, from: data))
                     }
@@ -219,7 +221,7 @@ extension Http {
                 do {
                     let (stream, _) = try await URLSession.shared.bytes(for: req)
                     for try await line in stream.lines {
-                        debug("sendRequest: response body: \n\(line)")
+                        debug("streaming: response body: \n\(line)")
                         if ignoreBody {
                             continue
                         }

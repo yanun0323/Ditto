@@ -136,7 +136,7 @@ extension Http {
                         warn("streaming: complete download, data length: \(line.count)")
                         debug("streaming: response body: \n\(line)")
                         guard let data = line.data(using: .utf8) else { continue }
-                        publisher.send(try JSONDecoder().decode(T.self, from: data))
+                        publisher.asyncSend(try JSONDecoder().decode(T.self, from: data))
                     }
                 } catch {
                     warn("streaming: \(error)")
@@ -225,7 +225,7 @@ extension Http {
                         if ignoreBody {
                             continue
                         }
-                        publisher.send(line)
+                        publisher.asyncSend(line)
                     }
                 } catch {
                     warn("streaming: \(error)")

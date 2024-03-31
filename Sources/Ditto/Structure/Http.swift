@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 
 public struct Http {}
 
@@ -113,9 +114,10 @@ extension Http {
      - parameters:
         - method: The http method for this request. (GET, POST, PUT, PATCH, DELETE)
         - toUrl: The url to send request.
+        - streaming: provide the publisher if the request is streaming.
         - action: Use this to modify request, such as set cookies, add headers or add data.
      */
-    public static func sendRequest<T>(_ method: Http.Method = .GET, toUrl path: String, type: T.Type, action: @escaping (inout URLRequest) -> Void = { _ in }) -> (T?, Int?, Http.Error?) where T: Decodable {
+    public static func sendRequest<T>(_ method: Http.Method = .GET, toUrl path: String, streaming publisher: PassthroughSubject<T, Never>? = nil, type: T.Type, action: @escaping (inout URLRequest) -> Void = { _ in }) -> (T?, Int?, Http.Error?) where T: Decodable {
         guard let url = URL(string: path) else {
             warn("sendRequest: failed to generate url from string: \(path)")
             return (nil, nil, .errParseURL(method, path))
@@ -129,6 +131,33 @@ extension Http {
         var request = URLRequest(url: url, timeoutInterval: 30)
         request.httpMethod = method.rawValue
         action(&request)
+        
+        if let publisher = publisher {
+            let req = request
+            Task {
+                do {
+                    guard let url = URL(string: path) else {
+                        print("sendRequest: failed to generate url from string: \(path)")
+                        return
+                    }
+                    
+                    var request = URLRequest(url: url, timeoutInterval: 30)
+                    request.httpMethod = method.rawValue
+                    action(&request)
+                    Http.setLogLevel(.release)
+                    
+                    let (stream, _) = try await URLSession.shared.bytes(for: req)
+                    for try await line in stream.lines {
+                        guard let result = try? JSONDecoder().decode(T.self, from: line.data(using: .utf8)!) else { continue }
+                        publisher.send(result)
+                    }
+                } catch {
+                    print(error)
+                }
+            }
+            
+            return (nil, nil, nil)
+        }
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             defer { channel.signal() }
@@ -179,10 +208,11 @@ extension Http {
      - parameters:
         - method: The http method for this request. (GET, POST, PUT, PATCH, DELETE)
         - toUrl: The url to send request.
+        - streaming: provide the publisher if the request is streaming.
         - ignoreBody: It won't return the body if true. It helps increasing performance to ignore the body return.
         - action: Use this to modify request, such as set cookies, add headers or add data.
      */
-    public static func sendRequestForString(_ method: Method = .GET, toUrl path: String, ignoreBody: Bool = false, action: @escaping (inout URLRequest) -> Void = { _ in }) -> (String, Int?, Http.Error?) {
+    public static func sendRequestForString(_ method: Method = .GET, toUrl path: String, streaming publisher: PassthroughSubject<String, Never>? = nil, ignoreBody: Bool = false, action: @escaping (inout URLRequest) -> Void = { _ in }) -> (String, Int?, Http.Error?) {
         guard let url = URL(string: path) else {
             warn("sendRequest: failed to generate url from string: \(path)")
             return ("", nil, .errParseURL(method, path))
@@ -196,6 +226,37 @@ extension Http {
         var request = URLRequest(url: url, timeoutInterval: 30)
         request.httpMethod = method.rawValue
         action(&request)
+        
+        
+        if let publisher = publisher {
+            let req = request
+            Task {
+                do {
+                    guard let url = URL(string: path) else {
+                        print("sendRequest: failed to generate url from string: \(path)")
+                        return
+                    }
+                    
+                    var request = URLRequest(url: url, timeoutInterval: 30)
+                    request.httpMethod = method.rawValue
+                    action(&request)
+                    Http.setLogLevel(.release)
+                    
+                    let (stream, _) = try await URLSession.shared.bytes(for: req)
+                    for try await line in stream.lines {
+                        debug("sendRequest: response body: \n\(line)")
+                        if ignoreBody {
+                            continue
+                        }
+                        publisher.send(line)
+                    }
+                } catch {
+                    print(error)
+                }
+            }
+            
+            return ("", nil, nil)
+        }
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             defer { channel.signal() }

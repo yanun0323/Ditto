@@ -19,7 +19,7 @@ public enum SpanComponent {
 
 // MARK: - Date
 extension Date {
-    public init(_ year: Int, _ month: Int, _ day: Int, _ hour: Int, _ minute: Int, _ second: Int, locale: Locale = .autoupdatingCurrent) {
+    public init(_ year: Int, _ month: Int, _ day: Int, _ hour: Int, _ minute: Int, _ second: Int, locale: Locale? = nil) {
         var comp = DateComponents()
         comp.setValue(year, for: .year)
         comp.setValue(month, for: .month)
@@ -27,11 +27,11 @@ extension Date {
         comp.setValue(hour, for: .hour)
         comp.setValue(minute, for: .minute)
         comp.setValue(second, for: .second)
-        comp.timeZone = locale.timeZone
+        comp.timeZone = locale?.timeZone
         self = Calendar.current.date(from: comp) ?? .zero
     }
 
-    public init?(from date: String, _ layout: DateFormatLayout, _ timeZone: TimeZone = .autoupdatingCurrent) {
+    public init?(from date: String, _ layout: DateFormatLayout, _ timeZone: TimeZone? = nil) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = layout
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")

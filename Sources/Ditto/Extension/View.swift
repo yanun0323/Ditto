@@ -103,7 +103,7 @@ extension View {
     
     // MARK: round
     @ViewBuilder
-    public func round(_ radius: CGFloat = 7) -> some View {
+    public func round(_ radius: CGFloat = 13) -> some View {
         if radius == 0 {
             self
         } else {
@@ -230,9 +230,24 @@ extension View {
             .foregrounds(.red, .purple)
         Text("Hello, world!")
             .font(.largeTitle)
-            .backgrounds(.red, .purple)
+            .paddings(5, 15)
+            .round()
+            .contextMenu {
+                Button("123") {}
+            }
         Text("Empty Background")
             .backgrounds()
+        
+            
+        Text("Text Menu")
+            .font(.largeTitle)
+            .paddings(5, 15)
+            .backgrounds(.red, .purple)
+            .round()
+            .contextMenu {
+                Button("123") {}
+            }
     }
+    .padding()
 }
 #endif

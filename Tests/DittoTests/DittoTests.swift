@@ -33,6 +33,7 @@ final class DittoTests: XCTestCase {
         XCTAssertEqual(elem.reversed(), descendResult)
     }
     
+    #if os(macOS)
     func testCommand() throws {
         var count = 0
         let limitation = 3
@@ -47,4 +48,5 @@ final class DittoTests: XCTestCase {
             sleep(1)
         }
     }
+    #endif
 }

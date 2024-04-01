@@ -203,66 +203,66 @@ extension System {
     }
 #endif
 
-#if DEBUG
-    #Preview {
-        SystemPreview()
-    }
+#if os(macOS)
+#Preview {
+    SystemPreview()
+}
 
-    struct SystemPreview: View {
-        @State private var publisher = PassthroughSubject<String, Never>()
-        @State private var sub: AnyCancellable?
-        @State private var num = 1
-        @State private var info = "-"
-        var body: some View {
-            VStack {
-                Text("\(num)")
-                Button {
+struct SystemPreview: View {
+    @State private var publisher = PassthroughSubject<String, Never>()
+    @State private var sub: AnyCancellable?
+    @State private var num = 1
+    @State private var info = "-"
+    var body: some View {
+        VStack {
+            Text("\(num)")
+            Button {
+                num += 1
+                System.async {
                     num += 1
-                    System.async {
-                        num += 1
-                    }
-                } label: {
-                    Text("Add")
                 }
-                
-                Button {
-                    let result = System.shell("/usr/local/bin/ollama list") ?? "-"
-                    publisher.asyncSend(result)
-                } label: {
-                    Text("list")
-                }
-                
-                Button {
-                    let result = System.shell("/usr/local/bin/ollama rm stable-code:code") ?? "-"
-                    publisher.asyncSend(result)
-                } label: {
-                    Text("remove")
-                }
-                
-                Button {
-                    var result = ""
-                    let output = System.shell("/usr/local/bin/ollama pull stable-code:code") { err in
-                        publisher.asyncSend(result)
-                    } receive: { msg in
-                        result.append(result)
-                    }
-                    publisher.asyncSend(output ?? "...")
-                } label: {
-                    Text("pull")
-                }
-                
-                ScrollView(.vertical) {
-                    VStack(alignment: .leading) {
-                        ForEach(info.components(separatedBy: "\n"), id: \.self) { text in
-                            Text(text)
-                        }
-                    }
-                }
+            } label: {
+                Text("Add")
             }
-            .frame(width: 500)
-            .onReceive(publisher) { msg in
-                info = msg
+            
+            Button {
+                let result = System.shell("/usr/local/bin/ollama list") ?? "-"
+                publisher.asyncSend(result)
+            } label: {
+                Text("list")
+            }
+            
+            Button {
+                let result = System.shell("/usr/local/bin/ollama rm stable-code:code") ?? "-"
+                publisher.asyncSend(result)
+            } label: {
+                Text("remove")
+            }
+            
+            Button {
+                var result = ""
+                let output = System.shell("/usr/local/bin/ollama pull stable-code:code") { err in
+                    publisher.asyncSend(result)
+                } receive: { msg in
+                    result.append(result)
+                }
+                publisher.asyncSend(output ?? "...")
+            } label: {
+                Text("pull")
+            }
+            
+            ScrollView(.vertical) {
+                VStack(alignment: .leading) {
+                    ForEach(info.components(separatedBy: "\n"), id: \.self) { text in
+                        Text(text)
+                    }
+                }
             }
         }
+        .frame(width: 500)
+        .onReceive(publisher) { msg in
+            info = msg
+        }
     }
+}
 #endif

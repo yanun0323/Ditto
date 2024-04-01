@@ -45,7 +45,7 @@ extension Date {
 extension Date { public static let zero = Date(timeIntervalSince1970: 0) }
 
 extension Date {
-    public func replace(_ year: Int? = nil, _ month: Int? = nil, _ day: Int? = nil, _ hour: Int? = nil, _ minute: Int? = nil, _ second: Int? = nil, locale: Locale? = nil) -> Date {
+    public func replace(year: Int? = nil, month: Int? = nil, day: Int? = nil, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, locale: Locale? = nil) -> Date {
         var comp = DateComponents()
         comp.setValue(year ?? self.year, for: .year)
         comp.setValue(month ?? self.month, for: .month)
@@ -55,6 +55,15 @@ extension Date {
         comp.setValue(second ?? self.second, for: .second)
         comp.timeZone = locale?.timeZone
         return Calendar.current.date(from: comp) ?? .zero
+    }
+    
+    public func add(year: Int? = nil, month: Int? = nil, day: Int? = nil, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, locale: Locale? = nil) -> Date {
+        return self.add(.year, year ?? 0)
+            .add(.month, month ?? 0)
+            .add(.day, day ?? 0)
+            .add(.hour, hour ?? 0)
+            .add(.minute, minute ?? 0)
+            .add(.second, second ?? 0)
     }
 }
 

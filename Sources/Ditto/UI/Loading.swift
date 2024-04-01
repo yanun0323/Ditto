@@ -44,7 +44,13 @@ public struct Loading<Content: View>: View {
                     .rotate(-Double(i)*40)
                     .rotate(isLoading ? 360 : 0)
                     .animation(.linear(duration: speed).repeatForever(autoreverses: false), value: isLoading)
-                    .onAppear { isLoading = true }
+                    .onAppear {
+                        System.async {
+                            withAnimation {
+                                isLoading = true
+                            }
+                        } main: {}
+                    }
                     .transition(.opacity)
             }
         }

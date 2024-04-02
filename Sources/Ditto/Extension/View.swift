@@ -279,6 +279,15 @@ extension View {
             .contextMenu {
                 Button("123") {}
             }
+            .padding(.bottom)
+        
+        Text(Date.now.description)
+        Text(Date.now.string())
+            .padding(.bottom)
+        
+        Text(Date.now.replace(hour: 0, minute: 0, second: 0).description)
+        Text(Date.now.replace(hour: 0, minute: 0, second: 0).string())
+            .padding(.bottom)
     }
     .padding()
 }

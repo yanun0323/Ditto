@@ -42,19 +42,13 @@ extension Date {
 }
 
 // MARK: Date Static
-extension Date { public static let zero = Date(timeIntervalSince1970: 0) }
+extension Date { 
+    public static let zero = Date(timeIntervalSince1970: 0)
+}
 
 extension Date {
     public func replace(year: Int? = nil, month: Int? = nil, day: Int? = nil, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, locale: Locale? = nil) -> Date {
-        var comp = DateComponents()
-        comp.setValue(year ?? self.year, for: .year)
-        comp.setValue(month ?? self.month, for: .month)
-        comp.setValue(day ?? self.day, for: .day)
-        comp.setValue(hour ?? self.hour, for: .hour)
-        comp.setValue(minute ?? self.minute, for: .minute)
-        comp.setValue(second ?? self.second, for: .second)
-        comp.timeZone = locale?.timeZone
-        return Calendar.current.date(from: comp) ?? .zero
+        return Date(year ?? self.year, month ?? self.month, day ?? self.day, hour ?? self.hour, minute ?? self.minute, second ?? self.second, locale: locale)
     }
     
     public func add(year: Int? = nil, month: Int? = nil, day: Int? = nil, hour: Int? = nil, minute: Int? = nil, second: Int? = nil, locale: Locale? = nil) -> Date {

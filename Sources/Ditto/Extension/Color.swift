@@ -14,14 +14,14 @@ extension Color {
     public static let primaryFull: Self = .primary
     public static let primaryHalf: Self = .primary.opacity(0.5)
     public static let primaryQuarter: Self = .primary.opacity(0.25)
-    public static let section: Self  = .primary.opacity(0.1)
     
     // white
     public static let transparent: Self = .white.opacity(0.1).opacity(0.0101)
     
     // black
     public static let shadow: Self = .black.opacity(0.3)
-    public static let stone: Self  = .black.opacity(0.2)
+    public static let stone: Self = .black.opacity(0.2)
+    public static let section: Self = .black.opacity(0.1)
     
     // hex
     public static let ivory: Self = Color(hex: "F7F7F7")

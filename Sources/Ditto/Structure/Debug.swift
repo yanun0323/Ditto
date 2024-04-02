@@ -3,15 +3,23 @@ import SwiftUI
 public struct Debug {}
 
 extension Debug {
-    public static func print(_ message: String) {
+    public static func print(
+        _ items: Any...,
+        separator: String = " ",
+        terminator: String = "\n"
+    ) {
         #if DEBUG
-        Swift.print(message)
+        Swift.print(items, separator: separator, terminator: terminator)
         #endif
     }
-    
-    public static func print(_ error: Error) {
-        #if DEBUG
-        Swift.print(String(describing: error))
-        #endif
-    }
+}
+/**
+ prints content with the building tag  **`#if DEBUG`**
+ */
+public func printDebug(
+    _ items: Any...,
+    separator: String = " ",
+    terminator: String = "\n"
+) {
+    Debug.print(items, separator: separator, terminator: terminator)
 }

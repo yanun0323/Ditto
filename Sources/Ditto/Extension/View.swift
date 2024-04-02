@@ -205,6 +205,37 @@ extension View {
             )
         }
     }
+    
+    // MARK: date picker
+    @ViewBuilder
+    public func datePicker(
+        selection date: Binding<Date>,
+        in range: ClosedRange<Date>,
+        displayed style: DatePickerComponents = .date,
+        debug: Bool = false
+    ) -> some View {
+        self.overlay {
+            DatePicker(selection: date, in: range, displayedComponents: style, label: {})
+                .labelsHidden()
+                .datePickerStyle(.compact)
+                .opacity(debug ? 0.8 : 0.011)
+        }
+    }
+    
+    @ViewBuilder
+    public func datePicker(
+        selection date: Binding<Date>,
+        in range: PartialRangeFrom<Date>,
+        displayed style: DatePickerComponents = .date,
+        debug: Bool = false
+    ) -> some View {
+        self.overlay {
+            DatePicker(selection: date, in: range, displayedComponents: style, label: {})
+                .labelsHidden()
+                .datePickerStyle(.compact)
+                .opacity(debug ? 0.8 : 0.011)
+        }
+    }
 }
 
 // MARK: statusbar
@@ -235,6 +266,7 @@ extension View {
             .contextMenu {
                 Button("123") {}
             }
+            .datePicker(selection: .constant(.now), in: Date(2024,1,1,0,0,0)...Date.now, displayed: .date, debug: true)
         Text("Empty Background")
             .backgrounds()
         

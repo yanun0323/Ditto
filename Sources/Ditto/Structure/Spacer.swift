@@ -5,7 +5,7 @@ struct ConditionSpacer: View {
     
     var body: some View {
         if visible {
-            SwiftUI.Spacer()
+            SwiftUI.Spacer(minLength: 0)
         } else {
             EmptyView()
         }

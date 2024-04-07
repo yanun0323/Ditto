@@ -2,8 +2,7 @@ import CoreGraphics
 import SwiftUI
 
 extension View {
-    @MainActor
-    public func mosaic(_ sampling: CGFloat = 1.5) -> some View {
+    @MainActor public func mosaic(_ sampling: CGFloat = 1.5) -> some View {
         #if os(macOS)
         let zero = Image(systemName: "")
         

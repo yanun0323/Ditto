@@ -134,12 +134,10 @@ public enum DittoFont: CaseIterable {
 }
 
 extension View {
-    @ViewBuilder
     public func font(name font: DittoFont, size: CGFloat) -> some View {
         self.font(.custom(font.name, size: size))
     }
     
-    @ViewBuilder
     public func font(name font: DittoFont, _ style: Font.TextStyle = .body) -> some View {
         self.font(.custom(font.name, size: style.size))
     }
@@ -213,7 +211,6 @@ fileprivate extension Font.TextStyle {
     return FontTestView(26, .largeTitle, font: .Cubic11R)
 }
 
-@ViewBuilder
 func FontTestView(_ size: CGFloat, _ style: Font.TextStyle, font: DittoFont) -> some View {
     VStack {
         Text("Font Test 測試")

@@ -54,7 +54,6 @@ fileprivate extension Layout {
 }
 
 extension View {
-    @ViewBuilder
     public func push(_ layout: Layout) -> some View {
         VStack(spacing: 0) {
             ConditionSpacer(visible: layout.topSpacer)

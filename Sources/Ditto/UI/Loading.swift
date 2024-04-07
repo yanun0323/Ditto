@@ -1,7 +1,6 @@
 import SwiftUI
 
 extension View {
-    @ViewBuilder
     public func makeLoading(frame size: CGFloat, speed: CGFloat = 1.2, fixed: Bool = false) -> some View {
         Loading(icon: self, frame: size, speed: speed, fixed: fixed)
     }

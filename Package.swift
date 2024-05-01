@@ -15,6 +15,10 @@ let package = Package(
         .library(
             name: "Ditto",
             targets: ["Ditto"]
+        ),
+        .library(
+            name: "DittoFont",
+            targets: ["DittoFont"]
         )
     ],
     dependencies: [
@@ -25,9 +29,12 @@ let package = Package(
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
-            name: "Ditto",
+            name: "Ditto"
+        ),
+        .target(
+            name: "DittoFont",
             resources: [
-                .process("Font"),
+                .process("Fonts"),
             ]
         ),
         .testTarget(

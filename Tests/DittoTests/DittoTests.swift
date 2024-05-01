@@ -10,6 +10,7 @@ final class DittoTests: XCTestCase {
         XCTAssertNotEqual(Date.zero, Date(2024, 1, 23, 0, 0, 0))
     }
     
+    @available(iOS 17.0, macOS 14.0, watchOS 10.0, *)
     func testAVLTree() throws {
         let avl = AVLTree<Int, Int>()
     
@@ -37,7 +38,7 @@ final class DittoTests: XCTestCase {
     func testCommand() throws {
         var count = 0
         let limitation = 3
-        System.shell("/usr/local/bin/ollama 123") { err in
+        let _ = System.shell("/usr/local/bin/ollama 123") { err in
             print("err: \(err)")
         } receive: { msg in
             print("msg: \(msg)")

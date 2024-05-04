@@ -53,8 +53,8 @@ public struct UserDefaultState<Value> {
         }
     }
     
-    public var projectedValue: AnyPublisher<Value, Never> {
-        return publisher.eraseToAnyPublisher()
+    public var projectedValue: CurrentValueSubject<Value, Never> {
+        return publisher
     }
 }
 

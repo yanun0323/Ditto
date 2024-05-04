@@ -28,8 +28,15 @@ import SwiftUI
 public struct UserDefaultState<Value> {
     public let key: String
     public let defaultValue: Value
-    public var container: UserDefaults = .standard
-    private let publisher = PassthroughSubject<Value, Never>()
+    public let container: UserDefaults
+    private let publisher: CurrentValueSubject<Value, Never>
+    
+    init(key: String, defaultValue: Value, container: UserDefaults = .standard) {
+        self.key = key
+        self.defaultValue = defaultValue
+        self.container = container
+        self.publisher = CurrentValueSubject(defaultValue)
+    }
     
     public var wrappedValue: Value {
         get {
@@ -96,6 +103,24 @@ extension UserDefaults {
 }
 
 struct PreviewView: View {
+    @State var toggle = false
+    @State private var count = 0
+    
+    var body: some View {
+        VStack {
+            Text(count.description)
+            Button("OPEN") {
+                toggle = true
+            }
+            .sheet(isPresented: $toggle) {
+                PreviewSheetView()
+            }
+        }
+        .onReceive(UserDefaults.$count) { count = $0 }
+    }
+}
+
+struct PreviewSheetView: View {
     @State private var cancel: [AnyCancellable] = []
     @State private var count = 0
     
@@ -109,11 +134,9 @@ struct PreviewView: View {
             }
         }
         .paddings()
-        .onAppear {
-            UserDefaults.count = 0
-            cancel.append(UserDefaults.$count.sink { count in
-                self.count = count
-            })
+        .onReceive(UserDefaults.$count) {
+            print("Hi")
+            count = $0
         }
         .onDisappear {
             cancel.forEach { c in

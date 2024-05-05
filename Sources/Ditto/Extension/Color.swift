@@ -29,7 +29,13 @@ extension Color {
 
 #if DEBUG
 #Preview {
-    VStack(spacing: 0) {
+    let c = Color(hex: "#88AAFF")
+    let cc = Color(hue:c.hsb!.h, saturation: c.hsb!.s , brightness: c.hsb!.b)
+    return VStack(spacing: 0) {
+        c
+        Text("\(c.hsb!.h) \(c.hsb!.s) \(c.hsb!.b)")
+        cc
+        Text("\(cc.hsb!.h) \(cc.hsb!.s) \(cc.hsb!.b)")
         Color.gray
         Color.stone
         Color.section
@@ -63,6 +69,41 @@ extension Color {
 #endif
         
         return (r, g, b, a)
+    }
+    
+    public var hsb: (h: CGFloat, s: CGFloat, b: CGFloat)? {
+        guard let (r, g, b, _) = self.components else { return nil }
+        let maximum = max(r, g, b)
+        let minimum = min(r, g, b)
+        let brightness = maximum
+        if maximum == minimum { return (0, 0, brightness) }
+        
+        let delta = (maximum - minimum)
+        let saturation = delta / maximum
+        let cR = (maximum-r) / delta
+        let cG = (maximum-g) / delta
+        let cB = (maximum-b) / delta
+        var hue = CGFloat(0)
+        switch maximum {
+        case r:
+            hue = cB-cG
+        case g:
+            hue = 2+cR-cB
+        default:
+            hue = 4+cG-cR
+        }
+        
+        hue /= 6
+        
+        while hue < 0 {
+            hue += 1
+        }
+        
+        while hue > 1 {
+            hue -= 1
+        }
+        
+        return (hue, saturation, brightness)
     }
 }
 

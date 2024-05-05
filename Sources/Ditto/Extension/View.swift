@@ -247,6 +247,7 @@ extension View {
             .contextMenu {
                 Button("123") {}
             }
+            .opacity(0.3)
             .datePicker(selection: .constant(.now), in: Date(2024,1,1,0,0,0)...Date.now, displayed: .date, debug: true)
         Text("Empty Background")
             .backgrounds()

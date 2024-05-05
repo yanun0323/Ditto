@@ -35,7 +35,8 @@ public struct UserDefaultState<Value> {
         self.key = key
         self.defaultValue = defaultValue
         self.container = container
-        self.publisher = CurrentValueSubject(defaultValue)
+        
+        self.publisher = CurrentValueSubject(container.value(forKey: key) as? Value ?? defaultValue)
     }
     
     public var wrappedValue: Value {
